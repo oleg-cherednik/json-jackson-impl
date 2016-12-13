@@ -1,12 +1,9 @@
 package cop.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
@@ -52,10 +49,6 @@ public final class JsonUtils {
 
     public static <T> void writeValue(T obj, OutputStream out) throws IOException {
         JacksonObjectMapper.getMapper().writeValue(out, obj);
-    }
-
-    public static boolean isFieldExists(@NotNull String fieldName, @NotNull JsonNode node) {
-        return node.has(fieldName) && node.get(fieldName).getNodeType() != JsonNodeType.NULL;
     }
 
     private JsonUtils() {

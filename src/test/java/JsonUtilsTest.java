@@ -1,7 +1,13 @@
 import cop.utils.json.JsonUtils;
+import org.apache.commons.io.output.WriterOutputStream;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +23,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SuppressWarnings("serial")
 public class JsonUtilsTest {
+    @BeforeClass
+    public static void init() {
+        try {
+            Constructor<JsonUtils> constructor = JsonUtils.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+        } catch(Exception ignored) {
+        }
+    }
+
     @Test
     public void testReadWriteObject() throws IOException {
         String json = JsonUtils.writeValue(new Data(666, "omen"));
@@ -72,5 +88,21 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
         assertThat(JsonUtils.readMap("{}")).isSameAs(Collections.emptyMap());
         assertThat(JsonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
+    }
+
+    @Test
+    public void testWriteStream() throws IOException {
+        try (Writer out = new StringWriter()) {
+            JsonUtils.writeValue(new Data(666, "omen"), new WriterOutputStream(out, Charset.forName("UTF-8")));
+            assertThat(out.toString()).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
+        }
+    }
+
+    @Test
+    public void testWriteStreamNull() throws IOException {
+        try (Writer out = new StringWriter()) {
+            JsonUtils.writeValue(null, new WriterOutputStream(out, Charset.forName("UTF-8")));
+            assertThat(out.toString()).isEqualTo("null");
+        }
     }
 }
