@@ -51,6 +51,10 @@ public final class JsonUtils {
         JacksonObjectMapper.getMapper().writeValue(out, obj);
     }
 
+    public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
+        JacksonObjectMapper.getPrettyMapper().writeValue(out, obj);
+    }
+
     private JsonUtils() {
     }
 }
