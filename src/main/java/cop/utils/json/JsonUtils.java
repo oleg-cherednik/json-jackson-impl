@@ -52,11 +52,11 @@ public final class JsonUtils {
     }
 
     public static <T> String writePrettyValue(T obj) throws JsonProcessingException {
-        return obj != null ? JacksonObjectMapper.getPrettyMapper().writeValueAsString(obj) : null;
+        return obj != null ? JacksonObjectMapper.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj) : null;
     }
 
     public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
-        JacksonObjectMapper.getPrettyMapper().writeValue(out, obj);
+        JacksonObjectMapper.getMapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
     }
 
     private JsonUtils() {
