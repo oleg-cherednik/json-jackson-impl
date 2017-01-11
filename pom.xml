@@ -197,6 +197,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>${versions-maven-plugin.version}</version>
+                <configuration>
+                    <rulesUri>file:///${project.build.outputDirectory}/maven/version-rules.xml</rulesUri>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -350,6 +353,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>${versions-maven-plugin.version}</version>
+                <configuration>
+                    <rulesUri>file:///${project.build.outputDirectory}/maven/version-rules.xml</rulesUri>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
