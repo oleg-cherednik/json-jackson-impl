@@ -58,10 +58,16 @@
 
     <licenses>
         <license>
-            <name>name</name>
-            <url>${project.url}</url>
+            <name>Apache 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             <distribution>repo</distribution>
-            <comments/>
+            <comments>
+                The Apache License is permissive in that it does not require a derivative work of the software, or modifications to the original, to
+                be distributed using the same license (unlike copyleft licenses – see comparison). It still requires application of the same license
+                to all unmodified parts and, in every licensed file, any original copyright, patent, trademark, and attribution notices in
+                redistributed code must be preserved (excluding notices that do not pertain to any part of the derivative works); and, in every
+                licensed file changed, a notification must be added stating that changes have been made to that file.
+            </comments>
         </license>
     </licenses>
 
