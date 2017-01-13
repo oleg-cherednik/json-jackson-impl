@@ -25,9 +25,10 @@
         <jackson.version>2.8.6</jackson.version>
         <github.project>json-utils</github.project>
         <github.user>oleg-cherednik</github.user>
+        <github.maven-repo>maven-repo</github.maven-repo>
         <github.global.server>github</github.global.server>
         <lib.dir>${project.build.directory}/lib</lib.dir>
-        <mvn-repo.dir>${project.build.directory}/mvn-repo</mvn-repo.dir>
+        <maven-repo.dir>${project.build.directory}/${github.maven-repo}</maven-repo.dir>
     </properties>
 
     <prerequisites>
@@ -134,7 +135,7 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.2</version>
                 <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${mvn-repo.dir}</altDeploymentRepository>
+                    <altDeploymentRepository>internal.repo::default::file://${maven-repo.dir}</altDeploymentRepository>
                 </configuration>
             </plugin>
             <plugin>
@@ -144,12 +145,12 @@
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>
                     <noJekyll>true</noJekyll>
-                    <outputDirectory>${mvn-repo.dir}</outputDirectory>
-                    <branch>refs/heads/mvn-repo</branch>
+                    <outputDirectory>${maven-repo.dir}</outputDirectory>
+                    <branch>refs/heads/master</branch>
                     <includes>
                         <include>**/*</include>
                     </includes>
-                    <repositoryName>${github.project}</repositoryName>
+                    <repositoryName>${github.maven-repo}</repositoryName>
                     <repositoryOwner>${github.user}</repositoryOwner>
                 </configuration>
                 <executions>
