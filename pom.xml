@@ -25,7 +25,9 @@
         <jackson.version>2.8.6</jackson.version>
         <github.project>json-utils</github.project>
         <github.user>oleg-cherednik</github.user>
+        <github.global.server>github</github.global.server>
         <lib.dir>${project.build.directory}/lib</lib.dir>
+        <mvn-repo.dir>${project.build.directory}/mvn-repo</mvn-repo.dir>
     </properties>
 
     <prerequisites>
@@ -127,6 +129,37 @@
                     <target>${jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <altDeploymentRepository>internal.repo::default::file://${mvn-repo.dir}</altDeploymentRepository>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.12</version>
+                <configuration>
+                    <message>Maven artifacts for ${project.version}</message>
+                    <noJekyll>true</noJekyll>
+                    <outputDirectory>${mvn-repo.dir}</outputDirectory>
+                    <branch>refs/heads/mvn-repo</branch>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <repositoryName>${github.project}</repositoryName>
+                    <repositoryOwner>${github.user}</repositoryOwner>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -421,5 +454,13 @@
         <url>${project.url}/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
 </project>
 
