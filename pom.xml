@@ -152,6 +152,7 @@
                     </includes>
                     <repositoryName>${github.maven-repo}</repositoryName>
                     <repositoryOwner>${github.user}</repositoryOwner>
+                    <merge>true</merge>
                 </configuration>
                 <executions>
                     <execution>
