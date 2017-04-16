@@ -6,7 +6,7 @@
 
     <groupId>cop.utils</groupId>
     <artifactId>json</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <url>http://github.com/${github.user}/${github.project}</url>
@@ -25,7 +25,7 @@
         <jackson.version>2.8.6</jackson.version>
         <github.project>json-utils</github.project>
         <github.user>oleg-cherednik</github.user>
-        <github.maven-repo>maven-repo</github.maven-repo>
+        <github.maven-repo>m2</github.maven-repo>
         <github.global.server>github</github.global.server>
         <lib.dir>${project.build.directory}/lib</lib.dir>
         <maven-repo.dir>${project.build.directory}/${github.maven-repo}</maven-repo.dir>
