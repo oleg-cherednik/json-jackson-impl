@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <copyright>Copyright © ${project.inceptionYear} Oleg Cherednik</copyright>
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <checkstyle.verstion>7.4</checkstyle.verstion>
+        <checkstyle.verstion>8.29</checkstyle.verstion>
         <versions-maven-plugin.version>2.3</versions-maven-plugin.version>
         <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
         <jdk.version>1.8</jdk.version>
