@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -37,40 +36,68 @@ public class JsonUtilsTest {
         }
     }
 
-    public void testReadWriteObject() throws IOException {
-        String json = JsonUtils.writeValue(new Data(666, "omen"));
-        assertThat(json).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
+    public void shouldRetrieveNullWhenObjectNull() {
+        assertThat(JsonUtils.readValue(null, Object.class)).isNull();
+        assertThat(JsonUtils.readList(null, Object.class)).isNull();
+        assertThat(JsonUtils.writeValue(null)).isNull();
+        assertThat(JsonUtils.readMap(null)).isNull();
+    }
 
-        Data actual = JsonUtils.readValue(json, Data.class);
+    public void shouldRetrieveDeserializedObjectWhenReadJson() {
+        Data actual = JsonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);
         assertThat(actual.getIntVal()).isEqualTo(666);
         assertThat(actual.getStrVal()).isEqualTo("omen");
+    }
 
-        actual = JsonUtils.readValue("{}", Data.class);
+    public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyJson() {
+        Data actual = JsonUtils.readValue("{}", Data.class);
         assertThat(actual.getIntVal()).isEqualTo(0);
         assertThat(actual.getStrVal()).isNull();
     }
 
-    public void testReadWriteNull() throws IOException {
-        assertThat(JsonUtils.writeValue(null)).isNull();
-        assertThat(JsonUtils.readValue(null, Object.class)).isNull();
-        assertThat(JsonUtils.readList(null, Object.class)).isNull();
-        assertThat(JsonUtils.readMap(null)).isNull();
+    public void shouldRetrieveDeserializedListWhenReadJsonAsList() throws IOException {
+        String json = "[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]";
+        List<Data> actual = JsonUtils.readList(json, Data.class);
+        assertThat(actual).isEqualTo(ListUtils.of(
+                new Data(555, "victory"),
+                new Data(666, "omen")));
     }
 
-    public void testReadWriteList() throws IOException {
-        List<Data> expected = new ArrayList<Data>() {{
-            add(new Data(555, "victory"));
-            add(new Data(666, "omen"));
-        }};
-
-        String json = JsonUtils.writeValue(expected);
-        assertThat(json).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
-        assertThat(JsonUtils.readList(json, Data.class)).isEqualTo(expected);
-
-        assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
+    public void shouldRetrieveEmptyListWhenReadEmptyJsonAsList() {
         assertThat(JsonUtils.readList("[]", Data.class)).isSameAs(Collections.emptyList());
-        assertThat(JsonUtils.readList("{}", Data.class)).isEqualTo(Collections.singletonList(new Data()));
     }
+
+    public void shouldRetrieveListWithOneEmptyElementWhenReadEmptyJsonObjectAsList() {
+        assertThat(JsonUtils.readList("{}", Data.class)).isEqualTo(ListUtils.of(new Data()));
+    }
+
+//    public void testReadWriteObject() throws IOException {
+//        String json = JsonUtils.writeValue(new Data(666, "omen"));
+//        assertThat(json).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
+//
+//        Data actual = JsonUtils.readValue(json, Data.class);
+//        assertThat(actual.getIntVal()).isEqualTo(666);
+//        assertThat(actual.getStrVal()).isEqualTo("omen");
+//
+//        actual = JsonUtils.readValue("{}", Data.class);
+//        assertThat(actual.getIntVal()).isEqualTo(0);
+//        assertThat(actual.getStrVal()).isNull();
+//    }
+
+//    public void testReadWriteList() throws IOException {
+//        List<Data> expected = new ArrayList<Data>() {{
+//            add(new Data(555, "victory"));
+//            add(new Data(666, "omen"));
+//        }};
+//
+//        String json = JsonUtils.writeValue(expected);
+//        assertThat(json).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
+//        assertThat(JsonUtils.readList(json, Data.class)).isEqualTo(expected);
+//
+//        assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
+//        assertThat(JsonUtils.readList("[]", Data.class)).isSameAs(Collections.emptyList());
+//        assertThat(JsonUtils.readList("{}", Data.class)).isEqualTo(Collections.singletonList(new Data()));
+//    }
 
     public void testReadWriteMap() throws IOException {
         Map<String, Object> expected = new LinkedHashMap<String, Object>() {{

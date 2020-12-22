@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 
 /**
  * @author Oleg Cherednik
@@ -29,36 +31,43 @@ import java.util.Map;
  */
 public final class JsonUtils {
 
-    public static <T> T readValue(String json, Class<T> clazz) throws IOException {
-        return json != null ? JacksonObjectMapper.mapper().readValue(json, clazz) : null;
+    public static <T> T readValue(String json, Class<T> valueType) {
+        Objects.requireNonNull(valueType, "'valueType' should not be null");
+        return withRuntimeException(() -> json == null ? null : JacksonObjectMapper.mapper().readValue(json, valueType));
     }
 
-    public static <T> List<T> readList(String json, Class<T> clazz) throws IOException {
-        if (json == null)
-            return null;
+    public static <T> List<T> readList(String json, Class<T> valueType) {
+        Objects.requireNonNull(valueType, "'valueType' should not be null");
 
-        ObjectReader reader = JacksonObjectMapper.mapper().readerFor(clazz);
-        MappingIterator<T> it = reader.readValues(json);
-        return it.hasNextValue() ? it.readAll() : Collections.emptyList();
+        return withRuntimeException(() -> {
+            if (json == null)
+                return null;
+
+            ObjectReader reader = JacksonObjectMapper.mapper().readerFor(valueType);
+            MappingIterator<T> it = reader.readValues(json);
+            return it.hasNextValue() ? it.readAll() : Collections.emptyList();
+        });
     }
 
-    public static <T> Map<String, T> readMap(String json) throws IOException {
-        if (json == null)
-            return null;
+    public static <T> Map<String, T> readMap(String json) {
+        return withRuntimeException(() -> {
+            if (json == null)
+                return null;
 
-        ObjectReader reader = JacksonObjectMapper.mapper().readerFor(Map.class);
-        MappingIterator<Map<String, T>> it = reader.readValues(json);
+            ObjectReader reader = JacksonObjectMapper.mapper().readerFor(Map.class);
+            MappingIterator<Map<String, T>> it = reader.readValues(json);
 
-        if (it.hasNextValue()) {
-            Map<String, T> res = it.next();
-            return res.isEmpty() ? Collections.emptyMap() : res;
-        }
+            if (it.hasNextValue()) {
+                Map<String, T> res = it.next();
+                return res.isEmpty() ? Collections.emptyMap() : res;
+            }
 
-        return Collections.emptyMap();
+            return Collections.emptyMap();
+        });
     }
 
-    public static <T> String writeValue(T obj) throws JsonProcessingException {
-        return obj != null ? JacksonObjectMapper.mapper().writeValueAsString(obj) : null;
+    public static <T> String writeValue(T obj) {
+        return withRuntimeException(() -> obj != null ? JacksonObjectMapper.mapper().writeValueAsString(obj) : null);
     }
 
     public static <T> void writeValue(T obj, OutputStream out) throws IOException {
@@ -71,6 +80,14 @@ public final class JsonUtils {
 
     public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
         JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
+    }
+
+    private static <T> T withRuntimeException(Callable<T> task) {
+        try {
+            return task.call();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JsonUtils() {
