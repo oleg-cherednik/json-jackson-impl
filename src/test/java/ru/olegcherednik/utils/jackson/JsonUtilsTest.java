@@ -1,4 +1,4 @@
-package ru.olegcherednik.utils.json;
+package ru.olegcherednik.utils.jackson;
 
 import org.apache.commons.io.output.WriterOutputStream;
 import org.testng.annotations.BeforeClass;
@@ -8,15 +8,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
-import java.nio.charset.Charset;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 13.12.2016
  */
+@Test
 @SuppressWarnings("serial")
 public class JsonUtilsTest {
 
@@ -41,7 +37,6 @@ public class JsonUtilsTest {
         }
     }
 
-    @Test
     public void testReadWriteObject() throws IOException {
         String json = JsonUtils.writeValue(new Data(666, "omen"));
         assertThat(json).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
@@ -55,7 +50,6 @@ public class JsonUtilsTest {
         assertThat(actual.getStrVal()).isNull();
     }
 
-    @Test
     public void testReadWriteNull() throws IOException {
         assertThat(JsonUtils.writeValue(null)).isNull();
         assertThat(JsonUtils.readValue(null, Object.class)).isNull();
@@ -63,7 +57,6 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readMap(null)).isNull();
     }
 
-    @Test
     public void testReadWriteList() throws IOException {
         List<Data> expected = new ArrayList<Data>() {{
             add(new Data(555, "victory"));
@@ -79,7 +72,6 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readList("{}", Data.class)).isEqualTo(Collections.singletonList(new Data()));
     }
 
-    @Test
     public void testReadWriteMap() throws IOException {
         Map<String, Object> expected = new LinkedHashMap<String, Object>() {{
             put("sample", Arrays.asList("one, two", "three"));
@@ -98,62 +90,57 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
     }
 
-    @Test
     public void testWriteStream() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.writeValue(new Data(666, "omen"), new WriterOutputStream(out, Charset.forName("UTF-8")));
+            JsonUtils.writeValue(new Data(666, "omen"), new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
-    @Test
     public void testWriteStreamNull() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.writeValue(null, new WriterOutputStream(out, Charset.forName("UTF-8")));
+            JsonUtils.writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
     }
 
-    @Test
-    public void testReadWriteDate() throws IOException {
-        Date expected = new Date(1500796634225L);
-        String json = JsonUtils.writeValue(expected);
-        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
-        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
-    }
-
-    @Test
-    public void testReadWriteZonedDateTime() throws IOException {
-        String str = "2017-07-23T07:57:14.225";
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        ZonedDateTime utc = ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC));
-        ZonedDateTime singapore = ZonedDateTime.parse(str,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Asia/Singapore")));
-        ZonedDateTime australia = ZonedDateTime.parse(str,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Australia/Sydney")));
-
-        String json = JsonUtils.writeValue(utc);
-        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
-        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(utc);
-
-        json = JsonUtils.writeValue(singapore);
-        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
-        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(singapore);
-    }
-
-    @Test
-    public void testWriteDateReadZonedDateTime() throws IOException {
-        Date expected = new Date();
-        String json = JsonUtils.writeValue(expected);
+//    public void testReadWriteDate() throws IOException {
+//        Date expected = new Date(1500796634225L);
+//        String json = JsonUtils.writeValue(expected);
 //        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
-        // "2017-07-24T07:36:21.129+0000"
-
-        ZonedDateTime actual = JsonUtils.readValue(json, ZonedDateTime.class);
-        int a = 0;
-        a++;
-
 //        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
-    }
+//    }
+
+//    public void testReadWriteZonedDateTime() throws IOException {
+//        String str = "2017-07-23T07:57:14.225";
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+//        ZonedDateTime utc = ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC));
+//        ZonedDateTime singapore = ZonedDateTime.parse(str,
+//                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Asia/Singapore")));
+//        ZonedDateTime australia = ZonedDateTime.parse(str,
+//                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Australia/Sydney")));
+//
+//        String json = JsonUtils.writeValue(utc);
+//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
+//        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(utc);
+//
+//        json = JsonUtils.writeValue(singapore);
+//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
+//        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(singapore);
+//    }
+
+//    public void testWriteDateReadZonedDateTime() throws IOException {
+//        Date expected = new Date();
+//        String json = JsonUtils.writeValue(expected);
+////        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
+//        // "2017-07-24T07:36:21.129+0000"
+//
+//        ZonedDateTime actual = JsonUtils.readValue(json, ZonedDateTime.class);
+//        int a = 0;
+//        a++;
+//
+////        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
+//    }
 
     private static final class Data {
 

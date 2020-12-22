@@ -1,4 +1,4 @@
-package ru.olegcherednik.utils.json;
+package ru.olegcherednik.utils.jackson;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParser;
