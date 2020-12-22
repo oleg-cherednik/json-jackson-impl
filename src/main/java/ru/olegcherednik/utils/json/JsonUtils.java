@@ -11,7 +11,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package cop.utils.json;
+package ru.olegcherednik.utils.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -28,15 +28,16 @@ import java.util.Map;
  * @since 19.11.2014
  */
 public final class JsonUtils {
+
     public static <T> T readValue(String json, Class<T> clazz) throws IOException {
-        return json != null ? JacksonObjectMapper.getMapper().readValue(json, clazz) : null;
+        return json != null ? JacksonObjectMapper.mapper().readValue(json, clazz) : null;
     }
 
     public static <T> List<T> readList(String json, Class<T> clazz) throws IOException {
         if (json == null)
             return null;
 
-        ObjectReader reader = JacksonObjectMapper.getMapper().readerFor(clazz);
+        ObjectReader reader = JacksonObjectMapper.mapper().readerFor(clazz);
         MappingIterator<T> it = reader.readValues(json);
         return it.hasNextValue() ? it.readAll() : Collections.emptyList();
     }
@@ -45,7 +46,7 @@ public final class JsonUtils {
         if (json == null)
             return null;
 
-        ObjectReader reader = JacksonObjectMapper.getMapper().readerFor(Map.class);
+        ObjectReader reader = JacksonObjectMapper.mapper().readerFor(Map.class);
         MappingIterator<Map<String, T>> it = reader.readValues(json);
 
         if (it.hasNextValue()) {
@@ -57,19 +58,19 @@ public final class JsonUtils {
     }
 
     public static <T> String writeValue(T obj) throws JsonProcessingException {
-        return obj != null ? JacksonObjectMapper.getMapper().writeValueAsString(obj) : null;
+        return obj != null ? JacksonObjectMapper.mapper().writeValueAsString(obj) : null;
     }
 
     public static <T> void writeValue(T obj, OutputStream out) throws IOException {
-        JacksonObjectMapper.getMapper().writeValue(out, obj);
+        JacksonObjectMapper.mapper().writeValue(out, obj);
     }
 
     public static <T> String writePrettyValue(T obj) throws JsonProcessingException {
-        return obj != null ? JacksonObjectMapper.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj) : null;
+        return obj != null ? JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj) : null;
     }
 
     public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
-        JacksonObjectMapper.getMapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
+        JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
     }
 
     private JsonUtils() {

@@ -1,4 +1,5 @@
-import cop.utils.json.JsonUtils;
+package ru.olegcherednik.utils.json;
+
 import org.apache.commons.io.output.WriterOutputStream;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -8,12 +9,18 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.nio.charset.Charset;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SuppressWarnings("serial")
 public class JsonUtilsTest {
+
     @BeforeClass
     public static void init() {
         try {
@@ -103,6 +111,87 @@ public class JsonUtilsTest {
         try (Writer out = new StringWriter()) {
             JsonUtils.writeValue(null, new WriterOutputStream(out, Charset.forName("UTF-8")));
             assertThat(out.toString()).isEqualTo("null");
+        }
+    }
+
+    @Test
+    public void testReadWriteDate() throws IOException {
+        Date expected = new Date(1500796634225L);
+        String json = JsonUtils.writeValue(expected);
+        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
+        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
+    }
+
+    @Test
+    public void testReadWriteZonedDateTime() throws IOException {
+        String str = "2017-07-23T07:57:14.225";
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        ZonedDateTime utc = ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC));
+        ZonedDateTime singapore = ZonedDateTime.parse(str,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Asia/Singapore")));
+        ZonedDateTime australia = ZonedDateTime.parse(str,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Australia/Sydney")));
+
+        String json = JsonUtils.writeValue(utc);
+        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
+        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(utc);
+
+        json = JsonUtils.writeValue(singapore);
+        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
+        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(singapore);
+    }
+
+    @Test
+    public void testWriteDateReadZonedDateTime() throws IOException {
+        Date expected = new Date();
+        String json = JsonUtils.writeValue(expected);
+//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
+        // "2017-07-24T07:36:21.129+0000"
+
+        ZonedDateTime actual = JsonUtils.readValue(json, ZonedDateTime.class);
+        int a = 0;
+        a++;
+
+//        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
+    }
+
+    private static final class Data {
+
+        private int intVal;
+        private String strVal;
+
+        public Data() {
+        }
+
+        public Data(int intVal, String strVal) {
+            this.intVal = intVal;
+            this.strVal = strVal;
+        }
+
+        public int getIntVal() {
+            return intVal;
+        }
+
+        public String getStrVal() {
+            return strVal;
+        }
+
+        // ========== Object ==========
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!(obj instanceof Data))
+                return false;
+            Data data = (Data)obj;
+
+            return intVal == data.intVal && Objects.equals(strVal, data.strVal);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(intVal, strVal);
         }
     }
 }
