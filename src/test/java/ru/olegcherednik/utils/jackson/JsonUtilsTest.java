@@ -78,7 +78,15 @@ public class JsonUtilsTest {
         assertThat(actual.get("order")).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
     }
 
-    public void shouldRetrieveDataLinkedHashMapWhenReadJsonAsMap() {
+    public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMap() {
+        String json = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
+        Map<String, ?> actual = JsonUtils.readMap(json);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
+        assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
+    }
+
+    public void shouldRetrieveDataLinkedHashMapWhenReadJsonAsMapWithTypes() {
         String json = "{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}";
         Map<String, Data> actual = JsonUtils.readMap(json, String.class, Data.class);
         assertThat(actual).isNotNull();
@@ -86,6 +94,14 @@ public class JsonUtilsTest {
         assertThat(actual.keySet()).containsExactlyInAnyOrder("victory", "omen");
         assertThat(actual.get("victory")).isEqualTo(new Data(555, "victory"));
         assertThat(actual.get("omen")).isEqualTo(new Data(666, "omen"));
+    }
+
+    public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMapWithTypes() {
+        String json = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
+        Map<String, String> actual = JsonUtils.readMap(json, String.class, String.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
+        assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
     }
 
     public void shouldRetrieveEmptyMapWhenReadEmptyJsonAsMap() {
