@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class JacsonObjectMapper {
+public final class JacksonObjectMapper {
 
     private static Consumer<ObjectMapper> settingsConsumer = DefaultSettingsConsumer.INSTANCE;
     private static final ThreadLocal<ObjectMapper> THREAD_LOCAL_MAPPER = ThreadLocal.withInitial(() -> {
@@ -34,10 +34,10 @@ public final class JacsonObjectMapper {
     public static void setSettingsConsumer(Consumer<ObjectMapper> settingsConsumer) {
         settingsConsumer = Optional.ofNullable(settingsConsumer).orElse(DefaultSettingsConsumer.INSTANCE);
 
-        if (JacsonObjectMapper.settingsConsumer == settingsConsumer)
+        if (JacksonObjectMapper.settingsConsumer == settingsConsumer)
             return;
 
-        JacsonObjectMapper.settingsConsumer = DefaultSettingsConsumer.INSTANCE;
+        JacksonObjectMapper.settingsConsumer = DefaultSettingsConsumer.INSTANCE;
         THREAD_LOCAL_MAPPER.remove();
     }
 
@@ -49,7 +49,7 @@ public final class JacsonObjectMapper {
         THREAD_LOCAL_MAPPER.remove();
     }
 
-    private JacsonObjectMapper() {
+    private JacksonObjectMapper() {
     }
 
 }

@@ -1,7 +1,7 @@
 package ru.olegcherednik.utils.jackson;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -11,7 +11,7 @@ import java.util.Map;
 public final class MapUtils {
 
     static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2) {
-        Map<K, V> map = new HashMap<>();
+        Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);
         map.put(k2, v2);
         return Collections.unmodifiableMap(map);

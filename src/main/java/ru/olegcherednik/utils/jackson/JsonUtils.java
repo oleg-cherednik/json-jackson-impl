@@ -13,7 +13,6 @@
  */
 package ru.olegcherednik.utils.jackson;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
@@ -39,7 +38,7 @@ public final class JsonUtils {
         if (json == null)
             return null;
 
-        return withRuntimeException(() -> JacsonObjectMapper.mapper().readValue(json, valueType));
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().readValue(json, valueType));
     }
 
     public static <T> List<T> readList(String json, Class<T> valueType) {
@@ -51,7 +50,7 @@ public final class JsonUtils {
             return Collections.emptyList();
 
         return withRuntimeException(() -> {
-            ObjectReader reader = JacsonObjectMapper.mapper().readerFor(valueType);
+            ObjectReader reader = JacksonObjectMapper.mapper().readerFor(valueType);
             return reader.<T>readValues(json).readAll();
         });
     }
@@ -63,7 +62,7 @@ public final class JsonUtils {
             return Collections.emptyMap();
 
         return withRuntimeException(() -> {
-            ObjectMapper mapper = JacsonObjectMapper.mapper();
+            ObjectMapper mapper = JacksonObjectMapper.mapper();
             MapType mapType = mapper.getTypeFactory().constructRawMapType(LinkedHashMap.class);
             return mapper.readValue(json, mapType);
         });
@@ -76,7 +75,7 @@ public final class JsonUtils {
             return Collections.emptyMap();
 
         return withRuntimeException(() -> {
-            ObjectMapper mapper = JacsonObjectMapper.mapper();
+            ObjectMapper mapper = JacksonObjectMapper.mapper();
             MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
             return mapper.readValue(json, mapType);
         });
@@ -86,30 +85,30 @@ public final class JsonUtils {
         if (obj == null)
             return null;
 
-        return withRuntimeException(() -> JacsonObjectMapper.mapper().writeValueAsString(obj));
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().writeValueAsString(obj));
     }
 
     public static <T> void writeValue(T obj, OutputStream out) {
         Objects.requireNonNull(out, "'out' should not be null");
 
         withRuntimeException(() -> {
-            JacsonObjectMapper.mapper().writeValue(out, obj);
+            JacksonObjectMapper.mapper().writeValue(out, obj);
             return null;
         });
     }
 
-    public static <T> String writePrettyValue(T obj) throws JsonProcessingException {
+    public static <T> String writePrettyPrinterValue(T obj) {
         if (obj == null)
             return null;
 
-        return withRuntimeException(() -> JacsonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
     }
 
-    public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
+    public static <T> void writePrettyPrinterValue(T obj, OutputStream out) throws IOException {
         Objects.requireNonNull(out, "'out' should not be null");
 
         withRuntimeException(() -> {
-            JacsonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
+            JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
             return null;
         });
     }

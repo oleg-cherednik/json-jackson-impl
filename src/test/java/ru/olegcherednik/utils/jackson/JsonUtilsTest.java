@@ -40,6 +40,7 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readMap(null)).isNull();
         assertThat(JsonUtils.readMap(null, String.class, String.class)).isNull();
         assertThat(JsonUtils.writeValue(null)).isNull();
+        assertThat(JsonUtils.writePrettyPrinterValue(null)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
@@ -111,90 +112,108 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readMap("[]", String.class, Data.class)).isSameAs(Collections.emptyMap());
     }
 
-//    public void testReadWriteMap() throws IOException {
-//        Map<String, Object> expected = new LinkedHashMap<String, Object>() {{
-//            put("sample", Arrays.asList("one, two", "three"));
-//            put("order", new LinkedHashMap<String, Object>() {{
-//                put("key1", "val1");
-//                put("key2", "val2");
-//            }});
-//        }};
-//
-//        String json = JsonUtils.writeValue(expected);
-//        assertThat(json).isEqualTo("{\"sample\":[\"one, two\",\"three\"],\"order\":{\"key1\":\"val1\",\"key2\":\"val2\"}}");
-//        assertThat(JsonUtils.readMap(json)).isEqualTo(expected);
-//
-//        assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
-//        assertThat(JsonUtils.readMap("{}")).isSameAs(Collections.emptyMap());
-//        assertThat(JsonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
-//    }
+    public void shouldRetrieveJsonWhenWriteObject() {
+        Data data = new Data(555, "victory");
+        String actual = JsonUtils.writeValue(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("{\"intVal\":555,\"strVal\":\"victory\"}");
+    }
 
-//    public void testReadWriteObject() throws IOException {
-//        String json = JsonUtils.writeValue(new Data(666, "omen"));
-//        assertThat(json).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
-//
-//        Data actual = JsonUtils.readValue(json, Data.class);
-//        assertThat(actual.getIntVal()).isEqualTo(666);
-//        assertThat(actual.getStrVal()).isEqualTo("omen");
-//
-//        actual = JsonUtils.readValue("{}", Data.class);
-//        assertThat(actual.getIntVal()).isEqualTo(0);
-//        assertThat(actual.getStrVal()).isNull();
-//    }
+    public void shouldRetrieveJsonWhenWriteMapObject() {
+        Map<String, Data> map = MapUtils.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        String actual = JsonUtils.writeValue(map);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}");
+    }
 
-//    public void testReadWriteList() throws IOException {
-//        List<Data> expected = new ArrayList<Data>() {{
-//            add(new Data(555, "victory"));
-//            add(new Data(666, "omen"));
-//        }};
-//
-//        String json = JsonUtils.writeValue(expected);
-//        assertThat(json).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
-//        assertThat(JsonUtils.readList(json, Data.class)).isEqualTo(expected);
-//
-//        assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
-//        assertThat(JsonUtils.readList("[]", Data.class)).isSameAs(Collections.emptyList());
-//        assertThat(JsonUtils.readList("{}", Data.class)).isEqualTo(Collections.singletonList(new Data()));
-//    }
+    public void shouldRetrieveJsonWhenWriteListObject() {
+        List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
+        String actual = JsonUtils.writeValue(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
+    }
 
-//    public void testReadWriteMap() throws IOException {
-//        Map<String, Object> expected = new LinkedHashMap<String, Object>() {{
-//            put("sample", Arrays.asList("one, two", "three"));
-//            put("order", new LinkedHashMap<String, Object>() {{
-//                put("key1", "val1");
-//                put("key2", "val2");
-//            }});
-//        }};
-//
-//        String json = JsonUtils.writeValue(expected);
-//        assertThat(json).isEqualTo("{\"sample\":[\"one, two\",\"three\"],\"order\":{\"key1\":\"val1\",\"key2\":\"val2\"}}");
-//        assertThat(JsonUtils.readMap(json)).isEqualTo(expected);
-//
-//        assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
-//        assertThat(JsonUtils.readMap("{}")).isSameAs(Collections.emptyMap());
-//        assertThat(JsonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
-//    }
+    public void shouldRetrieveEmptyJsonWhenWriteEmptyCollection() {
+        assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
+        assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
+        assertThat(JsonUtils.writePrettyPrinterValue(Collections.emptyList())).isEqualTo("[ ]");
+        assertThat(JsonUtils.writePrettyPrinterValue(Collections.emptyMap())).isEqualTo("{ }");
+    }
 
-    public void testWriteStream() throws IOException {
+    public void shouldWriteJsonToStreamWhenWriteObjectToStream() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.writeValue(new Data(666, "omen"), new WriterOutputStream(out, StandardCharsets.UTF_8));
+            Data data = new Data(666, "omen");
+            JsonUtils.writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
-    public void testWriteStreamNull() throws IOException {
+    public void shouldWriteNullJsonWhenWriteNullToStream() throws IOException {
         try (Writer out = new StringWriter()) {
             JsonUtils.writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
     }
 
-//    public void testReadWriteDate() throws IOException {
-//        Date expected = new Date(1500796634225L);
-//        String json = JsonUtils.writeValue(expected);
-//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
-//        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
-//    }
+    public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() {
+        Data data = new Data(555, "victory");
+        String actual = JsonUtils.writePrettyPrinterValue(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
+                "  \"intVal\" : 555," + System.lineSeparator() +
+                "  \"strVal\" : \"victory\"" + System.lineSeparator() +
+                '}');
+    }
+
+    public void shouldRetrievePrettyPrintJsonWhenWriteMapObjectWithPrettyPrint() {
+        Map<String, Data> data = MapUtils.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        String actual = JsonUtils.writePrettyPrinterValue(data);
+        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
+                "  \"victory\" : {" + System.lineSeparator() +
+                "    \"intVal\" : 555," + System.lineSeparator() +
+                "    \"strVal\" : \"victory\"" + System.lineSeparator() +
+                "  }," + System.lineSeparator() +
+                "  \"omen\" : {" + System.lineSeparator() +
+                "    \"intVal\" : 666," + System.lineSeparator() +
+                "    \"strVal\" : \"omen\"" + System.lineSeparator() +
+                "  }" + System.lineSeparator() +
+                '}');
+    }
+
+    public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() {
+        List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
+        String actual = JsonUtils.writePrettyPrinterValue(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("[ {" + System.lineSeparator() +
+                "  \"intVal\" : 555," + System.lineSeparator() +
+                "  \"strVal\" : \"victory\"" + System.lineSeparator() +
+                "}, {" + System.lineSeparator() +
+                "  \"intVal\" : 666," + System.lineSeparator() +
+                "  \"strVal\" : \"omen\"" + System.lineSeparator() +
+                "} ]");
+    }
+
+    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToStream() throws IOException {
+        try (Writer out = new StringWriter()) {
+            Data data = new Data(666, "omen");
+            JsonUtils.writePrettyPrinterValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            assertThat(out.toString()).isEqualTo('{' + System.lineSeparator() +
+                    "  \"intVal\" : 666," + System.lineSeparator() +
+                    "  \"strVal\" : \"omen\"" + System.lineSeparator() +
+                    '}');
+        }
+    }
+
+    public void shouldWriteNullJsonWhenWriteNullWithPrettyPrintToStream() throws IOException {
+        try (Writer out = new StringWriter()) {
+            JsonUtils.writePrettyPrinterValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            assertThat(out.toString()).isEqualTo("null");
+        }
+    }
 
 //    public void testReadWriteZonedDateTime() throws IOException {
 //        String str = "2017-07-23T07:57:14.225";
