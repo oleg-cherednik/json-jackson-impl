@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Oleg Cherednik
@@ -213,6 +214,13 @@ public class JsonUtilsTest {
             JsonUtils.writePrettyPrinterValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
+    }
+
+    public void shouldThrowJacksonUtilsExceptionWhenReadIncorrectJson() {
+        assertThatThrownBy(() -> JsonUtils.readValue("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JsonUtils.readList("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JsonUtils.readMap("incorrect")).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JsonUtils.readMap("incorrect", String.class, Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
     }
 
 //    public void testReadWriteZonedDateTime() throws IOException {
