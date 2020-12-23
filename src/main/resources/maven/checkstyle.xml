@@ -66,9 +66,9 @@
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="e\d*|ignored"/>
         </module>
-        <module name="LeftCurly">
-            <property name="maxLineLength" value="150"/>
-        </module>
+<!--        <module name="LeftCurly">-->
+<!--            <property name="maxLineLength" value="150"/>-->
+<!--        </module>-->
         <module name="RightCurly">
             <property name="id" value="RightCurlySame"/>
             <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_DO"/>
@@ -170,12 +170,12 @@
         </module>
         <module name="JavadocMethod">
             <property name="allowMissingParamTags" value="true"/>
-            <property name="allowMissingThrowsTags" value="true"/>
+<!--            <property name="allowMissingThrowsTags" value="true"/>-->
             <property name="allowMissingReturnTag" value="true"/>
-            <property name="minLineCount" value="2"/>
+<!--            <property name="minLineCount" value="2"/>-->
             <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
-            <property name="allowMissingJavadoc" value="true"/>
+<!--            <property name="allowThrowsTagsForSubclasses" value="true"/>-->
+<!--            <property name="allowMissingJavadoc" value="true"/>-->
         </module>
         <module name="JavadocStyle">
             <property name="checkFirstSentence" value="false"/>
@@ -277,18 +277,18 @@
         <module name="MemberName"/>
         <module name="MethodTypeParameterName"/>
         <module name="PackageName"/>
-        <module name="ParameterName">
-            <property name="id" value="NonPublicParameterName"/>
-            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
-            <property name="scope" value="public"/>
-            <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="ParameterName">
-            <property name="id" value="PublicParameterName"/>
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
-            <property name="scope" value="public"/>
-            <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+<!--        <module name="ParameterName">-->
+<!--            <property name="id" value="NonPublicParameterName"/>-->
+<!--            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>-->
+<!--            <property name="scope" value="public"/>-->
+<!--            <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>-->
+<!--        </module>-->
+<!--        <module name="ParameterName">-->
+<!--            <property name="id" value="PublicParameterName"/>-->
+<!--            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>-->
+<!--            <property name="scope" value="public"/>-->
+<!--            <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>-->
+<!--        </module>-->
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
         <module name="TrailingComment"/>
@@ -299,10 +299,10 @@
             -->
         <module name="AnonInnerLength"/>
         <module name="ExecutableStatementCount"/>
-        <module name="LineLength">
-            <property name="max" value="150"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
-        </module>
+<!--        <module name="LineLength">-->
+<!--            <property name="max" value="150"/>-->
+<!--            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>-->
+<!--        </module>-->
         <module name="MethodCount"/>
         <module name="MethodLength"/>
         <module name="OuterTypeNumber"/>
