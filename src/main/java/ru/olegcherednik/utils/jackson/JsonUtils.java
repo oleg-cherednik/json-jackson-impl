@@ -14,12 +14,14 @@
 package ru.olegcherednik.utils.jackson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.type.MapType;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -33,36 +35,50 @@ public final class JsonUtils {
 
     public static <T> T readValue(String json, Class<T> valueType) {
         Objects.requireNonNull(valueType, "'valueType' should not be null");
-        return withRuntimeException(() -> json == null ? null : JacksonObjectMapper.mapper().readValue(json, valueType));
+
+        if (json == null)
+            return null;
+
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().readValue(json, valueType));
     }
 
     public static <T> List<T> readList(String json, Class<T> valueType) {
         Objects.requireNonNull(valueType, "'valueType' should not be null");
 
-        return withRuntimeException(() -> {
-            if (json == null)
-                return null;
+        if (json == null)
+            return null;
+        if (isEmpty(json))
+            return Collections.emptyList();
 
+        return withRuntimeException(() -> {
             ObjectReader reader = JacksonObjectMapper.mapper().readerFor(valueType);
-            MappingIterator<T> it = reader.readValues(json);
-            return it.hasNextValue() ? it.readAll() : Collections.emptyList();
+            return reader.<T>readValues(json).readAll();
         });
     }
 
-    public static <T> Map<String, T> readMap(String json) {
-        return withRuntimeException(() -> {
-            if (json == null)
-                return null;
-
-            ObjectReader reader = JacksonObjectMapper.mapper().readerFor(Map.class);
-            MappingIterator<Map<String, T>> it = reader.readValues(json);
-
-            if (it.hasNextValue()) {
-                Map<String, T> res = it.next();
-                return res.isEmpty() ? Collections.emptyMap() : res;
-            }
-
+    public static Map<String, ?> readMap(String json) {
+        if (json == null)
+            return null;
+        if (isEmpty(json))
             return Collections.emptyMap();
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = JacksonObjectMapper.mapper();
+            MapType mapType = mapper.getTypeFactory().constructRawMapType(LinkedHashMap.class);
+            return mapper.readValue(json, mapType);
+        });
+    }
+
+    public static <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
+        if (json == null)
+            return null;
+        if (isEmpty(json))
+            return Collections.emptyMap();
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = JacksonObjectMapper.mapper();
+            MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
+            return mapper.readValue(json, mapType);
         });
     }
 
@@ -88,6 +104,11 @@ public final class JsonUtils {
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean isEmpty(String json) {
+        json = json.trim();
+        return "{}".equals(json) || "[]".equals(json);
     }
 
     private JsonUtils() {
