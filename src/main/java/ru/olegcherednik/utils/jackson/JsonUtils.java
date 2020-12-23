@@ -83,19 +83,35 @@ public final class JsonUtils {
     }
 
     public static <T> String writeValue(T obj) {
-        return withRuntimeException(() -> obj != null ? JacksonObjectMapper.mapper().writeValueAsString(obj) : null);
+        if (obj == null)
+            return null;
+
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().writeValueAsString(obj));
     }
 
-    public static <T> void writeValue(T obj, OutputStream out) throws IOException {
-        JacksonObjectMapper.mapper().writeValue(out, obj);
+    public static <T> void writeValue(T obj, OutputStream out) {
+        Objects.requireNonNull(out, "'out' should not be null");
+
+        withRuntimeException(() -> {
+            JacksonObjectMapper.mapper().writeValue(out, obj);
+            return null;
+        });
     }
 
     public static <T> String writePrettyValue(T obj) throws JsonProcessingException {
-        return obj != null ? JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj) : null;
+        if (obj == null)
+            return null;
+
+        return withRuntimeException(() -> JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
     }
 
     public static <T> void writePrettyValue(T obj, OutputStream out) throws IOException {
-        JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
+        Objects.requireNonNull(out, "'out' should not be null");
+
+        withRuntimeException(() -> {
+            JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
+            return null;
+        });
     }
 
     private static <T> T withRuntimeException(Callable<T> task) {
