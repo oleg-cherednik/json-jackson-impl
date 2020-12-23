@@ -102,7 +102,7 @@ public final class JsonUtils {
         try {
             return task.call();
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new JacksonUtilsException(e);
         }
     }
 
