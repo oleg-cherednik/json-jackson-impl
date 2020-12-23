@@ -1,16 +1,3 @@
-/*
- * Copyright © 2016 Oleg Cherednik
- *
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership. The ASF licenses this file to You under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
- * under the License.
- */
 package ru.olegcherednik.utils.jackson;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -30,37 +17,36 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.function.Consumer;
 
 /**
  * @author Oleg Cherednik
- * @since 19.11.2014
+ * @since 23.12.2020
  */
-final class JacksonObjectMapper extends ObjectMapper {
+public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
 
-    private static final long serialVersionUID = 6432178737868715292L;
+    public static final DefaultSettingsConsumer INSTANCE = new DefaultSettingsConsumer();
 
-    private static final ThreadLocal<ObjectMapper> THREAD_LOCAL_MAPPER = ThreadLocal.withInitial(JacksonObjectMapper::new);
+    protected static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss.SSSZ";
 
-    public static ObjectMapper mapper() {
-        return THREAD_LOCAL_MAPPER.get();
+    protected DefaultSettingsConsumer() {
     }
 
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss.SSSZ";
+    @Override
+    public void accept(ObjectMapper mapper) {
+        mapper.registerModule(createJavaTimeModule());
+        mapper.registerModule(new AfterburnerModule());
 
-    private JacksonObjectMapper() {
-        registerModule(createJavaTimeModule());
-        registerModule(new AfterburnerModule());
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-        setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
-        setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setDateFormat(new SimpleDateFormat(DEFAULT_DATE_FORMAT));
 
-        setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        setDateFormat(new SimpleDateFormat(DEFAULT_DATE_FORMAT));
-
-        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, true);
-        configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, true);
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
     }
 
     private static JavaTimeModule createJavaTimeModule() {
