@@ -223,37 +223,7 @@ public class JsonUtilsTest {
         assertThatThrownBy(() -> JsonUtils.readMap("incorrect", String.class, Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
     }
 
-//    public void testReadWriteZonedDateTime() throws IOException {
-//        String str = "2017-07-23T07:57:14.225";
-//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-//        ZonedDateTime utc = ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC));
-//        ZonedDateTime singapore = ZonedDateTime.parse(str,
-//                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Asia/Singapore")));
-//        ZonedDateTime australia = ZonedDateTime.parse(str,
-//                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneId.of("Australia/Sydney")));
-//
-//        String json = JsonUtils.writeValue(utc);
-//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
-//        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(utc);
-//
-//        json = JsonUtils.writeValue(singapore);
-//        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225Z\"");
-//        assertThat(JsonUtils.readValue(json, ZonedDateTime.class)).isEqualTo(singapore);
-//    }
-
-//    public void testWriteDateReadZonedDateTime() throws IOException {
-//        Date expected = new Date();
-//        String json = JsonUtils.writeValue(expected);
-////        assertThat(json).isEqualTo("\"2017-07-23T07:57:14.225+0000\"");
-//        // "2017-07-24T07:36:21.129+0000"
-//
-//        ZonedDateTime actual = JsonUtils.readValue(json, ZonedDateTime.class);
-//        int a = 0;
-//        a++;
-//
-////        assertThat(JsonUtils.readValue(json, Date.class)).isEqualTo(expected);
-//    }
-
+    @SuppressWarnings({ "FieldMayBeFinal", "unused" })
     private static final class Data {
 
         private int intVal;
@@ -293,4 +263,5 @@ public class JsonUtilsTest {
             return Objects.hash(intVal, strVal);
         }
     }
+
 }

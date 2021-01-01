@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 public final class JacksonObjectMapper {
 
     private static Consumer<ObjectMapper> settingsConsumer = DefaultSettingsConsumer.INSTANCE;
+
     private static final ThreadLocal<ObjectMapper> THREAD_LOCAL_MAPPER = ThreadLocal.withInitial(() -> {
         ObjectMapper mapper = new ObjectMapper();
         settingsConsumer.accept(mapper);

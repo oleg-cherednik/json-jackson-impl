@@ -10,11 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.function.Consumer;
@@ -27,26 +27,29 @@ public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
 
     public static final DefaultSettingsConsumer INSTANCE = new DefaultSettingsConsumer();
 
-    protected static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss.SSSZ";
-
     protected DefaultSettingsConsumer() {
     }
 
     @Override
     public void accept(ObjectMapper mapper) {
-        mapper.registerModule(createJavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());
+//        mapper.registerModule(createJavaTimeModule());
         mapper.registerModule(new AfterburnerModule());
 
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setDateFormat(new SimpleDateFormat(DEFAULT_DATE_FORMAT));
+//        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ"));   // ISO 8601
+        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        mapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, true);
-        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+
+        mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
+        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        mapper.enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
     }
 
     private static JavaTimeModule createJavaTimeModule() {

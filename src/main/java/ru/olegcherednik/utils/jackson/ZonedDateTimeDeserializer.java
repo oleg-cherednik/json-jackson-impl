@@ -22,7 +22,7 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  * @author Oleg Cherednik
  * @since 24.07.2017
  */
-final class ZonedDateTimeDeserializer extends JSR310DateTimeDeserializerBase<ZonedDateTime> {
+public class ZonedDateTimeDeserializer extends JSR310DateTimeDeserializerBase<ZonedDateTime> {
 
     private static final long serialVersionUID = -8798893923746924324L;
 
@@ -34,21 +34,29 @@ final class ZonedDateTimeDeserializer extends JSR310DateTimeDeserializerBase<Zon
         super(ZonedDateTime.class, df);
     }
 
+    protected ZonedDateTimeDeserializer(ZonedDateTimeDeserializer base, Boolean leniency) {
+        super(base, leniency);
+    }
+
+    protected ZonedDateTimeDeserializer(ZonedDateTimeDeserializer base, JsonFormat.Shape shape) {
+        super(base, shape);
+    }
+
     // ========== JSR310DateTimeDeserializerBase ==========
 
     @Override
-    protected JSR310DateTimeDeserializerBase<ZonedDateTime> withDateFormat(DateTimeFormatter dtf) {
+    protected ZonedDateTimeDeserializer withDateFormat(DateTimeFormatter dtf) {
         return new ZonedDateTimeDeserializer(dtf);
     }
 
     @Override
-    protected JSR310DateTimeDeserializerBase<ZonedDateTime> withLeniency(Boolean leniency) {
-        return null;
+    protected ZonedDateTimeDeserializer withLeniency(Boolean leniency) {
+        return new ZonedDateTimeDeserializer(this, leniency);
     }
 
     @Override
-    protected JSR310DateTimeDeserializerBase<ZonedDateTime> withShape(JsonFormat.Shape shape) {
-        return null;
+    protected ZonedDateTimeDeserializer withShape(JsonFormat.Shape shape) {
+        return new ZonedDateTimeDeserializer(this, shape);
     }
 
     // ========== JsonDeserializer ==========
