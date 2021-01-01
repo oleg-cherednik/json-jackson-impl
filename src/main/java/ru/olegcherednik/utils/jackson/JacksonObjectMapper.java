@@ -15,39 +15,20 @@ package ru.olegcherednik.utils.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 /**
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class JacksonObjectMapper {
+final class JacksonObjectMapper {
 
-    private static Consumer<ObjectMapper> settingsConsumer = DefaultSettingsConsumer.INSTANCE;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final ThreadLocal<ObjectMapper> THREAD_LOCAL_MAPPER = ThreadLocal.withInitial(() -> {
-        ObjectMapper mapper = new ObjectMapper();
-        settingsConsumer.accept(mapper);
-        return mapper;
-    });
-
-    public static void setSettingsConsumer(Consumer<ObjectMapper> settingsConsumer) {
-        settingsConsumer = Optional.ofNullable(settingsConsumer).orElse(DefaultSettingsConsumer.INSTANCE);
-
-        if (JacksonObjectMapper.settingsConsumer == settingsConsumer)
-            return;
-
-        JacksonObjectMapper.settingsConsumer = DefaultSettingsConsumer.INSTANCE;
-        THREAD_LOCAL_MAPPER.remove();
+    static {
+        DefaultSettingsConsumer.INSTANCE.accept(OBJECT_MAPPER);
     }
 
     public static ObjectMapper mapper() {
-        return THREAD_LOCAL_MAPPER.get();
-    }
-
-    public static void remove() {
-        THREAD_LOCAL_MAPPER.remove();
+        return OBJECT_MAPPER;
     }
 
     private JacksonObjectMapper() {
