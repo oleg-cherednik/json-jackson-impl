@@ -10,6 +10,12 @@ import java.util.Map;
  */
 public final class MapUtils {
 
+    static <K, V> Map<K, V> of(K k1, V v1) {
+        Map<K, V> map = new LinkedHashMap<>();
+        map.put(k1, v1);
+        return Collections.unmodifiableMap(map);
+    }
+
     static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2) {
         Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);

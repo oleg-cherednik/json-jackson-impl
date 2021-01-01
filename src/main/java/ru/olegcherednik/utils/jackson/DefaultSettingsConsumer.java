@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -32,6 +33,7 @@ public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
 
     @Override
     public void accept(ObjectMapper mapper) {
+        mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new JavaTimeModule());
 //        mapper.registerModule(createJavaTimeModule());
         mapper.registerModule(new AfterburnerModule());
@@ -40,7 +42,6 @@ public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ"));   // ISO 8601
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
 
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
