@@ -3,6 +3,7 @@ package ru.olegcherednik.utils.jackson;
 import org.testng.annotations.Test;
 
 import java.time.ZoneId;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,9 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ZoneIdZonedDateTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithFeature() {
-        ZoneId zone = ZoneId.of("Asia/Singapore");
-        LocalZonedDateTimeSerializer ser = new LocalZonedDateTimeSerializer(zone);
-
+        LocalZonedDateTimeSerializer ser = new LocalZonedDateTimeSerializer(zoneId -> ZoneId.of("Asia/Singapore"));
         assertThat(ser.withFeatures(false)).isExactlyInstanceOf(ZoneIdZonedDateTimeSerializer.class);
         assertThat(ser.withFeatures(false, false)).isExactlyInstanceOf(ZoneIdZonedDateTimeSerializer.class);
     }
@@ -25,8 +24,8 @@ public class ZoneIdZonedDateTimeSerializerTest {
 
         private static final long serialVersionUID = 1319340992384997514L;
 
-        public LocalZonedDateTimeSerializer(ZoneId zone) {
-            super(zone);
+        public LocalZonedDateTimeSerializer(Function<ZoneId, ZoneId> withZone) {
+            super(withZone);
         }
 
         @Override

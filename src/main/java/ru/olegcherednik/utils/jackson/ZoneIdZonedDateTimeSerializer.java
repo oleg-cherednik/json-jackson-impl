@@ -7,10 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 
 import java.io.IOException;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author Oleg Cherednik
@@ -20,10 +20,10 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     private static final long serialVersionUID = -2135138754031293296L;
 
-    private final ZoneId zone;
+    private final Function<ZoneId, ZoneId> withZone;
 
-    public ZoneIdZonedDateTimeSerializer(ZoneId zone) {
-        this.zone = Optional.ofNullable(zone).orElse(ZoneOffset.UTC);
+    public ZoneIdZonedDateTimeSerializer(Function<ZoneId, ZoneId> withZone) {
+        this.withZone = Optional.ofNullable(withZone).orElse(JacksonObjectMapperBuilder.WITH_SAME_ZONE);
     }
 
     protected ZoneIdZonedDateTimeSerializer(ZoneIdZonedDateTimeSerializer base, Boolean useTimestamp, DateTimeFormatter formatter,
@@ -34,11 +34,12 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     protected ZoneIdZonedDateTimeSerializer(ZoneIdZonedDateTimeSerializer base, Boolean useTimestamp, Boolean useNanoseconds,
             DateTimeFormatter formatter, Boolean writeZoneId) {
         super(base, useTimestamp, useNanoseconds, formatter, writeZoneId);
-        zone = base.zone;
+        withZone = base.withZone;
     }
 
     @Override
     public void serialize(ZonedDateTime value, JsonGenerator g, SerializerProvider provider) throws IOException {
+        ZoneId zone = withZone.apply(value.getZone());
         super.serialize(value.withZoneSameInstant(zone), g, provider);
     }
 
