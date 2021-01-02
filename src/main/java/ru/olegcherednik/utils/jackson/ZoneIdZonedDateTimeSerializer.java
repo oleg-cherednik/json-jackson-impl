@@ -48,6 +48,7 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected ZoneIdZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
         return new ZoneIdZonedDateTimeSerializer(this, _useTimestamp, _formatter, writeZoneId);
     }

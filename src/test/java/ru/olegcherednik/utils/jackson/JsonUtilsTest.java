@@ -41,7 +41,6 @@ public class JsonUtilsTest {
         assertThat(JsonUtils.readMap(null)).isNull();
         assertThat(JsonUtils.readMap(null, String.class, String.class)).isNull();
         assertThat(JsonUtils.writeValue(null)).isNull();
-        assertThat(JsonUtils.writePrettyPrinterValue(null)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
@@ -139,8 +138,6 @@ public class JsonUtilsTest {
     public void shouldRetrieveEmptyJsonWhenWriteEmptyCollection() {
         assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
         assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
-        assertThat(JsonUtils.writePrettyPrinterValue(Collections.emptyList())).isEqualTo("[ ]");
-        assertThat(JsonUtils.writePrettyPrinterValue(Collections.emptyMap())).isEqualTo("{ }");
     }
 
     public void shouldWriteJsonToStreamWhenWriteObjectToStream() throws IOException {
@@ -160,7 +157,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() {
         Data data = new Data(555, "victory");
-        String actual = JsonUtils.writePrettyPrinterValue(data);
+        String actual = JsonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"intVal\" : 555," + System.lineSeparator() +
@@ -172,7 +169,7 @@ public class JsonUtilsTest {
         Map<String, Data> data = MapUtils.of(
                 "victory", new Data(555, "victory"),
                 "omen", new Data(666, "omen"));
-        String actual = JsonUtils.writePrettyPrinterValue(data);
+        String actual = JsonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"victory\" : {" + System.lineSeparator() +
                 "    \"intVal\" : 555," + System.lineSeparator() +
@@ -187,7 +184,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() {
         List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
-        String actual = JsonUtils.writePrettyPrinterValue(data);
+        String actual = JsonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("[ {" + System.lineSeparator() +
                 "  \"intVal\" : 555," + System.lineSeparator() +
@@ -201,7 +198,7 @@ public class JsonUtilsTest {
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToStream() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
-            JsonUtils.writePrettyPrinterValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JsonUtils.prettyPrint().writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo('{' + System.lineSeparator() +
                     "  \"intVal\" : 666," + System.lineSeparator() +
                     "  \"strVal\" : \"omen\"" + System.lineSeparator() +
@@ -211,7 +208,7 @@ public class JsonUtilsTest {
 
     public void shouldWriteNullJsonWhenWriteNullWithPrettyPrintToStream() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.writePrettyPrinterValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JsonUtils.prettyPrint().writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
     }

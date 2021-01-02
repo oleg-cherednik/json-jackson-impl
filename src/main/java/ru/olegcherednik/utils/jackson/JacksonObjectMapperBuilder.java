@@ -11,26 +11,37 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * @author Oleg Cherednik
- * @since 23.12.2020
+ * @since 02.01.2021
  */
-public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
+public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
 
-    public static final DefaultSettingsConsumer INSTANCE = new DefaultSettingsConsumer();
+    private final ZoneId zone;
 
-    protected DefaultSettingsConsumer() {
+    public JacksonObjectMapperBuilder() {
+        this(ZoneOffset.UTC);
+    }
+
+    public JacksonObjectMapperBuilder(ZoneId zone) {
+        this.zone = zone;
+    }
+
+    protected void registerModule(ObjectMapper mapper) {
+        mapper.registerModule(new ParameterNamesModule());
+        mapper.registerModule(new AfterburnerModule());
+        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(zone)));
     }
 
     @Override
-    public void accept(ObjectMapper mapper) {
-        mapper.registerModule(new ParameterNamesModule());
-        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(ZoneOffset.UTC)));
-        mapper.registerModule(new AfterburnerModule());
+    public ObjectMapper get() {
+        ObjectMapper mapper = new ObjectMapper();
+        registerModule(mapper);
 
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -44,6 +55,6 @@ public class DefaultSettingsConsumer implements Consumer<ObjectMapper> {
         mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         mapper.enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
+        return mapper;
     }
-
 }

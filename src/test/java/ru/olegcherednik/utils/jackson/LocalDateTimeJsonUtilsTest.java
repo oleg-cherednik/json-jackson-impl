@@ -25,7 +25,7 @@ public class LocalDateTimeJsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonWhenWriteZonedDateTimeMapWithPrettyPrint() {
         Map<String, LocalDateTime> map = createData();
-        String actual = JsonUtils.writePrettyPrinterValue(map);
+        String actual = JsonUtils.prettyPrint().writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"local\" : \"2017-07-23T13:57:14.225\"" + System.lineSeparator() +
                 '}');

@@ -13,18 +13,9 @@
  */
 package ru.olegcherednik.utils.jackson;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.type.MapType;
-
-import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.Callable;
 
 /**
  * @author Oleg Cherednik
@@ -32,100 +23,46 @@ import java.util.concurrent.Callable;
  */
 public final class JsonUtils {
 
+    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonObjectMapper::mapper);
+    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(JacksonObjectMapper::prettyPrintMapper);
+
+    // ---------- ObjectMapperDecorator ----------
+
     public static <T> T readValue(String json, Class<T> valueType) {
-        Objects.requireNonNull(valueType, "'valueType' should not be null");
-
-        if (json == null)
-            return null;
-
-        return withRuntimeException(() -> JacksonObjectMapper.mapper().readValue(json, valueType));
+        return print().readValue(json, valueType);
     }
 
     public static <T> List<T> readList(String json, Class<T> valueType) {
-        Objects.requireNonNull(valueType, "'valueType' should not be null");
-
-        if (json == null)
-            return null;
-        if (isEmpty(json))
-            return Collections.emptyList();
-
-        return withRuntimeException(() -> {
-            ObjectReader reader = JacksonObjectMapper.mapper().readerFor(valueType);
-            return reader.<T>readValues(json).readAll();
-        });
+        return print().readList(json, valueType);
     }
 
     public static Map<String, ?> readMap(String json) {
-        if (json == null)
-            return null;
-        if (isEmpty(json))
-            return Collections.emptyMap();
-
-        return withRuntimeException(() -> {
-            ObjectMapper mapper = JacksonObjectMapper.mapper();
-            MapType mapType = mapper.getTypeFactory().constructRawMapType(LinkedHashMap.class);
-            return mapper.readValue(json, mapType);
-        });
+        return print().readMap(json);
     }
 
     public static <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
-        if (json == null)
-            return null;
-        if (isEmpty(json))
-            return Collections.emptyMap();
-
-        return withRuntimeException(() -> {
-            ObjectMapper mapper = JacksonObjectMapper.mapper();
-            MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
-            return mapper.readValue(json, mapType);
-        });
+        return print().readMap(json, keyClass, valueClass);
     }
 
     public static <T> String writeValue(T obj) {
-        if (obj == null)
-            return null;
-
-        return withRuntimeException(() -> JacksonObjectMapper.mapper().writeValueAsString(obj));
+        return print().writeValue(obj);
     }
 
     public static <T> void writeValue(T obj, OutputStream out) {
-        Objects.requireNonNull(out, "'out' should not be null");
-
-        withRuntimeException(() -> {
-            JacksonObjectMapper.mapper().writeValue(out, obj);
-            return null;
-        });
+        print().writeValue(obj, out);
     }
 
-    public static <T> String writePrettyPrinterValue(T obj) {
-        if (obj == null)
-            return null;
+    // ---------- print ----------
 
-        return withRuntimeException(() -> JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
+    public static ObjectMapperDecorator print() {
+        return DELEGATE;
     }
 
-    public static <T> void writePrettyPrinterValue(T obj, OutputStream out) throws IOException {
-        Objects.requireNonNull(out, "'out' should not be null");
-
-        withRuntimeException(() -> {
-            JacksonObjectMapper.mapper().writerWithDefaultPrettyPrinter().writeValue(out, obj);
-            return null;
-        });
-    }
-
-    private static <T> T withRuntimeException(Callable<T> task) {
-        try {
-            return task.call();
-        } catch(Exception e) {
-            throw new JacksonUtilsException(e);
-        }
-    }
-
-    private static boolean isEmpty(String json) {
-        json = json.trim();
-        return "{}".equals(json) || "[]".equals(json);
+    public static ObjectMapperDecorator prettyPrint() {
+        return PRETTY_PRINT_DELEGATE;
     }
 
     private JsonUtils() {
     }
+
 }
