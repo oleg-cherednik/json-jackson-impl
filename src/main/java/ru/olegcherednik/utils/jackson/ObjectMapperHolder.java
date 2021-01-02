@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class JacksonObjectMapper {
+public final class ObjectMapperHolder {
 
     public static final Supplier<ObjectMapper> DEFAULT_MAPPER_BUILDER = new JacksonObjectMapperBuilder();
 
@@ -64,12 +64,12 @@ public final class JacksonObjectMapper {
     }
 
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
-        JacksonObjectMapper.mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
+        ObjectMapperHolder.mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
         mapper = createMapper();
         prettyPrintMapper = createPrettyPrintMapper();
     }
 
-    private JacksonObjectMapper() {
+    private ObjectMapperHolder() {
     }
 
 }
