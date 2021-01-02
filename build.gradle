@@ -1,0 +1,123 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+    id 'io.codearte.nexus-staging' version '0.11.0'
+    id 'com.gradle.build-scan' version '3.5'
+//    id "com.github.hierynomus.license" version "0.15.0"
+}
+
+apply plugin: 'com.bmuschko.nexus'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+group 'ru.oleg-cherednik.utils.jackson'
+version '2.12.0.1'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+mainClassName = 'unknown'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+configurations {
+    jar.archiveName = "jackson-utils-${version}.jar"
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.12.0'
+    implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.12.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.12.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0'
+
+    testImplementation 'org.testng:testng:7.3.0'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'commons-io:commons-io:2.5'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+    useTestNG()
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}
+
+//license {
+//    header = file('license_header.txt')
+//    include "**/*.java"
+//    exclude "**/*Test.java"
+//}
+
+modifyPom {
+    project {
+        name 'jackson-utils'
+        description 'Some utils for Jackson Project'
+        url 'https://github.com/oleg-cherednik/jackson-utils'
+        inceptionYear '2020'
+
+        scm {
+            url 'https://github.com/oleg-cherednik/jackson-utils'
+            connection 'scm:https://github.com/oleg-cherednik/jackson-utils.git'
+            developerConnection 'scm:git@github.com:oleg-cherednik/jackson-utils.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'oleg.cherednik'
+                name 'Oleg Cherednik'
+                email 'oleg.cherednik@gmail.com'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources true
+    tests true
+    javadoc true
+}
+
+nexus {
+    sign true
+    repositoryUrl 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+    snapshotRepositoryUrl 'https://oss.sonatype.org/content/repositories/snapshots'
+}
+
+nexusStaging {
+    packageGroup 'ru.oleg-cherednik'
+    stagingProfileId 'd3835bf60f05b9'
+}
