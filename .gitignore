@@ -2,7 +2,7 @@
 /gradlew
 /gradlew.bat
 /gradle/
-.iddea
+.idea
 *.iml
 build
 /out/
