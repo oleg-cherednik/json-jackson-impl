@@ -14,6 +14,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -22,20 +23,27 @@ import java.util.function.Supplier;
  */
 public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
 
-    private final ZoneId zone;
+    public static final Function<ZoneId, ZoneId> WITH_SAME_ZONE = zoneId -> zoneId;
+    public static final Function<ZoneId, ZoneId> WITH_UTC_ZONE = zoneId -> ZoneOffset.UTC;
+
+    private final Function<ZoneId, ZoneId> withZone;
 
     public JacksonObjectMapperBuilder() {
-        this(ZoneOffset.UTC);
+        this(WITH_UTC_ZONE);
     }
 
     public JacksonObjectMapperBuilder(ZoneId zone) {
-        this.zone = zone;
+        this(z -> zone);
+    }
+
+    public JacksonObjectMapperBuilder(Function<ZoneId, ZoneId> withZone) {
+        this.withZone = withZone;
     }
 
     protected void registerModule(ObjectMapper mapper) {
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new AfterburnerModule());
-        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(zone)));
+        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(withZone)));
     }
 
     @Override

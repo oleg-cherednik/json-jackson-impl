@@ -24,8 +24,8 @@ repositories {
     mavenCentral()
 }
 
-group 'ru.oleg-cherednik.utils.jackson'
-version '2.12.0.1'
+group 'ru.oleg-cherednik.utils'
+version '2.12.0.2'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
