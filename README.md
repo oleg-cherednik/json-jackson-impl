@@ -2,5 +2,5 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![codecov](https://codecov.io/gh/oleg-cherednik/jackson-utils/branch/dev/graph/badge.svg)](https://codecov.io/gh/oleg-cherednik/jackson-utils)
 [![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/jackson-utils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/jackson-utils?targetFile=build.gradle)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b6b963fef254ff4b00b8be0304e829b)](https://www.codacy.com/app/oleg-cherednik/zip4jvm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/zip4jvm&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/jackson-utils&amp;utm_campaign=Badge_Grade)
 [![coverity](https://scan.coverity.com/projects/22381/badge.svg)](https://scan.coverity.com/projects/oleg-cherednik-jackson-utils)
