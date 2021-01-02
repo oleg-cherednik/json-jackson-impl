@@ -8,7 +8,7 @@
 [![coverity](https://scan.coverity.com/projects/22381/badge.svg)](https://scan.coverity.com/projects/oleg-cherednik-jackson-utils)
 
 ##### Links
-* Home page: https://github.com/oleg-cherednik/zip4jvm
+* Home page: https://github.com/oleg-cherednik/jackson-utils
 * Maven:
   * **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.zip4jvm/zip4jvm
   * **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/jackson-utils/
