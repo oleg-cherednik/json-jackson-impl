@@ -29,7 +29,7 @@ public class ObjectMapperDecorator {
         this.supplier = supplier;
     }
 
-    public <T> T readValue(String json, Class<T> valueType) {
+    public <V> V readValue(String json, Class<V> valueType) {
         Objects.requireNonNull(valueType, "'valueType' should not be null");
 
         if (json == null)
@@ -38,7 +38,7 @@ public class ObjectMapperDecorator {
         return withRuntimeException(() -> supplier.get().readValue(json, valueType));
     }
 
-    public <T> List<T> readList(String json, Class<T> valueType) {
+    public <V> List<V> readList(String json, Class<V> valueType) {
         Objects.requireNonNull(valueType, "'valueType' should not be null");
 
         if (json == null)
@@ -48,7 +48,7 @@ public class ObjectMapperDecorator {
 
         return withRuntimeException(() -> {
             ObjectReader reader = supplier.get().readerFor(valueType);
-            return reader.<T>readValues(json).readAll();
+            return reader.<V>readValues(json).readAll();
         });
     }
 
@@ -65,6 +65,10 @@ public class ObjectMapperDecorator {
         });
     }
 
+    public <V> Map<String, V> readMap(String json, Class<V> valueClass) {
+        return readMap(json, String.class, valueClass);
+    }
+
     public <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
         if (json == null)
             return null;
@@ -78,14 +82,14 @@ public class ObjectMapperDecorator {
         });
     }
 
-    public <T> String writeValue(T obj) {
+    public <V> String writeValue(V obj) {
         if (obj == null)
             return null;
 
         return withRuntimeException(() -> supplier.get().writeValueAsString(obj));
     }
 
-    public <T> void writeValue(T obj, OutputStream out) {
+    public <V> void writeValue(V obj, OutputStream out) {
         Objects.requireNonNull(out, "'out' should not be null");
 
         withRuntimeException(() -> {
@@ -94,7 +98,7 @@ public class ObjectMapperDecorator {
         });
     }
 
-    private static <T> T withRuntimeException(Callable<T> task) {
+    private static <V> V withRuntimeException(Callable<V> task) {
         try {
             return task.call();
         } catch(Exception e) {

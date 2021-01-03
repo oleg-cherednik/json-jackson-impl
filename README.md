@@ -85,7 +85,28 @@ public class Data {
 List<Data> res = JsonUtils.readList(json, Data.class);
 ```
 
-#### Read json string as a map of a given class type
+#### Read json string as a map
+
+##### Map with `String` keys and `Map` or primitive types as values
+
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+Map<String, ?> map = JsonUtils.readMap(json);
+```
+**Note:** `map` values have either primitive type or `Map`.
+
+##### Map with `String` keys and given type as value
 
 ```java
 public class Data {
@@ -106,7 +127,31 @@ public class Data {
 }
 ```
 ```
-Map<String, Data> map = JsonUtils.readMap(json, String.class, Data.class);
+Map<String, Data> map = JsonUtils.readMap(json, Data.class);
+```
+
+##### Map with `Integer` keys and given type as value
+
+```java
+public class Data {
+    private int intVal;
+    private String strVal;
+}
+```
+```json                        
+{
+    "1" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "2" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
 ```
 
 ##### Links

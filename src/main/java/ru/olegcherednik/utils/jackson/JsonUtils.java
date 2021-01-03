@@ -28,11 +28,11 @@ public final class JsonUtils {
 
     // ---------- ObjectMapperDecorator ----------
 
-    public static <T> T readValue(String json, Class<T> valueType) {
+    public static <V> V readValue(String json, Class<V> valueType) {
         return print().readValue(json, valueType);
     }
 
-    public static <T> List<T> readList(String json, Class<T> valueType) {
+    public static <V> List<V> readList(String json, Class<V> valueType) {
         return print().readList(json, valueType);
     }
 
@@ -40,15 +40,19 @@ public final class JsonUtils {
         return print().readMap(json);
     }
 
+    public static <V> Map<String, V> readMap(String json, Class<V> valueClass) {
+        return print().readMap(json, valueClass);
+    }
+
     public static <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
         return print().readMap(json, keyClass, valueClass);
     }
 
-    public static <T> String writeValue(T obj) {
+    public static <V> String writeValue(V obj) {
         return print().writeValue(obj);
     }
 
-    public static <T> void writeValue(T obj, OutputStream out) {
+    public static <V> void writeValue(V obj, OutputStream out) {
         print().writeValue(obj, out);
     }
 
