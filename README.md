@@ -9,7 +9,7 @@
      
 # jackson-utils
 > a java tool to make working with Jackson Project more comfortable
----
+
 ## Features
 * Encapsulate all checked exceptions from Jackson with custom runtime exception;
 * A centralized configuration of `ObjectMapper`;
