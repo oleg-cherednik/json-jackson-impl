@@ -39,6 +39,18 @@ public class ZonedDateTimeJsonUtilsTest {
                 "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"}");
     }
 
+    public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
+        ObjectMapperDecorator jsonUtils = ObjectMapperHolder.createMapperDecorator(
+                () -> new JacksonObjectMapperBuilder(JacksonObjectMapperBuilder.WITH_SAME_ZONE).get());
+
+        Map<String, ZonedDateTime> map = createData();
+        String actual = jsonUtils.writeValue(map);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
+                "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
+                "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}");
+    }
+
     public void shouldRetrievePrettyPrintJsonUTCZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         Map<String, ZonedDateTime> map = createData();
         String actual = JsonUtils.prettyPrint().writeValue(map);
@@ -49,7 +61,7 @@ public class ZonedDateTimeJsonUtilsTest {
                 '}');
     }
 
-    public void shouldRetrievePrettyPrintJsonSingaporeZOneWhenWriteZonedDateTimeMapWithPrettyPrint() {
+    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         ObjectMapperDecorator jsonUtils = ObjectMapperHolder.createPrettyPrintMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
