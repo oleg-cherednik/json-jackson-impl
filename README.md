@@ -38,6 +38,76 @@ The last section is the `jackson-utils` version. This number is unique.
 
 ## Usage 
 
+To simplify usage of _jackson-utils_, there're following classes:
+* [JsonUtils](#jsonutils) - utility class with set of method to use json transformation;
+
+### JsonUtils
+
+#### Read json string as given class type (not a collection)
+
+```java
+public class Data {
+    private int intVal;
+    private String strVal;
+}
+```
+```json                        
+{
+    "intVal" : 666,
+    "strVal" : "omen"
+}
+```
+```
+Data data = JsonUtils.readValue(json, Data.class);
+```
+
+#### Read json string as a list of a given class type
+
+```java
+public class Data {
+    private int intVal;
+    private String strVal;
+}
+```
+```json                        
+[
+    {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+]
+```
+```
+List<Data> res = JsonUtils.readList(json, Data.class);
+```
+
+#### Read json string as a map of a given class type
+
+```java
+public class Data {
+    private int intVal;
+    private String strVal;
+}
+```
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+Map<String, Data> map = JsonUtils.readMap(json, String.class, Data.class);
+```
 
 ##### Links
 * Home page: https://github.com/oleg-cherednik/jackson-utils
