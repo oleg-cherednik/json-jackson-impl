@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,17 +31,19 @@ public class ObjectMapperDecorator {
         this.supplier = supplier;
     }
 
-    public <V> V readValue(String json, Class<V> valueType) {
-        Objects.requireNonNull(valueType, "'valueType' should not be null");
+    // ---------- read ----------
+
+    public <V> V readValue(String json, Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         if (json == null)
             return null;
 
-        return withRuntimeException(() -> supplier.get().readValue(json, valueType));
+        return withRuntimeException(() -> supplier.get().readValue(json, valueClass));
     }
 
-    public <V> List<V> readList(String json, Class<V> valueType) {
-        Objects.requireNonNull(valueType, "'valueType' should not be null");
+    public <V> List<V> readList(String json, Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         if (json == null)
             return null;
@@ -47,7 +51,7 @@ public class ObjectMapperDecorator {
             return Collections.emptyList();
 
         return withRuntimeException(() -> {
-            ObjectReader reader = supplier.get().readerFor(valueType);
+            ObjectReader reader = supplier.get().readerFor(valueClass);
             return reader.<V>readValues(json).readAll();
         });
     }
@@ -82,6 +86,8 @@ public class ObjectMapperDecorator {
         });
     }
 
+    // ---------- write ----------
+
     public <V> String writeValue(V obj) {
         if (obj == null)
             return null;
@@ -97,6 +103,69 @@ public class ObjectMapperDecorator {
             return null;
         });
     }
+
+    // ---------- InputStream ----------
+
+    public <V> V readValue(InputStream in, Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().readValue(in, valueClass));
+    }
+
+    public <V> List<V> readList(InputStream in, Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectReader reader = supplier.get().readerFor(valueClass);
+            return reader.<V>readValues(in).readAll();
+        });
+    }
+
+    public <V> Iterator<V> readListLazy(InputStream in, Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectReader reader = supplier.get().readerFor(valueClass);
+            return reader.readValues(in);
+        });
+    }
+
+    public Map<String, ?> readMap(InputStream in) {
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = supplier.get();
+            MapType mapType = mapper.getTypeFactory().constructRawMapType(LinkedHashMap.class);
+            return mapper.readValue(in, mapType);
+        });
+    }
+
+    public <V> Map<String, V> readMap(InputStream in, Class<V> valueClass) {
+        return readMap(in, String.class, valueClass);
+    }
+
+    public <K, V> Map<K, V> readMap(InputStream in, Class<K> keyClass, Class<V> valueClass) {
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = supplier.get();
+            MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
+            return mapper.readValue(in, mapType);
+        });
+    }
+
+    // ---------- misc ----------
 
     private static <V> V withRuntimeException(Callable<V> task) {
         try {

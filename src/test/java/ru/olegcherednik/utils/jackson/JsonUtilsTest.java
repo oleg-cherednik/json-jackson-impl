@@ -36,25 +36,25 @@ public class JsonUtilsTest {
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JsonUtils.readValue(null, Object.class)).isNull();
-        assertThat(JsonUtils.readList(null, Object.class)).isNull();
-        assertThat(JsonUtils.readMap(null)).isNull();
-        assertThat(JsonUtils.readMap(null, String.class, String.class)).isNull();
+        assertThat(JsonUtils.readValue((String)null, Object.class)).isNull();
+        assertThat(JsonUtils.readList((String)null, Object.class)).isNull();
+        assertThat(JsonUtils.readMap((String)null)).isNull();
+        assertThat(JsonUtils.readMap((String)null, String.class, String.class)).isNull();
         assertThat(JsonUtils.writeValue(null)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
+        Data expected = new Data(666, "omen");
         Data actual = JsonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual.getIntVal()).isEqualTo(666);
-        assertThat(actual.getStrVal()).isEqualTo("omen");
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyJson() {
+        Data expected = new Data();
         Data actual = JsonUtils.readValue("{}", Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual.getIntVal()).isEqualTo(0);
-        assertThat(actual.getStrVal()).isNull();
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveDeserializedListWhenReadJsonAsList() {
@@ -243,16 +243,6 @@ public class JsonUtilsTest {
             this.intVal = intVal;
             this.strVal = strVal;
         }
-
-        public int getIntVal() {
-            return intVal;
-        }
-
-        public String getStrVal() {
-            return strVal;
-        }
-
-        // ========== Object ==========
 
         @Override
         public boolean equals(Object obj) {

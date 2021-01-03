@@ -13,9 +13,11 @@ jackson-utils - a java tool to make working with Jackson Project more comfortabl
 ## Features
 * Encapsulate all checked exceptions from Jackson with custom runtime exception;
 * A centralized configuration of `ObjectMapper`;
-* `ObjectMapper` central holder - the place where single instance of `ObjectMapper` lives;
+* A central place of settings and all `ObjectMapper` instances;
 * Utility class to make most common operations much more comfortable to use;
-* Ability to change `Zone` to save `ZonedDateTime` independently of original zone.
+* Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
+* `InputStream` support for objects, lists and maps;
+* Lazy read support for list from `InputStream`. 
 
 ## Gradle
 
@@ -43,12 +45,14 @@ To simplify usage of _jackson-utils_, there're following classes:
 
 ### JsonUtils
 
-#### Read json string as given class type (not a collection)
+#### Read json from `String`
+
+##### Custom object type (but not a collection)
 
 ```java
-public class Data {
-    private int intVal;
-    private String strVal;
+class Data {
+    int intVal;
+    String strVal;
 }
 ```
 ```json                        
@@ -58,15 +62,16 @@ public class Data {
 }
 ```
 ```
+String json;
 Data data = JsonUtils.readValue(json, Data.class);
 ```
 
-#### Read json string as a list of a given class type
+##### List of custom object type
 
 ```java
-public class Data {
-    private int intVal;
-    private String strVal;
+class Data {
+    int intVal;
+    String strVal;
 }
 ```
 ```json                        
@@ -82,12 +87,13 @@ public class Data {
 ]
 ```
 ```
+String json;
 List<Data> res = JsonUtils.readList(json, Data.class);
 ```
 
-#### Read json string as a map
+##### Map of custom object type
 
-##### Map with `String` keys and `Map` or primitive types as values
+###### Map with `String` keys and `Map` or primitive types as values
 
 ```json                        
 {
@@ -102,16 +108,17 @@ List<Data> res = JsonUtils.readList(json, Data.class);
 }
 ```
 ```
+String json;
 Map<String, ?> map = JsonUtils.readMap(json);
 ```
-**Note:** `map` values have either primitive type or `Map`.
+**Note:** `map` values have either primitive type or `Map` or `List`.
 
-##### Map with `String` keys and given type as value
+###### Map with `String` keys and given type as value
 
 ```java
-public class Data {
-    private int intVal;
-    private String strVal;
+class Data {
+    int intVal;
+    String strVal;
 }
 ```
 ```json                        
@@ -127,15 +134,16 @@ public class Data {
 }
 ```
 ```
+String json;
 Map<String, Data> map = JsonUtils.readMap(json, Data.class);
 ```
 
-##### Map with `Integer` keys and given type as value
+###### Map with `Integer` keys and given type as value
 
 ```java
-public class Data {
-    private int intVal;
-    private String strVal;
+class Data {
+    int intVal;
+    String strVal;
 }
 ```
 ```json                        
@@ -151,7 +159,161 @@ public class Data {
 }
 ```
 ```
+String json;
 Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
+```
+
+#### Read json from `InputStream`
+
+##### Custom object type (but not a collection)
+
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json                        
+{
+    "intVal" : 666,
+    "strVal" : "omen"
+}
+```
+```         
+try (InputStream in = ...) {
+    Data data = JsonUtils.readValue(in, Data.class);
+}
+```
+
+##### List of custom object type
+
+##### Read eager
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json                        
+[
+    {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+]
+```
+```
+try (InputStream in = ...) {
+    List<Data> res = JsonUtils.readList(in, Data.class);
+}
+```
+
+##### Read lazy
+
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json                        
+[
+    {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+]
+```
+```
+try (InputStream in = ...) {
+    Iterator<Data> it = JsonUtils.readListLazy(in, Data.class);
+    
+    while (it.hasNext()) {
+        Data data = it.next();
+    }
+}
+```
+##### Map of custom object type
+
+###### Map with `String` keys and `Map` or primitive types as values
+
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+try (InputStream in = ...) {
+    Map<String, ?> map = JsonUtils.readMap(in);
+}
+```
+**Note:** `map` values have either primitive type or `Map` or `List`.
+
+###### Map with `String` keys and given type as value
+
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+try (InputStream in = ...) {
+    Map<String, ?> map = JsonUtils.readMap(in, Data.class);
+}
+```
+
+###### Map with `Integer` keys and given type as value
+
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json                        
+{
+    "1" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "2" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```
+try (InputStream in = ...) {
+    Map<Integer, Data> map = JsonUtils.readMap(in, Integer.class, Data.class);
+}
 ```
 
 ##### Links

@@ -64,9 +64,13 @@ public final class ObjectMapperHolder {
     }
 
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
-        ObjectMapperHolder.mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
-        mapper = createMapper();
-        prettyPrintMapper = createPrettyPrintMapper();
+        mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
+
+        if (mapperBuilder != ObjectMapperHolder.mapperBuilder) {
+            ObjectMapperHolder.mapperBuilder = mapperBuilder;
+            mapper = createMapper();
+            prettyPrintMapper = createPrettyPrintMapper();
+        }
     }
 
     private ObjectMapperHolder() {
