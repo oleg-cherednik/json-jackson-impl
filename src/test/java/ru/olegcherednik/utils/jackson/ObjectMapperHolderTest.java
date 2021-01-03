@@ -1,5 +1,6 @@
 package ru.olegcherednik.utils.jackson;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
@@ -35,6 +36,15 @@ public class ObjectMapperHolderTest {
         assertThat(JsonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
                 "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + System.lineSeparator() +
                 '}');
+    }
+
+    public void shouldNotRebuildMapperWhenSetSameBuilder() {
+        ObjectMapper expectedMapper = ObjectMapperHolder.mapper();
+        ObjectMapper expectedPrettyPrintMapper = ObjectMapperHolder.prettyPrintMapper();
+
+        ObjectMapperHolder.setMapperBuilder(ObjectMapperHolder.DEFAULT_MAPPER_BUILDER);
+        assertThat(ObjectMapperHolder.mapper()).isSameAs(expectedMapper);
+        assertThat(ObjectMapperHolder.prettyPrintMapper()).isSameAs(expectedPrettyPrintMapper);
     }
 
     private static Map<String, ZonedDateTime> createData() {
