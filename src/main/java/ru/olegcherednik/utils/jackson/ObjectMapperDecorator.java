@@ -19,7 +19,6 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 02.01.2021
  */
-@SuppressWarnings("PMD.AvoidReassigningParameters")
 public class ObjectMapperDecorator {
 
     protected final Supplier<ObjectMapper> supplier;
@@ -176,6 +175,7 @@ public class ObjectMapperDecorator {
         }
     }
 
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     private static boolean isEmpty(String json) {
         json = json.trim();
         return "{}".equals(json) || "[]".equals(json);

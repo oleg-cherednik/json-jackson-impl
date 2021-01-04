@@ -18,11 +18,13 @@ public final class ObjectMapperUtils {
     private static ObjectMapper mapper = createMapper();
     private static ObjectMapper prettyPrintMapper = createPrettyPrintMapper();
 
-    /* package */ static synchronized ObjectMapper mapper() {
+    @SuppressWarnings("PMD.DefaultPackage")
+    static synchronized ObjectMapper mapper() {
         return mapper;
     }
 
-    /* package */ static synchronized ObjectMapper prettyPrintMapper() {
+    @SuppressWarnings("PMD.DefaultPackage")
+    static synchronized ObjectMapper prettyPrintMapper() {
         return prettyPrintMapper;
     }
 
@@ -50,6 +52,7 @@ public final class ObjectMapperUtils {
         return new ObjectMapperDecorator(createPrettyPrintMapper(mapperBuilder));
     }
 
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
         mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
 
