@@ -62,7 +62,7 @@ class Data {
 }
 ```
 ```java
-String json = null;
+String json;
 Data data = JsonUtils.readValue(json, Data.class);
 ```
 
@@ -86,7 +86,7 @@ class Data {
     }
 ]
 ```
-```
+```java
 String json;
 List<Data> res = JsonUtils.readList(json, Data.class);
 ```
@@ -107,7 +107,7 @@ List<Data> res = JsonUtils.readList(json, Data.class);
     }
 }
 ```
-```
+```java
 String json;
 Map<String, ?> map = JsonUtils.readMap(json);
 ```
@@ -133,7 +133,7 @@ class Data {
     }
 }
 ```
-```
+```java
 String json;
 Map<String, Data> map = JsonUtils.readMap(json, Data.class);
 ```
@@ -158,7 +158,7 @@ class Data {
     }
 }
 ```
-```
+```java
 String json;
 Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
 ```
@@ -179,7 +179,7 @@ class Data {
     "strVal" : "omen"
 }
 ```
-```         
+```java         
 try (InputStream in = ...) {
     Data data = JsonUtils.readValue(in, Data.class);
 }
@@ -206,7 +206,7 @@ class Data {
     }
 ]
 ```
-```
+```java
 try (InputStream in = ...) {
     List<Data> res = JsonUtils.readList(in, Data.class);
 }
@@ -232,7 +232,7 @@ class Data {
     }
 ]
 ```
-```
+```java
 try (InputStream in = ...) {
     Iterator<Data> it = JsonUtils.readListLazy(in, Data.class);
     
@@ -257,7 +257,7 @@ try (InputStream in = ...) {
     }
 }
 ```
-```
+```java
 try (InputStream in = ...) {
     Map<String, ?> map = JsonUtils.readMap(in);
 }
@@ -284,7 +284,7 @@ class Data {
     }
 }
 ```
-```
+```java
 try (InputStream in = ...) {
     Map<String, ?> map = JsonUtils.readMap(in, Data.class);
 }
@@ -310,7 +310,7 @@ class Data {
     }
 }
 ```
-```
+```java
 try (InputStream in = ...) {
     Map<Integer, Data> map = JsonUtils.readMap(in, Integer.class, Data.class);
 }
