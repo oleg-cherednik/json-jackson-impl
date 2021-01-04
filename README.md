@@ -317,6 +317,7 @@ try (InputStream in = ...) {
 ```
 
 ##### Links
+
 *   Home page: https://github.com/oleg-cherednik/jackson-utils
 *   Maven:
     *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/jackson-utils
