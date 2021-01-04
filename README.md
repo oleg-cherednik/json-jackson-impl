@@ -11,13 +11,13 @@
 > a java tool to make working with Jackson Project more comfortable
 
 ## Features
-* Encapsulate all checked exceptions from Jackson with custom runtime exception;
-* A centralized configuration of `ObjectMapper`;
-* A central place of settings and all `ObjectMapper` instances;
-* Utility class to make most common operations much more comfortable to use;
-* Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
-* `InputStream` support for objects, lists and maps;
-* Lazy read support for list from `InputStream`. 
+  * Encapsulate all checked exceptions from Jackson with custom runtime exception;
+  * A centralized configuration of `ObjectMapper`;
+  * A central place of settings and all `ObjectMapper` instances;
+  * Utility class to make most common operations much more comfortable to use;
+  * Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
+  * `InputStream` support for objects, lists and maps;
+  * Lazy read support for list from `InputStream`. 
 
 ## Gradle
 
