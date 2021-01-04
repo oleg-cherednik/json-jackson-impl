@@ -10,20 +10,20 @@ import java.util.Map;
  */
 public final class MapUtils {
 
-    static <K, V> Map<K, V> of(K k1, V v1) {
+    public static <K, V> Map<K, V> of(K k1, V v1) {
         Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);
         return Collections.unmodifiableMap(map);
     }
 
-    static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2) {
+    public static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2) {
         Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);
         map.put(k2, v2);
         return Collections.unmodifiableMap(map);
     }
 
-    static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
+    public static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
         Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);
         map.put(k2, v2);
@@ -31,7 +31,7 @@ public final class MapUtils {
         return Collections.unmodifiableMap(map);
     }
 
-    static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+    public static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
         Map<K, V> map = new LinkedHashMap<>();
         map.put(k1, v1);
         map.put(k2, v2);

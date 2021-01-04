@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public final class JsonUtils {
 
-    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(ObjectMapperHolder::mapper);
-    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(ObjectMapperHolder::prettyPrintMapper);
+    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::mapper);
+    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::prettyPrintMapper);
 
     // ---------- read ----------
 

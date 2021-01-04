@@ -19,6 +19,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 02.01.2021
  */
+@SuppressWarnings("PMD.AvoidReassigningParameters")
 public class ObjectMapperDecorator {
 
     protected final Supplier<ObjectMapper> supplier;

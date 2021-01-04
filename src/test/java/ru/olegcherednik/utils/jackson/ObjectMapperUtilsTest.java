@@ -17,11 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 02.01.2021
  */
 @Test
-public class ObjectMapperHolderTest {
+public class ObjectMapperUtilsTest {
 
     @AfterMethod
     public void clear() {
-        ObjectMapperHolder.setMapperBuilder(null);
+        ObjectMapperUtils.setMapperBuilder(null);
     }
 
     public void shouldUseNewBuilderWhenSetNotNullBuilderToObjectMapperHolder() {
@@ -31,7 +31,7 @@ public class ObjectMapperHolderTest {
                 "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + System.lineSeparator() +
                 '}');
 
-        ObjectMapperHolder.setMapperBuilder(() -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
+        ObjectMapperUtils.setMapperBuilder(() -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
         assertThat(JsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
         assertThat(JsonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
                 "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + System.lineSeparator() +
@@ -39,12 +39,12 @@ public class ObjectMapperHolderTest {
     }
 
     public void shouldNotRebuildMapperWhenSetSameBuilder() {
-        ObjectMapper expectedMapper = ObjectMapperHolder.mapper();
-        ObjectMapper expectedPrettyPrintMapper = ObjectMapperHolder.prettyPrintMapper();
+        ObjectMapper expectedMapper = ObjectMapperUtils.mapper();
+        ObjectMapper expectedPrettyPrintMapper = ObjectMapperUtils.prettyPrintMapper();
 
-        ObjectMapperHolder.setMapperBuilder(ObjectMapperHolder.DEFAULT_MAPPER_BUILDER);
-        assertThat(ObjectMapperHolder.mapper()).isSameAs(expectedMapper);
-        assertThat(ObjectMapperHolder.prettyPrintMapper()).isSameAs(expectedPrettyPrintMapper);
+        ObjectMapperUtils.setMapperBuilder(ObjectMapperUtils.DEFAULT_MAPPER_BUILDER);
+        assertThat(ObjectMapperUtils.mapper()).isSameAs(expectedMapper);
+        assertThat(ObjectMapperUtils.prettyPrintMapper()).isSameAs(expectedPrettyPrintMapper);
     }
 
     private static Map<String, ZonedDateTime> createData() {

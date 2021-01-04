@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class ObjectMapperHolder {
+public final class ObjectMapperUtils {
 
     public static final Supplier<ObjectMapper> DEFAULT_MAPPER_BUILDER = new JacksonObjectMapperBuilder();
 
@@ -18,11 +18,11 @@ public final class ObjectMapperHolder {
     private static ObjectMapper mapper = createMapper();
     private static ObjectMapper prettyPrintMapper = createPrettyPrintMapper();
 
-    static synchronized ObjectMapper mapper() {
+    /* package */ static synchronized ObjectMapper mapper() {
         return mapper;
     }
 
-    static synchronized ObjectMapper prettyPrintMapper() {
+    /* package */ static synchronized ObjectMapper prettyPrintMapper() {
         return prettyPrintMapper;
     }
 
@@ -53,14 +53,14 @@ public final class ObjectMapperHolder {
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
         mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
 
-        if (mapperBuilder != ObjectMapperHolder.mapperBuilder) {
-            ObjectMapperHolder.mapperBuilder = mapperBuilder;
+        if (mapperBuilder != ObjectMapperUtils.mapperBuilder) {
+            ObjectMapperUtils.mapperBuilder = mapperBuilder;
             mapper = createMapper();
             prettyPrintMapper = createPrettyPrintMapper();
         }
     }
 
-    private ObjectMapperHolder() {
+    private ObjectMapperUtils() {
     }
 
 }
