@@ -1,16 +1,3 @@
-/*
- * Copyright © 2016 Oleg Cherednik
- *
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership. The ASF licenses this file to You under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
- * under the License.
- */
 package ru.olegcherednik.utils.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +10,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class ObjectMapperHolder {
+public final class ObjectMapperUtils {
 
     public static final Supplier<ObjectMapper> DEFAULT_MAPPER_BUILDER = new JacksonObjectMapperBuilder();
 
@@ -31,10 +18,12 @@ public final class ObjectMapperHolder {
     private static ObjectMapper mapper = createMapper();
     private static ObjectMapper prettyPrintMapper = createPrettyPrintMapper();
 
+    @SuppressWarnings("PMD.DefaultPackage")
     static synchronized ObjectMapper mapper() {
         return mapper;
     }
 
+    @SuppressWarnings("PMD.DefaultPackage")
     static synchronized ObjectMapper prettyPrintMapper() {
         return prettyPrintMapper;
     }
@@ -63,13 +52,18 @@ public final class ObjectMapperHolder {
         return new ObjectMapperDecorator(createPrettyPrintMapper(mapperBuilder));
     }
 
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
-        ObjectMapperHolder.mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
-        mapper = createMapper();
-        prettyPrintMapper = createPrettyPrintMapper();
+        mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
+
+        if (mapperBuilder != ObjectMapperUtils.mapperBuilder) {
+            ObjectMapperUtils.mapperBuilder = mapperBuilder;
+            mapper = createMapper();
+            prettyPrintMapper = createPrettyPrintMapper();
+        }
     }
 
-    private ObjectMapperHolder() {
+    private ObjectMapperUtils() {
     }
 
 }

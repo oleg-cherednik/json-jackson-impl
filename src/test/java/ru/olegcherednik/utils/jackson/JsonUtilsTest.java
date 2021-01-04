@@ -36,25 +36,25 @@ public class JsonUtilsTest {
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JsonUtils.readValue(null, Object.class)).isNull();
-        assertThat(JsonUtils.readList(null, Object.class)).isNull();
-        assertThat(JsonUtils.readMap(null)).isNull();
-        assertThat(JsonUtils.readMap(null, String.class, String.class)).isNull();
+        assertThat(JsonUtils.readValue((String)null, Object.class)).isNull();
+        assertThat(JsonUtils.readList((String)null, Object.class)).isNull();
+        assertThat(JsonUtils.readMap((String)null)).isNull();
+        assertThat(JsonUtils.readMap((String)null, String.class, String.class)).isNull();
         assertThat(JsonUtils.writeValue(null)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
+        Data expected = new Data(666, "omen");
         Data actual = JsonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual.getIntVal()).isEqualTo(666);
-        assertThat(actual.getStrVal()).isEqualTo("omen");
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyJson() {
+        Data expected = new Data();
         Data actual = JsonUtils.readValue("{}", Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual.getIntVal()).isEqualTo(0);
-        assertThat(actual.getStrVal()).isNull();
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveDeserializedListWhenReadJsonAsList() {
@@ -87,9 +87,9 @@ public class JsonUtilsTest {
         assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
     }
 
-    public void shouldRetrieveDataLinkedHashMapWhenReadJsonAsMapWithTypes() {
+    public void shouldRetrieveDataLinkedHashMapWhenReadJsonAsMapWithStringKeyAndGivenValueType() {
         String json = "{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}";
-        Map<String, Data> actual = JsonUtils.readMap(json, String.class, Data.class);
+        Map<String, Data> actual = JsonUtils.readMap(json, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual.keySet()).containsExactlyInAnyOrder("victory", "omen");
@@ -97,12 +97,22 @@ public class JsonUtilsTest {
         assertThat(actual.get("omen")).isEqualTo(new Data(666, "omen"));
     }
 
-    public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMapWithTypes() {
+    public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMapWithStringKeyAndType() {
         String json = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
-        Map<String, String> actual = JsonUtils.readMap(json, String.class, String.class);
+        Map<String, String> actual = JsonUtils.readMap(json, String.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
+    }
+
+    public void shouldRetrieveIntegerValueLinkedHashMapWhenReadJsonAsMapWithIntegerKeyAndGivenValueType() {
+        String json = "{\"1\":{\"intVal\":555,\"strVal\":\"victory\"},\"2\":{\"intVal\":666,\"strVal\":\"omen\"}}";
+        Map<Integer, Data> actual = JsonUtils.readMap(json, Integer.class, Data.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
+        assertThat(actual.keySet()).containsExactlyInAnyOrder(1, 2);
+        assertThat(actual.get(1)).isEqualTo(new Data(555, "victory"));
+        assertThat(actual.get(2)).isEqualTo(new Data(666, "omen"));
     }
 
     public void shouldRetrieveEmptyMapWhenReadEmptyJsonAsMap() {
@@ -233,16 +243,6 @@ public class JsonUtilsTest {
             this.intVal = intVal;
             this.strVal = strVal;
         }
-
-        public int getIntVal() {
-            return intVal;
-        }
-
-        public String getStrVal() {
-            return strVal;
-        }
-
-        // ========== Object ==========
 
         @Override
         public boolean equals(Object obj) {

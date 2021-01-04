@@ -28,7 +28,7 @@ public class ZonedDateTimeJsonUtilsTest {
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
-        ObjectMapperDecorator jsonUtils = ObjectMapperHolder.createMapperDecorator(
+        ObjectMapperDecorator jsonUtils = ObjectMapperUtils.createMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
         Map<String, ZonedDateTime> map = createData();
@@ -37,6 +37,18 @@ public class ZonedDateTimeJsonUtilsTest {
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"," +
                 "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
                 "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"}");
+    }
+
+    public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
+        ObjectMapperDecorator jsonUtils = ObjectMapperUtils.createMapperDecorator(
+                () -> new JacksonObjectMapperBuilder(JacksonObjectMapperBuilder.WITH_SAME_ZONE).get());
+
+        Map<String, ZonedDateTime> map = createData();
+        String actual = jsonUtils.writeValue(map);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
+                "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
+                "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}");
     }
 
     public void shouldRetrievePrettyPrintJsonUTCZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
@@ -49,8 +61,8 @@ public class ZonedDateTimeJsonUtilsTest {
                 '}');
     }
 
-    public void shouldRetrievePrettyPrintJsonSingaporeZOneWhenWriteZonedDateTimeMapWithPrettyPrint() {
-        ObjectMapperDecorator jsonUtils = ObjectMapperHolder.createPrettyPrintMapperDecorator(
+    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
+        ObjectMapperDecorator jsonUtils = ObjectMapperUtils.createPrettyPrintMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
         Map<String, ZonedDateTime> map = createData();
