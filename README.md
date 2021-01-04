@@ -21,7 +21,7 @@
 
 ## Gradle
 
-```
+```groovy
 compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.2'
 ```
 
@@ -41,13 +41,13 @@ The last section is the `jackson-utils` version. This number is unique.
 ## Usage 
 
 To simplify usage of _jackson-utils_, there're following classes:
-* [JsonUtils](#jsonutils) - utility class with set of method to use json transformation;
+*   [JsonUtils](#jsonutils) - utility class with set of method to use json transformation;
 
 ### JsonUtils
 
 #### Read json from `String`
 
-##### Custom object type (but not a collection)
+##### `String` to a custom object type (but not a collection)
 
 ```java
 class Data {
@@ -66,7 +66,7 @@ String json;
 Data data = JsonUtils.readValue(json, Data.class);
 ```
 
-##### List of custom object type
+##### `String` to a list of custom object type
 
 ```java
 class Data {
@@ -113,7 +113,7 @@ Map<String, ?> map = JsonUtils.readMap(json);
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
-###### Map with `String` keys and given type as value
+###### `String` to a map with `String` keys and given type as value
 
 ```java
 class Data {
@@ -138,7 +138,7 @@ String json;
 Map<String, Data> map = JsonUtils.readMap(json, Data.class);
 ```
 
-###### Map with `Integer` keys and given type as value
+###### `String` to a map with `Integer` keys and given type as value
 
 ```java
 class Data {
@@ -165,7 +165,7 @@ Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
 
 #### Read json from `InputStream`
 
-##### Custom object type (but not a collection)
+##### `InputStream` to a custom object type (but not a collection)
 
 ```java
 class Data {
@@ -185,7 +185,7 @@ try (InputStream in = ...) {
 }
 ```
 
-##### List of custom object type
+##### `InputStream` to a list of custom object type
 
 ##### Read eager
 ```java
@@ -243,7 +243,7 @@ try (InputStream in = ...) {
 ```
 ##### Map of custom object type
 
-###### Map with `String` keys and `Map` or primitive types as values
+###### `String` to a map with `String` keys and `Map` or primitive types as values
 
 ```json                        
 {
@@ -264,7 +264,7 @@ try (InputStream in = ...) {
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
-###### Map with `String` keys and given type as value
+###### `String` to a map with `String` keys and given type as value
 
 ```java
 class Data {
