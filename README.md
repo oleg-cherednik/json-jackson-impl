@@ -8,7 +8,7 @@
 [![coverity](https://scan.coverity.com/projects/22381/badge.svg)](https://scan.coverity.com/projects/oleg-cherednik-jackson-utils)
      
 # jackson-utils
-> a java tool to make working with Jackson Project more comfortable
+> a java tool to make working with [Jackson Project](https://github.com/FasterXML/jackson) more comfortable
 
 ## Features
 *   Encapsulate all checked exceptions from Jackson with custom runtime exception;
