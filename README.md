@@ -61,8 +61,8 @@ class Data {
     "strVal" : "omen"
 }
 ```
-```
-String json;
+```java
+String json = null;
 Data data = JsonUtils.readValue(json, Data.class);
 ```
 
@@ -91,7 +91,7 @@ String json;
 List<Data> res = JsonUtils.readList(json, Data.class);
 ```
 
-##### Map of custom object type
+##### `String` to a map of custom object type
 
 ###### Map with `String` keys and `Map` or primitive types as values
 
@@ -241,9 +241,9 @@ try (InputStream in = ...) {
     }
 }
 ```
-##### Map of custom object type
+##### `InputStream` to a map of custom object type
 
-###### `String` to a map with `String` keys and `Map` or primitive types as values
+###### `InputStream` to a map with `String` keys and `Map` or primitive types as values
 
 ```json                        
 {
@@ -264,7 +264,7 @@ try (InputStream in = ...) {
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
-###### `String` to a map with `String` keys and given type as value
+###### `InputStream` to a map with `String` keys and given type as value
 
 ```java
 class Data {
