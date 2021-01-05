@@ -1,6 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils)
 [![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.utils/jackson-utils)
-[![Build Status](https://travis-ci.org/oleg-cherednik/jackson-utils.svg?branch=dev)](https://travis-ci.org/oleg-cherednik/jackson-utils)
+[![Build Status](https://travis-ci.com/oleg-cherednik/jackson-utils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/jackson-utils)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![codecov](https://codecov.io/gh/oleg-cherednik/jackson-utils/branch/dev/graph/badge.svg)](https://codecov.io/gh/oleg-cherednik/jackson-utils)
 [![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/jackson-utils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/jackson-utils?targetFile=build.gradle)
