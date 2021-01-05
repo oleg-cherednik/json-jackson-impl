@@ -22,7 +22,7 @@
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.3'
+compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.4'
 ```
 
 ## Maven
@@ -31,7 +31,7 @@ compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.3'
 <dependency>
     <groupId>ru.oleg-cherednik.utils</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.12.0.3</version>
+    <version>2.12.0.4</version>
 </dependency>
 ```                                                    
 

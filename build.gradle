@@ -25,7 +25,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.utils'
-version '2.12.0.3'
+version '2.12.0.4'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -40,6 +40,7 @@ configurations {
 }
 
 dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.12.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.12.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.12.0'
