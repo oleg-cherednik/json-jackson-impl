@@ -6,7 +6,7 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/JacksonUtils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/JacksonUtils&amp;utm_campaign=Badge_Grade)
      
-# jackson-utils
+# JacksonUtils
 > a java tool to make working with [Jackson Project](https://github.com/FasterXML/jackson) more comfortable
 
 ## Features
