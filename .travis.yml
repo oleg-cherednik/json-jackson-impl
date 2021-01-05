@@ -11,7 +11,7 @@ jdk: openjdk8
 #  - export PATH=$GRADLE_HOME/bin:$PATH
 #  - gradle -v
 script:
-  - ./gradlew clean build --stacktrace
+  - ./gradlew build --stacktrace
   - ./gradlew jacocoTestReport
 after_success:
   - bash <(curl -s https://codecov.io/bash)
