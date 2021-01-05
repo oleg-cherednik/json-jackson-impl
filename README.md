@@ -54,14 +54,13 @@ class Data {
     String strVal;
 }
 ```
-```json                        
-{
-    "intVal" : 666,
-    "strVal" : "omen"
-}
-```
 ```java
-String json;
+String json = """
+              {
+                  "intVal" : 666,
+                  "strVal" : "omen"
+              }
+              """;
 Data data = JsonUtils.readValue(json, Data.class);
 ```
 
@@ -73,20 +72,19 @@ class Data {
     String strVal;
 }
 ```
-```json                        
-[
-    {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
-]
-```
 ```java
-String json;
+String json = """
+              [
+                  {
+                      "intVal" : 555,
+                      "strVal" : "victory"
+                  },
+                  {
+                      "intVal" : 666,
+                      "strVal" : "omen"
+                  }
+              ]
+              """;
 List<Data> res = JsonUtils.readList(json, Data.class);
 ```
 
@@ -94,20 +92,19 @@ List<Data> res = JsonUtils.readList(json, Data.class);
 
 ###### Map with `String` keys and `Map` or primitive types as values
 
-```json                        
-{
-    "victory" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "omen" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
-}
-```
 ```java
-String json;
+String json = """
+              {
+                  "victory" : {
+                      "intVal" : 555,
+                      "strVal" : "victory"
+                  },
+                  "omen" : {
+                      "intVal" : 666,
+                      "strVal" : "omen"
+                  }
+              }
+              """;
 Map<String, ?> map = JsonUtils.readMap(json);
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
@@ -120,20 +117,19 @@ class Data {
     String strVal;
 }
 ```
-```json                        
-{
-    "victory" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "omen" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
-}
-```
 ```java
-String json;
+String json = """
+              {
+                  "victory" : {
+                      "intVal" : 555,
+                      "strVal" : "victory"
+                  },
+                  "omen" : {
+                      "intVal" : 666,
+                      "strVal" : "omen"
+                  }
+              }
+              """;
 Map<String, Data> map = JsonUtils.readMap(json, Data.class);
 ```
 
@@ -145,20 +141,19 @@ class Data {
     String strVal;
 }
 ```
-```json                        
-{
-    "1" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "2" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
-}
-```
 ```java
-String json;
+String json = """
+              {
+                  "1" : {
+                      "intVal" : 555,
+                      "strVal" : "victory"
+                  },
+                  "2" : {
+                      "intVal" : 666,
+                      "strVal" : "omen"
+                  }
+              }
+              """;
 Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
 ```
 
