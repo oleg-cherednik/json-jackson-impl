@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class JsonUtils {
+public final class JacksonUtils {
 
     private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::mapper);
     private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::prettyPrintMapper);
@@ -83,7 +83,7 @@ public final class JsonUtils {
         return PRETTY_PRINT_DELEGATE;
     }
 
-    private JsonUtils() {
+    private JacksonUtils() {
     }
 
 }

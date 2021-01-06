@@ -14,18 +14,18 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.01.2021
  */
 @Test
-public class LocalDateTimeJsonUtilsTest {
+public class LocalDateTimeJacksonUtilsTest {
 
     public void shouldRetrieveJsonWhenWriteZonedDateTime() throws IOException {
         Map<String, LocalDateTime> map = createData();
-        String actual = JsonUtils.writeValue(map);
+        String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"local\":\"2017-07-23T13:57:14.225\"}");
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteZonedDateTimeMapWithPrettyPrint() {
         Map<String, LocalDateTime> map = createData();
-        String actual = JsonUtils.prettyPrint().writeValue(map);
+        String actual = JacksonUtils.prettyPrint().writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"local\" : \"2017-07-23T13:57:14.225\"" + System.lineSeparator() +
                 '}');
@@ -34,7 +34,7 @@ public class LocalDateTimeJsonUtilsTest {
     public void shouldRetrieveDeserializedZonedDateTimeMapWhenReadJsonAsMap() {
         String json = "{\"local\":\"2017-07-23T13:57:14.225\"}";
         Map<String, LocalDateTime> expected = createData();
-        Map<String, LocalDateTime> actual = JsonUtils.readMap(json, String.class, LocalDateTime.class);
+        Map<String, LocalDateTime> actual = JacksonUtils.readMap(json, String.class, LocalDateTime.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }

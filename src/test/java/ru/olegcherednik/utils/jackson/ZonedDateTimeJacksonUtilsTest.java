@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.01.2021
  */
 @Test
-public class ZonedDateTimeJsonUtilsTest {
+public class ZonedDateTimeJacksonUtilsTest {
 
     public void shouldRetrieveJsonUTCZoneWhenWriteZonedDateTimeDefaultSettings() throws IOException {
         Map<String, ZonedDateTime> map = createData();
-        String actual = JsonUtils.writeValue(map);
+        String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
                 "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
@@ -53,7 +53,7 @@ public class ZonedDateTimeJsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonUTCZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         Map<String, ZonedDateTime> map = createData();
-        String actual = JsonUtils.prettyPrint().writeValue(map);
+        String actual = JacksonUtils.prettyPrint().writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"," + System.lineSeparator() +
                 "  \"Asia/Singapore\" : \"2017-07-23T05:57:14.225Z\"," + System.lineSeparator() +
@@ -79,7 +79,7 @@ public class ZonedDateTimeJsonUtilsTest {
                 "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
                 "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}";
         Map<String, ZonedDateTime> expected = createData();
-        Map<String, ZonedDateTime> actual = JsonUtils.readMap(json, String.class, ZonedDateTime.class);
+        Map<String, ZonedDateTime> actual = JacksonUtils.readMap(json, String.class, ZonedDateTime.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }

@@ -26,14 +26,14 @@ public class ObjectMapperUtilsTest {
 
     public void shouldUseNewBuilderWhenSetNotNullBuilderToObjectMapperHolder() {
         Map<String, ZonedDateTime> map = createData();
-        assertThat(JsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"}");
-        assertThat(JsonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
+        assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"}");
+        assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
                 "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + System.lineSeparator() +
                 '}');
 
         ObjectMapperUtils.setMapperBuilder(() -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
-        assertThat(JsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
-        assertThat(JsonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
+        assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
+        assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
                 "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + System.lineSeparator() +
                 '}');
     }

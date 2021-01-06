@@ -23,12 +23,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 13.12.2016
  */
 @Test
-public class JsonUtilsTest {
+public class JacksonUtilsTest {
 
     @BeforeClass
     public static void init() {
         try {
-            Constructor<JsonUtils> constructor = JsonUtils.class.getDeclaredConstructor();
+            Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
         } catch(Exception ignored) {
@@ -36,42 +36,42 @@ public class JsonUtilsTest {
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JsonUtils.readValue((String)null, Object.class)).isNull();
-        assertThat(JsonUtils.readList((String)null, Object.class)).isNull();
-        assertThat(JsonUtils.readMap((String)null)).isNull();
-        assertThat(JsonUtils.readMap((String)null, String.class, String.class)).isNull();
-        assertThat(JsonUtils.writeValue(null)).isNull();
+        assertThat(JacksonUtils.readValue((String)null, Object.class)).isNull();
+        assertThat(JacksonUtils.readList((String)null, Object.class)).isNull();
+        assertThat(JacksonUtils.readMap((String)null)).isNull();
+        assertThat(JacksonUtils.readMap((String)null, String.class, String.class)).isNull();
+        assertThat(JacksonUtils.writeValue(null)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
         Data expected = new Data(666, "omen");
-        Data actual = JsonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);
+        Data actual = JacksonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyJson() {
         Data expected = new Data();
-        Data actual = JsonUtils.readValue("{}", Data.class);
+        Data actual = JacksonUtils.readValue("{}", Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveDeserializedListWhenReadJsonAsList() {
         String json = "[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]";
-        List<Data> actual = JsonUtils.readList(json, Data.class);
+        List<Data> actual = JacksonUtils.readList(json, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
     }
 
     public void shouldRetrieveEmptyListWhenReadEmptyJsonAsList() {
-        assertThat(JsonUtils.readList("{}", Data.class)).isSameAs(Collections.emptyList());
-        assertThat(JsonUtils.readList("[]", Data.class)).isSameAs(Collections.emptyList());
+        assertThat(JacksonUtils.readList("{}", Data.class)).isSameAs(Collections.emptyList());
+        assertThat(JacksonUtils.readList("[]", Data.class)).isSameAs(Collections.emptyList());
     }
 
     public void shouldRetrieveLinkedHashMapWhenReadJsonAsMap() {
         String json = "{\"sample\":[\"one, two\",\"three\"],\"order\":{\"key1\":\"val1\",\"key2\":\"val2\"}}";
-        Map<String, ?> actual = JsonUtils.readMap(json);
+        Map<String, ?> actual = JacksonUtils.readMap(json);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual).containsOnlyKeys("sample", "order");
@@ -81,7 +81,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMap() {
         String json = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
-        Map<String, ?> actual = JsonUtils.readMap(json);
+        Map<String, ?> actual = JacksonUtils.readMap(json);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
@@ -89,7 +89,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrieveDataLinkedHashMapWhenReadJsonAsMapWithStringKeyAndGivenValueType() {
         String json = "{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}";
-        Map<String, Data> actual = JsonUtils.readMap(json, Data.class);
+        Map<String, Data> actual = JacksonUtils.readMap(json, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual.keySet()).containsExactlyInAnyOrder("victory", "omen");
@@ -99,7 +99,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrieveStringValueLinkedHashMapWhenReadJsonAsMapWithStringKeyAndType() {
         String json = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
-        Map<String, String> actual = JsonUtils.readMap(json, String.class);
+        Map<String, String> actual = JacksonUtils.readMap(json, String.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual).isEqualTo(MapUtils.of("key1", "val1", "key2", "val2"));
@@ -107,7 +107,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrieveIntegerValueLinkedHashMapWhenReadJsonAsMapWithIntegerKeyAndGivenValueType() {
         String json = "{\"1\":{\"intVal\":555,\"strVal\":\"victory\"},\"2\":{\"intVal\":666,\"strVal\":\"omen\"}}";
-        Map<Integer, Data> actual = JsonUtils.readMap(json, Integer.class, Data.class);
+        Map<Integer, Data> actual = JacksonUtils.readMap(json, Integer.class, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isExactlyInstanceOf(LinkedHashMap.class);
         assertThat(actual.keySet()).containsExactlyInAnyOrder(1, 2);
@@ -116,15 +116,15 @@ public class JsonUtilsTest {
     }
 
     public void shouldRetrieveEmptyMapWhenReadEmptyJsonAsMap() {
-        assertThat(JsonUtils.readMap("{}")).isSameAs(Collections.emptyMap());
-        assertThat(JsonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
-        assertThat(JsonUtils.readMap("{}", String.class, Data.class)).isSameAs(Collections.emptyMap());
-        assertThat(JsonUtils.readMap("[]", String.class, Data.class)).isSameAs(Collections.emptyMap());
+        assertThat(JacksonUtils.readMap("{}")).isSameAs(Collections.emptyMap());
+        assertThat(JacksonUtils.readMap("[]")).isSameAs(Collections.emptyMap());
+        assertThat(JacksonUtils.readMap("{}", String.class, Data.class)).isSameAs(Collections.emptyMap());
+        assertThat(JacksonUtils.readMap("[]", String.class, Data.class)).isSameAs(Collections.emptyMap());
     }
 
     public void shouldRetrieveJsonWhenWriteObject() {
         Data data = new Data(555, "victory");
-        String actual = JsonUtils.writeValue(data);
+        String actual = JacksonUtils.writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"intVal\":555,\"strVal\":\"victory\"}");
     }
@@ -133,41 +133,41 @@ public class JsonUtilsTest {
         Map<String, Data> map = MapUtils.of(
                 "victory", new Data(555, "victory"),
                 "omen", new Data(666, "omen"));
-        String actual = JsonUtils.writeValue(map);
+        String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}");
     }
 
     public void shouldRetrieveJsonWhenWriteListObject() {
         List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
-        String actual = JsonUtils.writeValue(data);
+        String actual = JacksonUtils.writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
     }
 
     public void shouldRetrieveEmptyJsonWhenWriteEmptyCollection() {
-        assertThat(JsonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
-        assertThat(JsonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
+        assertThat(JacksonUtils.writeValue(Collections.emptyList())).isEqualTo("[]");
+        assertThat(JacksonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
     }
 
     public void shouldWriteJsonToStreamWhenWriteObjectToStream() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
-            JsonUtils.writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JacksonUtils.writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
     public void shouldWriteNullJsonWhenWriteNullToStream() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JacksonUtils.writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() {
         Data data = new Data(555, "victory");
-        String actual = JsonUtils.prettyPrint().writeValue(data);
+        String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"intVal\" : 555," + System.lineSeparator() +
@@ -179,7 +179,7 @@ public class JsonUtilsTest {
         Map<String, Data> data = MapUtils.of(
                 "victory", new Data(555, "victory"),
                 "omen", new Data(666, "omen"));
-        String actual = JsonUtils.prettyPrint().writeValue(data);
+        String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
                 "  \"victory\" : {" + System.lineSeparator() +
                 "    \"intVal\" : 555," + System.lineSeparator() +
@@ -194,7 +194,7 @@ public class JsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() {
         List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
-        String actual = JsonUtils.prettyPrint().writeValue(data);
+        String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("[ {" + System.lineSeparator() +
                 "  \"intVal\" : 555," + System.lineSeparator() +
@@ -208,7 +208,7 @@ public class JsonUtilsTest {
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToStream() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
-            JsonUtils.prettyPrint().writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JacksonUtils.prettyPrint().writeValue(data, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo('{' + System.lineSeparator() +
                     "  \"intVal\" : 666," + System.lineSeparator() +
                     "  \"strVal\" : \"omen\"" + System.lineSeparator() +
@@ -218,16 +218,16 @@ public class JsonUtilsTest {
 
     public void shouldWriteNullJsonWhenWriteNullWithPrettyPrintToStream() throws IOException {
         try (Writer out = new StringWriter()) {
-            JsonUtils.prettyPrint().writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
+            JacksonUtils.prettyPrint().writeValue(null, new WriterOutputStream(out, StandardCharsets.UTF_8));
             assertThat(out.toString()).isEqualTo("null");
         }
     }
 
     public void shouldThrowJacksonUtilsExceptionWhenReadIncorrectJson() {
-        assertThatThrownBy(() -> JsonUtils.readValue("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JsonUtils.readList("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JsonUtils.readMap("incorrect")).isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JsonUtils.readMap("incorrect", String.class, Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JacksonUtils.readValue("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JacksonUtils.readList("incorrect", Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JacksonUtils.readMap("incorrect")).isExactlyInstanceOf(JacksonUtilsException.class);
+        assertThatThrownBy(() -> JacksonUtils.readMap("incorrect", String.class, Data.class)).isExactlyInstanceOf(JacksonUtilsException.class);
     }
 
     @SuppressWarnings({ "FieldMayBeFinal", "unused" })

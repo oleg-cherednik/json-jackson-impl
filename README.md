@@ -41,9 +41,9 @@ The last section is the `jackson-utils` version. This number is unique.
 ## Usage 
 
 To simplify usage of _jackson-utils_, there're following classes:
-*   [JsonUtils](#jsonutils) - utility class with set of method to use json transformation;
+*   [JacksonUtils](#jacksonutils) - utility class with set of method to use json transformation;
 
-### JsonUtils
+### JacksonUtils
 
 #### Read json from `String`
 
@@ -62,7 +62,7 @@ String json = """
                   "strVal" : "omen"
               }
               """;
-Data data = JsonUtils.readValue(json, Data.class);
+Data data = JacksonUtils.readValue(json, Data.class);
 ```
 
 ##### `String` to a list of custom object type
@@ -86,7 +86,7 @@ String json = """
                   }
               ]
               """;
-List<Data> res = JsonUtils.readList(json, Data.class);
+List<Data> res = JacksonUtils.readList(json, Data.class);
 ```
 
 ##### `String` to a map of custom object type
@@ -106,7 +106,7 @@ String json = """
                   }
               }
               """;
-Map<String, ?> map = JsonUtils.readMap(json);
+Map<String, ?> map = JacksonUtils.readMap(json);
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
@@ -131,7 +131,7 @@ String json = """
                   }
               }
               """;
-Map<String, Data> map = JsonUtils.readMap(json, Data.class);
+Map<String, Data> map = JacksonUtils.readMap(json, Data.class);
 ```
 
 ###### `String` to a map with `Integer` keys and given type as value
@@ -155,7 +155,7 @@ String json = """
                   }
               }
               """;
-Map<Integer, Data> map = JsonUtils.readMap(json, Integer.class, Data.class);
+Map<Integer, Data> map = JacksonUtils.readMap(json, Integer.class, Data.class);
 ```
 
 #### Read json from `InputStream`
@@ -176,7 +176,7 @@ class Data {
 ```
 ```java         
 try (InputStream in = ...) {
-    Data data = JsonUtils.readValue(in, Data.class);
+    Data data = JacksonUtils.readValue(in, Data.class);
 }
 ```
 
@@ -203,7 +203,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    List<Data> res = JsonUtils.readList(in, Data.class);
+    List<Data> res = JacksonUtils.readList(in, Data.class);
 }
 ```
 
@@ -229,7 +229,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Iterator<Data> it = JsonUtils.readListLazy(in, Data.class);
+    Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
     
     while (it.hasNext()) {
         Data data = it.next();
@@ -254,7 +254,7 @@ try (InputStream in = ...) {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<String, ?> map = JsonUtils.readMap(in);
+    Map<String, ?> map = JacksonUtils.readMap(in);
 }
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
@@ -281,7 +281,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<String, ?> map = JsonUtils.readMap(in, Data.class);
+    Map<String, ?> map = JacksonUtils.readMap(in, Data.class);
 }
 ```
 
@@ -307,7 +307,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<Integer, Data> map = JsonUtils.readMap(in, Integer.class, Data.class);
+    Map<Integer, Data> map = JacksonUtils.readMap(in, Integer.class, Data.class);
 }
 ```
 
