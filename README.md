@@ -42,7 +42,7 @@ The last section is the `jackson-utils` version. This number is unique.
 ## Usage 
 
 To simplify usage of _jackson-utils_, there're following classes:
-*   [JacksonUtils](#jacksonutils-class) - utility class with set of method to use json transformation;
+*   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
 
 ### JacksonUtils class
 

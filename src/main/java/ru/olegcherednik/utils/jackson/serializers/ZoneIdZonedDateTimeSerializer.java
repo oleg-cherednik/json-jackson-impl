@@ -1,9 +1,10 @@
-package ru.olegcherednik.utils.jackson;
+package ru.olegcherednik.utils.jackson.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
+import ru.olegcherednik.utils.jackson.JacksonObjectMapperBuilder;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -20,10 +21,10 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     private static final long serialVersionUID = -2135138754031293296L;
 
-    private final Function<ZoneId, ZoneId> withZone;
+    private final Function<ZoneId, ZoneId> zoneModifier;
 
-    public ZoneIdZonedDateTimeSerializer(Function<ZoneId, ZoneId> withZone) {
-        this.withZone = Optional.ofNullable(withZone).orElse(JacksonObjectMapperBuilder.WITH_SAME_ZONE);
+    public ZoneIdZonedDateTimeSerializer(Function<ZoneId, ZoneId> zoneModifier) {
+        this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL);
     }
 
     protected ZoneIdZonedDateTimeSerializer(ZoneIdZonedDateTimeSerializer base, Boolean useTimestamp, DateTimeFormatter formatter,
@@ -34,12 +35,12 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     protected ZoneIdZonedDateTimeSerializer(ZoneIdZonedDateTimeSerializer base, Boolean useTimestamp, Boolean useNanoseconds,
             DateTimeFormatter formatter, Boolean writeZoneId) {
         super(base, useTimestamp, useNanoseconds, formatter, writeZoneId);
-        withZone = base.withZone;
+        zoneModifier = base.zoneModifier;
     }
 
     @Override
     public void serialize(ZonedDateTime value, JsonGenerator g, SerializerProvider provider) throws IOException {
-        ZoneId zone = withZone.apply(value.getZone());
+        ZoneId zone = zoneModifier.apply(value.getZone());
         super.serialize(value.withZoneSameInstant(zone), g, provider);
     }
 

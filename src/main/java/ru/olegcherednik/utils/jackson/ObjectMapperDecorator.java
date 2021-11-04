@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -31,7 +31,7 @@ public class ObjectMapperDecorator {
         this.supplier = supplier;
     }
 
-    // ---------- read ----------
+    // ---------- read String----------
 
     public <V> V readValue(String json, Class<V> valueClass) {
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
@@ -86,25 +86,7 @@ public class ObjectMapperDecorator {
         });
     }
 
-    // ---------- write ----------
-
-    public <V> String writeValue(V obj) {
-        if (obj == null)
-            return null;
-
-        return withRuntimeException(() -> supplier.get().writeValueAsString(obj));
-    }
-
-    public <V> void writeValue(V obj, OutputStream out) {
-        Objects.requireNonNull(out, "'out' should not be null");
-
-        withRuntimeException(() -> {
-            supplier.get().writeValue(out, obj);
-            return null;
-        });
-    }
-
-    // ---------- InputStream ----------
+    // ---------- read InputStream ----------
 
     public <V> V readValue(InputStream in, Class<V> valueClass) {
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
@@ -162,6 +144,24 @@ public class ObjectMapperDecorator {
             ObjectMapper mapper = supplier.get();
             MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
             return mapper.readValue(in, mapType);
+        });
+    }
+
+    // ---------- write ----------
+
+    public <V> String writeValue(V obj) {
+        if (obj == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().writeValueAsString(obj));
+    }
+
+    public <V> void writeValue(V obj, Writer out) {
+        Objects.requireNonNull(out, "'out' should not be null");
+
+        withRuntimeException(() -> {
+            supplier.get().writeValue(out, obj);
+            return null;
         });
     }
 

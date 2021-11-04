@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import ru.olegcherednik.utils.jackson.serializers.ZoneIdZonedDateTimeSerializer;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -23,27 +24,27 @@ import java.util.function.Supplier;
  */
 public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
 
-    public static final Function<ZoneId, ZoneId> WITH_SAME_ZONE = zoneId -> zoneId;
-    public static final Function<ZoneId, ZoneId> WITH_UTC_ZONE = zoneId -> ZoneOffset.UTC;
+    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
+    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
-    private final Function<ZoneId, ZoneId> withZone;
+    private final Function<ZoneId, ZoneId> zoneModifier;
 
     public JacksonObjectMapperBuilder() {
-        this(WITH_UTC_ZONE);
+        this(ZONE_MODIFIER_TO_UTC);
     }
 
     public JacksonObjectMapperBuilder(ZoneId zone) {
         this(z -> zone);
     }
 
-    public JacksonObjectMapperBuilder(Function<ZoneId, ZoneId> withZone) {
-        this.withZone = withZone;
+    public JacksonObjectMapperBuilder(Function<ZoneId, ZoneId> zoneModifier) {
+        this.zoneModifier = zoneModifier;
     }
 
     protected void registerModule(ObjectMapper mapper) {
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new AfterburnerModule());
-        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(withZone)));
+        mapper.registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(zoneModifier)));
     }
 
     @Override
@@ -63,6 +64,7 @@ public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
         mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         mapper.enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
+
         return mapper;
     }
 }

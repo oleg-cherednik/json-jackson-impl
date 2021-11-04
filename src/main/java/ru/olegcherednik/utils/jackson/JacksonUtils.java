@@ -1,7 +1,7 @@
 package ru.olegcherednik.utils.jackson;
 
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +12,10 @@ import java.util.Map;
  */
 public final class JacksonUtils {
 
-    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::mapper);
-    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(ObjectMapperUtils::prettyPrintMapper);
+    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonHelper::mapper);
+    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(JacksonHelper::prettyPrintMapper);
 
-    // ---------- read ----------
+    // ---------- read String ----------
 
     public static <V> V readValue(String json, Class<V> valueClass) {
         return print().readValue(json, valueClass);
@@ -37,17 +37,7 @@ public final class JacksonUtils {
         return print().readMap(json, keyClass, valueClass);
     }
 
-    // ---------- write ----------
-
-    public static <V> String writeValue(V obj) {
-        return print().writeValue(obj);
-    }
-
-    public static <V> void writeValue(V obj, OutputStream out) {
-        print().writeValue(obj, out);
-    }
-
-    // ---------- InputStream ----------
+    // ---------- read InputStream ----------
 
     public static <V> V readValue(InputStream in, Class<V> valueClass) {
         return print().readValue(in, valueClass);
@@ -71,6 +61,16 @@ public final class JacksonUtils {
 
     public static <K, V> Map<K, V> readMap(InputStream in, Class<K> keyClass, Class<V> valueClass) {
         return print().readMap(in, keyClass, valueClass);
+    }
+
+    // ---------- write ----------
+
+    public static <V> String writeValue(V obj) {
+        return print().writeValue(obj);
+    }
+
+    public static <V> void writeValue(V obj, Writer out) {
+        print().writeValue(obj, out);
     }
 
     // ---------- print ----------

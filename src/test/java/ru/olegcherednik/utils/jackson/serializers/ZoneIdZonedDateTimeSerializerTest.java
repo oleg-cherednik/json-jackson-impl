@@ -1,4 +1,4 @@
-package ru.olegcherednik.utils.jackson;
+package ru.olegcherednik.utils.jackson.serializers;
 
 import org.testng.annotations.Test;
 

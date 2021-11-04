@@ -10,11 +10,11 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class ObjectMapperUtils {
+public final class JacksonHelper {
 
-    public static final Supplier<ObjectMapper> DEFAULT_MAPPER_BUILDER = new JacksonObjectMapperBuilder();
+    public static final Supplier<ObjectMapper> DEFAULT_BUILDER = new JacksonObjectMapperBuilder();
 
-    private static Supplier<ObjectMapper> mapperBuilder = DEFAULT_MAPPER_BUILDER;
+    private static Supplier<ObjectMapper> mapperBuilder = DEFAULT_BUILDER;
     private static ObjectMapper mapper = createMapper();
     private static ObjectMapper prettyPrintMapper = createPrettyPrintMapper();
 
@@ -54,16 +54,17 @@ public final class ObjectMapperUtils {
 
     @SuppressWarnings("PMD.AvoidReassigningParameters")
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
-        mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_MAPPER_BUILDER);
+        mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_BUILDER);
 
-        if (mapperBuilder != ObjectMapperUtils.mapperBuilder) {
-            ObjectMapperUtils.mapperBuilder = mapperBuilder;
-            mapper = createMapper();
-            prettyPrintMapper = createPrettyPrintMapper();
-        }
+        if (mapperBuilder == JacksonHelper.mapperBuilder)
+            return;
+
+        JacksonHelper.mapperBuilder = mapperBuilder;
+        mapper = createMapper();
+        prettyPrintMapper = createPrettyPrintMapper();
     }
 
-    private ObjectMapperUtils() {
+    private JacksonHelper() {
     }
 
 }
