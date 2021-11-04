@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.utils.jackson.serializers;
+package ru.olegcherednik.jackson.utils.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
-import ru.olegcherednik.utils.jackson.JacksonObjectMapperBuilder;
+import ru.olegcherednik.jackson.utils.JacksonObjectMapperBuilder;
 
 import java.io.IOException;
 import java.time.ZoneId;

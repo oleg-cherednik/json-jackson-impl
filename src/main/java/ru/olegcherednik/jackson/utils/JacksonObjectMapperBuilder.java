@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.utils.jackson;
+package ru.olegcherednik.jackson.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import ru.olegcherednik.utils.jackson.serializers.ZoneIdZonedDateTimeSerializer;
+import ru.olegcherednik.jackson.utils.serializers.ZoneIdZonedDateTimeSerializer;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;

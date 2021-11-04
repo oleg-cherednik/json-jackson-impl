@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.utils.jackson.serializers;
+package ru.olegcherednik.jackson.utils.serializers;
 
 import org.testng.annotations.Test;
 

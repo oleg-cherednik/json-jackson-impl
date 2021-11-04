@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.utils.jackson;
+package ru.olegcherednik.jackson.utils;
 
 import org.testng.annotations.Test;
 
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.olegcherednik.utils.jackson.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
-import static ru.olegcherednik.utils.jackson.PrettyPrintUtils.withUnixLineSeparator;
+import static ru.olegcherednik.jackson.utils.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
+import static ru.olegcherednik.jackson.utils.PrettyPrintUtils.withUnixLineSeparator;
 
 /**
  * @author Oleg Cherednik
