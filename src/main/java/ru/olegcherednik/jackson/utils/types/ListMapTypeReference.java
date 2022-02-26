@@ -16,25 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.jackson.utils;
+package ru.olegcherednik.jackson.utils.types;
 
-import java.util.Arrays;
-import java.util.Collections;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Oleg Cherednik
- * @since 22.12.2020
+ * @since 18.02.2022
  */
-public final class ListUtils {
+public final class ListMapTypeReference extends TypeReference<List<Map<String, Object>>> {
 
-    public static <T> List<T> of(T... elements) {
-        if (elements == null || elements.length == 0)
-            return Collections.emptyList();
-        return Collections.unmodifiableList(Arrays.asList(elements));
-    }
+    public static final ListMapTypeReference INSTANCE = new ListMapTypeReference();
 
-    private ListUtils() {
+    private ListMapTypeReference() {
     }
 
 }

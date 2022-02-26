@@ -16,69 +16,48 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.jackson.utils;
+package ru.olegcherednik.jackson.utils.data;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * @author Oleg Cherednik
- * @since 07.01.2021
+ * @since 26.02.2022
  */
-@SuppressWarnings("unused")
-class Data {
+@SuppressWarnings({ "AssignmentOrReturnOfFieldWithMutableType", "unused" })
+public class Book {
 
-    private int intVal;
-    private String strVal;
-    private String nullVal;
+    private String title;
+    private ZonedDateTime date;
+    private int year;
+    private List<String> authors;
 
-    public Data() {
+    public Book() {
     }
 
-    public Data(int intVal, String strVal) {
-        this.intVal = intVal;
-        this.strVal = strVal;
-    }
-
-    public int getIntVal() {
-        return intVal;
-    }
-
-    public String getStrVal() {
-        return strVal;
-    }
-
-    public String getUnknownValue() {
-        return intVal + '_' + strVal;
-    }
-
-    public void setIntVal(int intVal) {
-        this.intVal = intVal;
-    }
-
-    public void setStrVal(String strVal) {
-        this.strVal = strVal;
-    }
-
-    public void setUnknownValue(String str) {
-        Scanner scan = new Scanner(str);
-        scan.useDelimiter("_");
-        intVal = scan.nextInt();
-        strVal = scan.next();
+    public Book(String title, ZonedDateTime date, int year, List<String> authors) {
+        this.title = title;
+        this.date = date;
+        this.year = year;
+        this.authors = authors;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!(obj instanceof Data))
+        if (!(obj instanceof Book))
             return false;
-        Data data = (Data)obj;
-        return intVal == data.intVal && Objects.equals(strVal, data.strVal);
+
+        Book book = (Book)obj;
+        return year == book.year && title.equals(book.title) && date.equals(book.date) && authors.equals(book.authors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(intVal, strVal);
+        return Objects.hash(title, date, year, authors);
     }
+
 }

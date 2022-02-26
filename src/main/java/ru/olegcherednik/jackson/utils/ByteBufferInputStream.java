@@ -18,23 +18,36 @@
  */
 package ru.olegcherednik.jackson.utils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /**
  * @author Oleg Cherednik
- * @since 22.12.2020
+ * @since 18.02.2022
  */
-public final class ListUtils {
+final class ByteBufferInputStream extends InputStream {
 
-    public static <T> List<T> of(T... elements) {
-        if (elements == null || elements.length == 0)
-            return Collections.emptyList();
-        return Collections.unmodifiableList(Arrays.asList(elements));
+    private final ByteBuffer buf;
+
+    public ByteBufferInputStream(ByteBuffer buf) {
+        this.buf = buf;
     }
 
-    private ListUtils() {
+    @Override
+    public int read() throws IOException {
+        return buf.hasRemaining() ? buf.get() & 0xFF : -1;
+    }
+
+    @Override
+    public int read(byte[] buf, int offs, int len) throws IOException {
+        if (this.buf.hasRemaining()) {
+            len = Math.min(len, this.buf.remaining());
+            this.buf.get(buf, offs, len);
+        } else
+            len = -1;
+
+        return len;
     }
 
 }

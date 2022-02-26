@@ -18,23 +18,21 @@
  */
 package ru.olegcherednik.jackson.utils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Marker annotation that can be used to define factory method as one to use for instantiating new instances of the
+ * associated class. The method should be a <b>static</b> and contain <b>exactly one</b> {@link String} argument.
+ * <p>
+ * This annotation works only with {@link EnumId}.
+ *
  * @author Oleg Cherednik
- * @since 22.12.2020
+ * @since 18.10.2021
  */
-public final class ListUtils {
-
-    public static <T> List<T> of(T... elements) {
-        if (elements == null || elements.length == 0)
-            return Collections.emptyList();
-        return Collections.unmodifiableList(Arrays.asList(elements));
-    }
-
-    private ListUtils() {
-    }
-
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonCreator {
 }

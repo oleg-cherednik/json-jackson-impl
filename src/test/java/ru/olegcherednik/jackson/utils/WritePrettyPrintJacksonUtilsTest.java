@@ -19,6 +19,7 @@
 package ru.olegcherednik.jackson.utils;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.jackson.utils.data.Data;
 
 import java.io.IOException;
 import java.io.StringWriter;

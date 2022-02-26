@@ -19,6 +19,7 @@
 package ru.olegcherednik.jackson.utils;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.jackson.utils.data.Book;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,6 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,21 +40,21 @@ public class InputStreamJacksonUtilsTest {
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(JacksonUtils.readValue((InputStream)null, Object.class)).isNull();
         assertThat(JacksonUtils.readList((InputStream)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListLazy(null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListLazy((InputStream)null, Object.class)).isNull();
         assertThat(JacksonUtils.readMap((InputStream)null)).isNull();
         assertThat(JacksonUtils.readMap((InputStream)null, String.class, String.class)).isNull();
     }
 
     public void shouldRetrieveMapWhenReadInputStreamAsMap() throws IOException {
         try (InputStream in = InputStreamJacksonUtilsTest.class.getResourceAsStream("/book.json")) {
-            Map<String, ?> expected = MapUtils.of(
+            Map<String, Object> expected = MapUtils.of(
                     "title", "Thinking in Java",
                     "date", "2017-07-23T13:57:14.225Z",
                     "year", 1998,
                     "authors", ListUtils.of("Bruce Eckel")
             );
 
-            Map<String, ?> actual = JacksonUtils.readMap(in);
+            Map<String, Object> actual = JacksonUtils.readMap(in);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
         }
@@ -163,40 +163,6 @@ public class InputStreamJacksonUtilsTest {
         }
     }
 
-    @SuppressWarnings({ "AssignmentOrReturnOfFieldWithMutableType", "unused" })
-    private static final class Book {
-
-        private String title;
-        private ZonedDateTime date;
-        private int year;
-        private List<String> authors;
-
-        public Book() {
-        }
-
-        public Book(String title, ZonedDateTime date, int year, List<String> authors) {
-            this.title = title;
-            this.date = date;
-            this.year = year;
-            this.authors = authors;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (!(obj instanceof Book))
-                return false;
-
-            Book book = (Book)obj;
-            return year == book.year && title.equals(book.title) && date.equals(book.date) && authors.equals(book.authors);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(title, date, year, authors);
-        }
-    }
 }
 
 

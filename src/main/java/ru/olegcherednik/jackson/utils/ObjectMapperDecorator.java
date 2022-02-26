@@ -21,16 +21,19 @@ package ru.olegcherednik.jackson.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
+import ru.olegcherednik.jackson.utils.types.ListMapTypeReference;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Collections;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -52,7 +55,7 @@ public class ObjectMapperDecorator {
     // ---------- read String----------
 
     public <V> V readValue(String json, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         if (json == null)
             return null;
@@ -60,13 +63,15 @@ public class ObjectMapperDecorator {
         return withRuntimeException(() -> supplier.get().readValue(json, valueClass));
     }
 
+    public List<Object> readList(String json) {
+        return readList(json, Object.class);
+    }
+
     public <V> List<V> readList(String json, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         if (json == null)
             return null;
-        if (isEmpty(json))
-            return Collections.emptyList();
 
         return withRuntimeException(() -> {
             ObjectReader reader = supplier.get().readerFor(valueClass);
@@ -74,11 +79,16 @@ public class ObjectMapperDecorator {
         });
     }
 
-    public Map<String, ?> readMap(String json) {
+    public List<Map<String, Object>> readListOfMap(String json) {
         if (json == null)
             return null;
-        if (isEmpty(json))
-            return Collections.emptyMap();
+
+        return withRuntimeException(() -> supplier.get().readValue(json, ListMapTypeReference.INSTANCE));
+    }
+
+    public Map<String, Object> readMap(String json) {
+        if (json == null)
+            return null;
 
         return withRuntimeException(() -> {
             ObjectMapper mapper = supplier.get();
@@ -94,8 +104,9 @@ public class ObjectMapperDecorator {
     public <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
         if (json == null)
             return null;
-        if (isEmpty(json))
-            return Collections.emptyMap();
+
+        requireNotNullKeyClass(keyClass);
+        requireNotNullValueClass(valueClass);
 
         return withRuntimeException(() -> {
             ObjectMapper mapper = supplier.get();
@@ -104,10 +115,93 @@ public class ObjectMapperDecorator {
         });
     }
 
+    // ---------- read ByteBuffer----------
+
+    public <V> V readValue(ByteBuffer buf, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readValue(in, valueClass));
+    }
+
+    public List<Object> readList(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readList);
+    }
+
+    public <V> List<V> readList(ByteBuffer buf, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readList(in, valueClass));
+    }
+
+    public Iterator<Object> readListLazy(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readListLazy);
+    }
+
+    public <V> Iterator<V> readListLazy(ByteBuffer buf, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readListLazy(in, valueClass));
+    }
+
+    public List<Map<String, Object>> readListOfMap(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readListOfMap);
+    }
+
+    public Iterator<Map<String, Object>> readListOfMapLazy(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readListOfMapLazy);
+    }
+
+    public Map<String, Object> readMap(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readMap);
+    }
+
+    public <V> Map<String, V> readMap(ByteBuffer buf, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readMap(in, valueClass));
+    }
+
+    public <K, V> Map<K, V> readMap(ByteBuffer buf, Class<K> keyClass, Class<V> valueClass) {
+        requireNotNullKeyClass(keyClass);
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readMap(in, keyClass, valueClass));
+    }
+
     // ---------- read InputStream ----------
 
     public <V> V readValue(InputStream in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         if (in == null)
             return null;
@@ -115,8 +209,12 @@ public class ObjectMapperDecorator {
         return withRuntimeException(() -> supplier.get().readValue(in, valueClass));
     }
 
+    public List<Object> readList(InputStream in) {
+        return readList(in, Object.class);
+    }
+
     public <V> List<V> readList(InputStream in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         if (in == null)
             return null;
@@ -127,8 +225,19 @@ public class ObjectMapperDecorator {
         });
     }
 
+    public List<Map<String, Object>> readListOfMap(InputStream in) {
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().readValue(in, ListMapTypeReference.INSTANCE));
+    }
+
+    public Iterator<Object> readListLazy(InputStream in) {
+        return readListLazy(in, Object.class);
+    }
+
     public <V> Iterator<V> readListLazy(InputStream in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         if (in == null)
             return null;
@@ -139,7 +248,17 @@ public class ObjectMapperDecorator {
         });
     }
 
-    public Map<String, ?> readMap(InputStream in) {
+    public Iterator<Map<String, Object>> readListOfMapLazy(InputStream in) {
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectReader reader = supplier.get().readerFor(Map.class);
+            return reader.readValues(in);
+        });
+    }
+
+    public Map<String, Object> readMap(InputStream in) {
         if (in == null)
             return null;
 
@@ -174,8 +293,17 @@ public class ObjectMapperDecorator {
         return withRuntimeException(() -> supplier.get().writeValueAsString(obj));
     }
 
+    public <V> void writeValue(V obj, OutputStream out) {
+        requireNotNullOut(out);
+
+        withRuntimeException(() -> {
+            supplier.get().writeValue(out, obj);
+            return null;
+        });
+    }
+
     public <V> void writeValue(V obj, Writer out) {
-        Objects.requireNonNull(out, "'out' should not be null");
+        requireNotNullOut(out);
 
         withRuntimeException(() -> {
             supplier.get().writeValue(out, obj);
@@ -188,15 +316,29 @@ public class ObjectMapperDecorator {
     private static <V> V withRuntimeException(Callable<V> task) {
         try {
             return task.call();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new JacksonUtilsException(e);
         }
     }
 
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
-    private static boolean isEmpty(String json) {
-        json = json.trim();
-        return "{}".equals(json) || "[]".equals(json);
+    private static <V> V withInputStream(ByteBuffer buf, Function<InputStream, V> task) {
+        try (InputStream in = new ByteBufferInputStream(buf)) {
+            return task.apply(in);
+        } catch (Exception e) {
+            throw new JacksonUtilsException(e);
+        }
+    }
+
+    private static <T> void requireNotNullOut(T out) {
+        Objects.requireNonNull(out, "'out' should not be null");
+    }
+
+    private static <K> void requireNotNullKeyClass(Class<K> keyClass) {
+        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
+    }
+
+    private static <V> void requireNotNullValueClass(Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
     }
 
 }
