@@ -1,0 +1,152 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'jacoco'
+    id 'java-library'
+    id 'org.cadixdev.licenser' version '0.6.1'
+
+    id 'signing'
+    id 'maven-publish'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.0.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+group 'ru.oleg-cherednik.jackson'
+version '2.3'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+configurations {
+    jar.archiveFileName = "${rootProject.name}-${version}.jar"
+}
+dependencies {
+    compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
+    compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
+    compileOnly "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
+    compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
+    compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
+
+    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
+
+    testImplementation('org.testng:testng:7.5') {
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.apache.ant', module: 'ant'
+    }
+
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
+    testImplementation "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
+    testImplementation "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
+
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+    testImplementation 'commons-io:commons-io:2.11.0'
+    testImplementation 'org.mockito:mockito-core:4.3.1'
+
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${property('spring-boot.version')}") {
+        exclude group: 'org.junit.jupiter'
+        exclude group: 'com.fasterxml.jackson.core'
+        exclude group: 'com.fasterxml.jackson.datatype'
+        exclude group: 'com.fasterxml.jackson.module'
+    }
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${property('spring-boot.version')}") {
+        exclude group: 'org.junit.vintage'
+        exclude group: 'org.junit.jupiter'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+    useTestNG()
+}
+
+license {
+    header rootProject.file('APACHE.txt')
+    include '**/*.java'
+    newLine false
+}
+
+signing {
+    sign publishing.publications
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            pom {
+                name = rootProject.name
+
+                description = "\n" +
+                        "    Jackson usability utilities.\n" +
+                        "    It's designed to add additional features like easy and centralized configuration,\n" +
+                        "    builder or static method set.\n" +
+                        "  "
+
+                url = 'https://github.com/oleg-cherednik/jackson-utils'
+                inceptionYear = '2020'
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'oleg.cherednik'
+                        name = 'Oleg Cherednik'
+                        email = 'oleg.cherednik@gmail.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/oleg-cherednik/jackson-utils'
+                    connection = 'scm:https://github.com/oleg-cherednik/jackson-utils.git'
+                    developerConnection = 'scm:git@github.com:oleg-cherednik/jackson-utils.git'
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
