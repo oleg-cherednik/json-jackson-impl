@@ -40,10 +40,11 @@ final class ByteBufferInputStream extends InputStream {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     public int read(byte[] buf, int offs, int len) throws IOException {
         if (this.buf.hasRemaining()) {
             len = Math.min(len, this.buf.remaining());
-            this.buf.get(buf, offs, len);
+            this.buf.get(buf, offs, Math.min(len, this.buf.remaining()));
         } else
             len = -1;
 
