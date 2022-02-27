@@ -261,8 +261,8 @@ public class ByteBufferJacksonUtilsTest {
                 .isExactlyInstanceOf(JacksonUtilsException.class);
     }
 
-    private static ByteBuffer getResourceAsByteBuffer(String json) throws IOException {
-        try (InputStream in = ByteBufferJacksonUtilsTest.class.getResourceAsStream(json)) {
+    private static ByteBuffer getResourceAsByteBuffer(String name) throws IOException {
+        try (InputStream in = ByteBufferJacksonUtilsTest.class.getResourceAsStream(name)) {
             return ByteBuffer.wrap(IOUtils.toByteArray(in));
         }
     }
