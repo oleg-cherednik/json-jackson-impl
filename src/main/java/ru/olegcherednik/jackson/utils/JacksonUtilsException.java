@@ -26,7 +26,12 @@ public class JacksonUtilsException extends RuntimeException {
 
     private static final long serialVersionUID = -8911497717091041951L;
 
+    public JacksonUtilsException(String message) {
+        super(message);
+    }
+
     public JacksonUtilsException(Throwable cause) {
         super(cause);
     }
+
 }

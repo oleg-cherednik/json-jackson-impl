@@ -16,23 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.jackson.utils;
+package ru.olegcherednik.jackson.utils.enumid;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.fasterxml.jackson.core.util.VersionUtil;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import ru.olegcherednik.jackson.utils.EnumId;
 
-/**
- * Marker annotation that can be used to define factory method as one to use for instantiating new instances of the
- * associated class. The method should be a <b>static</b> and contain <b>exactly one</b> {@link String} argument.
- * <p>
- * This annotation works only with {@link EnumId}.
- *
- * @author Oleg Cherednik
- * @since 18.10.2021
- */
-@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JsonCreator {
+public final class EnumIdModule extends SimpleModule {
+
+    private static final long serialVersionUID = -946898814418994813L;
+
+    public EnumIdModule() {
+        super(VersionUtil.parseVersion("2.13.11", "com.fasterxml.jackson.datatype11", "jackson-datatype-jsr31011"));
+        addSerializer(EnumId.class, EnumIdSerializer.INSTANCE);
+        _deserializers = EnumIdDeserializers.INSTANCE;
+    }
+
+    @Override
+    public void setupModule(SetupContext context) {
+        super.setupModule(context);
+        context.addBeanSerializerModifier(EnumIdSerializerModifier.INSTANCE);
+    }
+
 }

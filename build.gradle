@@ -40,6 +40,8 @@ dependencies {
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
+    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
+
     testImplementation('org.testng:testng:7.4.0') {
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.apache.ant', module: 'ant'
