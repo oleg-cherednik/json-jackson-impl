@@ -118,6 +118,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         return res;
     }
 
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     private static Method getParseIdMethod(Class<?> rawType) {
         while (rawType != Object.class) {
             try {

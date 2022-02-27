@@ -70,7 +70,7 @@ public final class JacksonHelper {
         return new ObjectMapperDecorator(createPrettyPrintMapper(mapperBuilder));
     }
 
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
+    @SuppressWarnings({ "PMD.AvoidReassigningParameters", "PMD.CompareObjectsWithEquals" })
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
         mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_BUILDER);
 
