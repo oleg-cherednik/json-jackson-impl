@@ -21,7 +21,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.jackson'
-version '2.2'
+version '2.3'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -42,7 +42,7 @@ dependencies {
 
     implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
-    testImplementation('org.testng:testng:7.4.0') {
+    testImplementation('org.testng:testng:7.5') {
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.apache.ant', module: 'ant'
     }
@@ -53,18 +53,18 @@ dependencies {
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
-    testImplementation 'org.assertj:assertj-core:3.21.0'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
     testImplementation 'commons-io:commons-io:2.11.0'
-    testImplementation 'org.mockito:mockito-core:4.0.0'
+    testImplementation 'org.mockito:mockito-core:4.3.1'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE') {
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${property('spring-boot.version')}") {
         exclude group: 'org.junit.jupiter'
         exclude group: 'com.fasterxml.jackson.core'
         exclude group: 'com.fasterxml.jackson.datatype'
         exclude group: 'com.fasterxml.jackson.module'
     }
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE') {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${property('spring-boot.version')}") {
         exclude group: 'org.junit.vintage'
         exclude group: 'org.junit.jupiter'
     }
