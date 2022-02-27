@@ -296,6 +296,9 @@ public class ObjectMapperDecorator {
     public <V> void writeValue(V obj, OutputStream out) {
         requireNotNullOut(out);
 
+        if (obj == null)
+            return;
+
         withRuntimeException(() -> {
             supplier.get().writeValue(out, obj);
             return null;
@@ -304,6 +307,9 @@ public class ObjectMapperDecorator {
 
     public <V> void writeValue(V obj, Writer out) {
         requireNotNullOut(out);
+
+        if (obj == null)
+            return;
 
         withRuntimeException(() -> {
             supplier.get().writeValue(out, obj);

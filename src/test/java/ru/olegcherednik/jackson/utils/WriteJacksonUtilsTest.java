@@ -18,10 +18,12 @@
  */
 package ru.olegcherednik.jackson.utils;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.testng.annotations.Test;
 import ru.olegcherednik.jackson.utils.data.Data;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collections;
@@ -29,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 /**
  * @author Oleg Cherednik
@@ -39,7 +44,18 @@ public class WriteJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(JacksonUtils.writeValue(null)).isNull();
-//        assertThat(JacksonUtils.writeValue(null, new BufferedOutputStream())).isNull();
+    }
+
+    public void shouldNotWriteToOutputStreamWhenObjectNull() {
+        OutputStream out = mock(OutputStream.class);
+        JacksonUtils.writeValue(null, out);
+        verifyNoInteractions(out);
+    }
+
+    public void shouldNotWriteToWriterWhenObjectNull() {
+        Writer out = mock(Writer.class);
+        JacksonUtils.writeValue(null, out);
+        verifyNoInteractions(out);
     }
 
     public void shouldRetrieveJsonWhenWriteObject() {
@@ -70,18 +86,19 @@ public class WriteJacksonUtilsTest {
         assertThat(JacksonUtils.writeValue(Collections.emptyMap())).isEqualTo("{}");
     }
 
-    public void shouldWriteJsonToStreamWhenWriteObjectToStream() throws IOException {
+    public void shouldWriteJsonToStreamWhenWriteObjectToWriter() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
             JacksonUtils.writeValue(data, out);
-            assertThat(out.toString()).isEqualTo("{\"intVal\":666,\"strVal\":\"omen\"}");
+            assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
-    public void shouldWriteNullJsonWhenWriteNullToStream() throws IOException {
-        try (Writer out = new StringWriter()) {
-            JacksonUtils.writeValue(null, out);
-            assertThat(out.toString()).isEqualTo("null");
+    public void shouldWriteJsonToStreamWhenWriteObjectToOutputStream() throws IOException {
+        try (OutputStream out = new ByteArrayOutputStream()) {
+            Data data = new Data(666, "omen");
+            JacksonUtils.writeValue(data, out);
+            assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
@@ -125,22 +142,38 @@ public class WriteJacksonUtilsTest {
                 "} ]");
     }
 
-    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToStream() throws IOException {
+    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToWriter() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
             JacksonUtils.prettyPrint().writeValue(data, out);
-            assertThat(out.toString()).isEqualTo('{' + System.lineSeparator() +
+            assertThat(out).hasToString('{' + System.lineSeparator() +
                     "  \"intVal\" : 666," + System.lineSeparator() +
                     "  \"strVal\" : \"omen\"" + System.lineSeparator() +
                     '}');
         }
     }
 
-    public void shouldWriteNullJsonWhenWriteNullWithPrettyPrintToStream() throws IOException {
-        try (Writer out = new StringWriter()) {
-            JacksonUtils.prettyPrint().writeValue(null, out);
-            assertThat(out.toString()).isEqualTo("null");
+    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToOutputStream() throws IOException {
+        try (OutputStream out = new ByteArrayOutputStream()) {
+            Data data = new Data(666, "omen");
+            JacksonUtils.prettyPrint().writeValue(data, out);
+            assertThat(out).hasToString('{' + System.lineSeparator() +
+                    "  \"intVal\" : 666," + System.lineSeparator() +
+                    "  \"strVal\" : \"omen\"" + System.lineSeparator() +
+                    '}');
         }
+    }
+
+    public void shouldThrownExceptionWhenOutputStreamNull() {
+        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (OutputStream)null))
+                .isExactlyInstanceOf(NullPointerException.class)
+                .hasMessage("'out' should not be null");
+    }
+
+    public void shouldThrownExceptionWhenWriterNull() {
+        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (Writer)null))
+                .isExactlyInstanceOf(NullPointerException.class)
+                .hasMessage("'out' should not be null");
     }
 
 }

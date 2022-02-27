@@ -89,11 +89,4 @@ public class WritePrettyPrintJacksonUtilsTest {
         }
     }
 
-    public void shouldWriteNullJsonWhenWriteNullWithPrettyPrintToStream() throws IOException {
-        try (Writer out = new StringWriter()) {
-            JacksonUtils.prettyPrint().writeValue(null, out);
-            assertThat(out.toString()).isEqualTo("null");
-        }
-    }
-
 }
