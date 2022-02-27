@@ -7,17 +7,22 @@
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&utm_medium=referral&utm_content=oleg-cherednik/jackson-utils&utm_campaign=Badge_Coverage)
 [![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
      
-# JacksonUtils
-> a java tool to make working with [Jackson Project](https://github.com/FasterXML/jackson) more comfortable
+# jackson-utils
+> [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
+> It's designed to add additional features like easy and centralized configuration,
+> builder or static method set. Artifact does not include direct `Jackson Project`.
+> It is up to you to add them into your project.
 
 ## Features
 *   Encapsulate all checked exceptions from Jackson with custom runtime exception;
-*   A centralized configuration of `ObjectMapper`;
-*   A central place of settings and all `ObjectMapper` instances;
+*   A central place for configuration;
+*   A central place for holding `ObjectMapper` instances;
 *   Utility class to make most common operations much more comfortable to use;
 *   Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
-*   `InputStream` support for objects, lists and maps;
-*   Lazy read support for list from `InputStream`. 
+*   `ByteBuffer`/`InputStream` support for objects, lists and maps;
+*   Lazy read support for list from `Writer`;
+*   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
+*   Advanced `Reader`/`Writer` support for `enum`. 
 
 ## Gradle
 
@@ -35,13 +40,14 @@ compile 'ru.oleg-cherednik.jackson:jackson-utils:2.3'
 </dependency>
 ```                                                    
 
-In the version, first 3 places are the version of `Jackson` that is used in this utils.
-The last section is the `jackson-utils` version. This number is unique. 
+**Note:** `jackson-utils` does not contain dependency to the specific `Jackson Project`
+version, so you have to add it additionally:
 
 ## Usage 
 
 To simplify usage of _jackson-utils_, there're following classes:
 *   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
+*   [EnumId](#work-with-enum) - advanced enum serialization support.
 
 ### JacksonUtils class
 
