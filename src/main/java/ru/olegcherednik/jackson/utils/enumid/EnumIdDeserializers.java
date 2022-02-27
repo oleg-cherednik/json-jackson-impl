@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import ru.olegcherednik.jackson.utils.EnumId;
 import ru.olegcherednik.jackson.utils.JacksonUtilsException;
 import ru.olegcherednik.utils.reflection.MethodUtils;
 
@@ -53,9 +52,6 @@ final class EnumIdDeserializers extends SimpleDeserializers {
     @Override
     public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc)
             throws JsonMappingException {
-        if (!EnumId.class.isAssignableFrom(type))
-            return null;
-
         Function<String, ?> read = createReadFunc(type);
 
         return new JsonDeserializer<Object>() {

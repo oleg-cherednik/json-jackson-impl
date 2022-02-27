@@ -36,6 +36,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -43,8 +44,8 @@ import java.util.function.Supplier;
  */
 public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
 
-    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
-    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
     private final Function<ZoneId, ZoneId> zoneModifier;
 
@@ -56,7 +57,7 @@ public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
         this(z -> zone);
     }
 
-    public JacksonObjectMapperBuilder(Function<ZoneId, ZoneId> zoneModifier) {
+    public JacksonObjectMapperBuilder(UnaryOperator<ZoneId> zoneModifier) {
         this.zoneModifier = zoneModifier;
     }
 
@@ -69,23 +70,19 @@ public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
 
     @Override
     public ObjectMapper get() {
-        ObjectMapper mapper = new ObjectMapper();
-        registerModule(mapper);
+        return registerModule(new ObjectMapper())
+                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
 
-        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
 
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-
-        mapper.enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
-        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        mapper.enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
-
-        return mapper;
+                .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+                .enable(JsonParser.Feature.ALLOW_COMMENTS)
+                .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
     }
 
 }

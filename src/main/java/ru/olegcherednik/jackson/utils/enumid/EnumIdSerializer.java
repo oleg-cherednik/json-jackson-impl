@@ -40,9 +40,7 @@ final class EnumIdSerializer extends JsonSerializer<EnumId> {
 
     @Override
     public void serialize(EnumId enumId, JsonGenerator generator, SerializerProvider serializers) throws IOException {
-        if (enumId != null) {
-            generator.writeString(enumId.getId());
-        }
+        generator.writeString(enumId.getId());
     }
 
 }

@@ -52,9 +52,6 @@ final class EnumIdSerializerModifier extends SerializerModifier {
         while (it.hasNext()) {
             BeanPropertyWriter bpw = it.next();
 
-            if (bpw.getClass() != BeanPropertyWriter.class)
-                continue;
-
             if (EnumId.class.isAssignableFrom(bpw.getMember().getRawType()))
                 it.set(new EnumIdBeanPropertyWriter(bpw));
         }

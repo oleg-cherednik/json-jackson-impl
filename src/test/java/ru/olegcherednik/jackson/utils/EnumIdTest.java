@@ -19,7 +19,10 @@
 package ru.olegcherednik.jackson.utils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,13 +52,14 @@ public class EnumIdTest {
         assertThat(actual.nullColor).isNull();
     }
 
-    //    public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() {
-    //        Data data = new Data(Auto.MERCEDES, Color.BLUE);
-    //        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
-    //        String json = gson.writeValue(data);
-    //        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-    //                + "\"nullAuto\":null,\"nullColor\":null}");
-    //    }
+    public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() throws JsonProcessingException {
+        Data data = new Data(Auto.MERCEDES, Color.BLUE);
+        ObjectMapper mapper = JacksonHelper.createMapper()
+                                           .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        String json = mapper.writeValueAsString(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
+                + "\"nullAuto\":null,\"nullColor\":null}");
+    }
 
     public void shouldThrowExceptionWhenReadEnumIdNoFactoryMethod() {
         String json = JacksonUtils.writeValue(City.SAINT_PETERSBURG);
@@ -160,6 +164,7 @@ public class EnumIdTest {
         }
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
