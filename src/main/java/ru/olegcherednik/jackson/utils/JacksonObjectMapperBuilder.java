@@ -34,7 +34,6 @@ import ru.olegcherednik.jackson.utils.serializers.ZoneIdZonedDateTimeSerializer;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -47,7 +46,7 @@ public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
     public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
     public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
-    private final Function<ZoneId, ZoneId> zoneModifier;
+    private final UnaryOperator<ZoneId> zoneModifier;
 
     public JacksonObjectMapperBuilder() {
         this(ZONE_MODIFIER_TO_UTC);

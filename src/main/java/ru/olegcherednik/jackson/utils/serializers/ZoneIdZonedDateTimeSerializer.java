@@ -29,7 +29,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -39,9 +39,9 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     private static final long serialVersionUID = -2135138754031293296L;
 
-    private final Function<ZoneId, ZoneId> zoneModifier;
+    private final UnaryOperator<ZoneId> zoneModifier;
 
-    public ZoneIdZonedDateTimeSerializer(Function<ZoneId, ZoneId> zoneModifier) {
+    public ZoneIdZonedDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier) {
         this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL);
     }
 
@@ -77,4 +77,5 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     protected ZoneIdZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
         return new ZoneIdZonedDateTimeSerializer(this, _useTimestamp, writeNanoseconds, _formatter, writeZoneId);
     }
+
 }

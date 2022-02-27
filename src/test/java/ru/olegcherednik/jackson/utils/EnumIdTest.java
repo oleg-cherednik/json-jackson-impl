@@ -18,9 +18,11 @@
  */
 package ru.olegcherednik.jackson.utils;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -56,6 +58,21 @@ public class EnumIdTest {
         Data data = new Data(Auto.MERCEDES, Color.BLUE);
         ObjectMapper mapper = JacksonHelper.createMapper()
                                            .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        String json = mapper.writeValueAsString(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
+                + "\"nullAuto\":null,\"nullColor\":null}");
+    }
+
+    public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNullAngGetters() throws JsonProcessingException {
+        Book data = new Book();
+        data.setNotNullAuto(Auto.MERCEDES);
+        data.setNotNullColor(Color.BLUE);
+
+        ObjectMapper mapper = JacksonHelper.createMapper()
+                                           .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+                                           .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY)
+                                           .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+
         String json = mapper.writeValueAsString(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
                 + "\"nullAuto\":null,\"nullColor\":null}");
@@ -328,6 +345,59 @@ public class EnumIdTest {
         public static Country three(String id) {
             return EnumId.parseId(Country.class, id);
         }
+    }
+
+    private static class Book {
+
+        private Auto notNullAuto;
+        private Color notNullColor;
+        private Auto nullAuto;
+        private Color nullColor;
+
+        public Auto getNotNullAuto() {
+            return notNullAuto;
+        }
+
+        public void setNotNullAuto(Auto notNullAuto) {
+            this.notNullAuto = notNullAuto;
+        }
+
+        public Color getNotNullColor() {
+            return notNullColor;
+        }
+
+        public void setNotNullColor(Color notNullColor) {
+            this.notNullColor = notNullColor;
+        }
+
+        public Auto getNullAuto() {
+            return nullAuto;
+        }
+
+        public void setNullAuto(Auto nullAuto) {
+            this.nullAuto = nullAuto;
+        }
+
+        public Color getNullColor() {
+            return nullColor;
+        }
+
+        public void setNullColor(Color nullColor) {
+            this.nullColor = nullColor;
+        }
+
+        @Override
+        @SuppressWarnings("ConstantConditions")
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!(obj instanceof Data))
+                return false;
+            Data data = (Data)obj;
+            return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
+                    && nullAuto == data.nullAuto && nullColor == data.nullColor;
+        }
+
     }
 
 }

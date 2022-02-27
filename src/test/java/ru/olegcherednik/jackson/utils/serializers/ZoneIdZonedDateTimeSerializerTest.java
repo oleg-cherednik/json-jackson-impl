@@ -21,7 +21,7 @@ package ru.olegcherednik.jackson.utils.serializers;
 import org.testng.annotations.Test;
 
 import java.time.ZoneId;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +42,7 @@ public class ZoneIdZonedDateTimeSerializerTest {
 
         private static final long serialVersionUID = 1319340992384997514L;
 
-        public LocalZonedDateTimeSerializer(Function<ZoneId, ZoneId> withZone) {
+        public LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
             super(withZone);
         }
 
@@ -55,5 +55,7 @@ public class ZoneIdZonedDateTimeSerializerTest {
         public ZoneIdZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
             return super.withFeatures(writeZoneId, writeNanoseconds);
         }
+
     }
+
 }
