@@ -322,5 +322,5 @@ try (InputStream in = ...) {
 *   Home page: https://github.com/oleg-cherednik/jackson-utils
 
 *   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/jackson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils/
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils
