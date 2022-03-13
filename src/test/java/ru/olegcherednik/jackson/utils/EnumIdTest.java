@@ -165,6 +165,11 @@ public class EnumIdTest {
         assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
     }
 
+    public void shouldRetrieveDefaultWhenObjectNull() {
+        assertThat(EnumId.getId(Auto.AUDI, Auto.BMW)).isSameAs(Auto.AUDI.getId());
+        assertThat(EnumId.getId(null, Auto.BMW)).isSameAs(Auto.BMW.getId());
+    }
+
     @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode" })
     private static class Data {
 

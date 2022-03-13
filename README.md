@@ -1,5 +1,5 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils)
-[![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.utils/jackson-utils)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils)
+[![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.jackson/jackson-utils)
 [![java1.8](https://badgen.net/badge/java/1.8/blue)](https://badgen.net/)
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev.svg?style=svg)](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -27,7 +27,7 @@
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.jackson:jackson-utils:2.3'
+compile 'ru.oleg-cherednik.jackson:jackson-utils:2.4'
 ```
 
 ## Maven
@@ -36,7 +36,7 @@ compile 'ru.oleg-cherednik.jackson:jackson-utils:2.3'
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
 </dependency>
 ```                                                    
 
@@ -322,5 +322,5 @@ try (InputStream in = ...) {
 *   Home page: https://github.com/oleg-cherednik/jackson-utils
 
 *   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/jackson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/jackson-utils/
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils

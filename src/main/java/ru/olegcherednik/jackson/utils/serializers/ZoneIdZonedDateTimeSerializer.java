@@ -42,6 +42,10 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     private final UnaryOperator<ZoneId> zoneModifier;
 
     public ZoneIdZonedDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier) {
+        super(new ZonedDateTimeSerializer(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                null,
+                DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+                false);
         this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL);
     }
 
@@ -64,7 +68,7 @@ public class ZoneIdZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     @Override
     protected ZoneIdZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter formatter, JsonFormat.Shape shape) {
-        return new ZoneIdZonedDateTimeSerializer(this, useTimestamp, formatter, _writeZoneId);
+        return new ZoneIdZonedDateTimeSerializer(this, useTimestamp, formatter, false);
     }
 
     @Override

@@ -29,11 +29,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import ru.olegcherednik.jackson.utils.enumid.EnumIdModule;
+import ru.olegcherednik.jackson.utils.serializers.ZoneIdDateSerializer;
 import ru.olegcherednik.jackson.utils.serializers.ZoneIdZonedDateTimeSerializer;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -63,7 +65,8 @@ public class JacksonObjectMapperBuilder implements Supplier<ObjectMapper> {
     protected ObjectMapper registerModule(ObjectMapper mapper) {
         return mapper.registerModule(new ParameterNamesModule())
                      .registerModule(new AfterburnerModule())
-                     .registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(zoneModifier)))
+                     .registerModule(new JavaTimeModule().addSerializer(ZonedDateTime.class, new ZoneIdZonedDateTimeSerializer(zoneModifier))
+                                                         .addSerializer(Date.class, new ZoneIdDateSerializer(zoneModifier)))
                      .registerModule(new EnumIdModule());
     }
 

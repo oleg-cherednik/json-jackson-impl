@@ -21,7 +21,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.jackson'
-version '2.3'
+version '2.4'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'

@@ -39,6 +39,10 @@ public interface EnumId {
         return name();
     }
 
+    static <T extends Enum<?> & EnumId> String getId(T obj, T def) {
+        return Optional.ofNullable(obj).orElse(def).getId();
+    }
+
     static <T extends Enum<?> & EnumId> T parseName(Class<T> cls, String name) {
         T res = parseName(cls.getEnumConstants(), name, null);
 

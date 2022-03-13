@@ -50,9 +50,9 @@ public class ZonedDateTimePrettyPrintJacksonUtilsTest {
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
         String actual = jsonUtils.writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"," + System.lineSeparator() +
-                "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," + System.lineSeparator() +
-                "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"" + System.lineSeparator() +
+                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"," + System.lineSeparator() +
+                "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00\"," + System.lineSeparator() +
+                "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00\"" + System.lineSeparator() +
                 '}');
     }
 
