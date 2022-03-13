@@ -34,14 +34,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class LocalDateTimeJacksonUtilsTest {
 
-    public void shouldRetrieveJsonWhenWriteZonedDateTime() throws IOException {
+    public void shouldRetrieveJsonWhenWriteLocalDateTime() throws IOException {
         Map<String, LocalDateTime> map = createData();
         String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"local\":\"2017-07-23T13:57:14.225\"}");
     }
 
-    public void shouldRetrievePrettyPrintJsonWhenWriteZonedDateTimeMapWithPrettyPrint() {
+    public void shouldRetrievePrettyPrintJsonWhenWriteLocalDateTimeMapWithPrettyPrint() {
         Map<String, LocalDateTime> map = createData();
         String actual = JacksonUtils.prettyPrint().writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
@@ -49,7 +49,7 @@ public class LocalDateTimeJacksonUtilsTest {
                 '}');
     }
 
-    public void shouldRetrieveDeserializedZonedDateTimeMapWhenReadJsonAsMap() {
+    public void shouldRetrieveDeserializedLocalDateTimeMapWhenReadJsonAsMap() {
         String json = "{\"local\":\"2017-07-23T13:57:14.225\"}";
         Map<String, LocalDateTime> expected = createData();
         Map<String, LocalDateTime> actual = JacksonUtils.readMap(json, String.class, LocalDateTime.class);

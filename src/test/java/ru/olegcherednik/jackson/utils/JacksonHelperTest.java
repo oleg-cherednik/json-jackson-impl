@@ -50,10 +50,9 @@ public class JacksonHelperTest {
                 '}');
 
         JacksonHelper.setMapperBuilder(() -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
-        assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
+        assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"}");
         assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + System.lineSeparator() +
-                '}');
+                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"" + System.lineSeparator() + '}');
     }
 
     public void shouldNotRebuildMapperWhenSetSameBuilder() {
@@ -70,4 +69,5 @@ public class JacksonHelperTest {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
         return MapUtils.of("UTC", ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC)));
     }
+
 }
