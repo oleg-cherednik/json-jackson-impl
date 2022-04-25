@@ -6,9 +6,7 @@
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/jackson-utils&amp;utm_campaign=Badge_Grade)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&utm_medium=referral&utm_content=oleg-cherednik/jackson-utils&utm_campaign=Badge_Coverage)
 [![vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_small)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_large)
+[![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
 
      
 # jackson-utils
