@@ -5,7 +5,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/jackson-utils&amp;utm_campaign=Badge_Grade)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&utm_medium=referral&utm_content=oleg-cherednik/jackson-utils&utm_campaign=Badge_Coverage)
-[![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
+[![vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
+[![license-scan](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?utm_source=share_link)
+
      
 # jackson-utils
 > [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
