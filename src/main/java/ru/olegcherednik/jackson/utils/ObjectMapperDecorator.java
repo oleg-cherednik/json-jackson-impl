@@ -317,6 +317,18 @@ public class ObjectMapperDecorator {
         });
     }
 
+    // ---------- convert ----------
+
+    public <V> Map<String, Object> convertToMap(V obj) {
+        if (obj == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = supplier.get();
+            return (Map<String, Object>)mapper.convertValue(obj, Map.class);
+        });
+    }
+
     // ---------- misc ----------
 
     private static <V> V withRuntimeException(Callable<V> task) {

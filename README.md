@@ -8,7 +8,7 @@
 [![vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
 
-     
+
 # jackson-utils
 > [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
 > It's designed to add additional features like easy and centralized configuration,
@@ -24,12 +24,12 @@
 *   `ByteBuffer`/`InputStream` support for objects, lists and maps;
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
-*   Advanced `Reader`/`Writer` support for `enum`. 
+*   Advanced `Reader`/`Writer` support for `enum`.
 
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.jackson:jackson-utils:2.4'
+compile 'ru.oleg-cherednik.jackson:jackson-utils:2.5'
 ```
 
 ## Maven
@@ -38,14 +38,14 @@ compile 'ru.oleg-cherednik.jackson:jackson-utils:2.4'
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
 </dependency>
-```                                                    
+```
 
 **Note:** `jackson-utils` does not contain dependency to the specific `Jackson Project`
 version, so you have to add it additionally:
 
-## Usage 
+## Usage
 
 To simplify usage of _jackson-utils_, there're following classes:
 *   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
@@ -176,13 +176,13 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "intVal" : 666,
     "strVal" : "omen"
 }
 ```
-```java         
+```java
 try (InputStream in = ...) {
     Data data = JacksonUtils.readValue(in, Data.class);
 }
@@ -197,7 +197,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 [
     {
         "intVal" : 555,
@@ -223,7 +223,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 [
     {
         "intVal" : 555,
@@ -238,7 +238,7 @@ class Data {
 ```java
 try (InputStream in = ...) {
     Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
-    
+
     while (it.hasNext()) {
         Data data = it.next();
     }
@@ -248,7 +248,7 @@ try (InputStream in = ...) {
 
 ###### `InputStream` to a map with `String` keys and `Map` or primitive types as values
 
-```json                        
+```json
 {
     "victory" : {
         "intVal" : 555,
@@ -275,7 +275,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "victory" : {
         "intVal" : 555,
@@ -301,7 +301,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "1" : {
         "intVal" : 555,
