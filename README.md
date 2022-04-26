@@ -1,12 +1,13 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils)
-[![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.jackson/jackson-utils)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils)
+[![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.jackson/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.jackson/jackson-utils)
 [![java1.8](https://badgen.net/badge/java/1.8/blue)](https://badgen.net/)
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev.svg?style=svg)](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/jackson-utils&amp;utm_campaign=Badge_Grade)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=github.com&utm_medium=referral&utm_content=oleg-cherednik/jackson-utils&utm_campaign=Badge_Coverage)
-[![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
-     
+[![vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
+[![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
+
 # jackson-utils
 > [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
 > It's designed to add additional features like easy and centralized configuration,
@@ -22,12 +23,12 @@
 *   `ByteBuffer`/`InputStream` support for objects, lists and maps;
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
-*   Advanced `Reader`/`Writer` support for `enum`. 
+*   Advanced `Reader`/`Writer` support for `enum`.
 
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.jackson:jackson-utils:2.4'
+compile 'ru.oleg-cherednik.jackson:jackson-utils:2.5'
 ```
 
 ## Maven
@@ -36,14 +37,14 @@ compile 'ru.oleg-cherednik.jackson:jackson-utils:2.4'
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
 </dependency>
-```                                                    
+```
 
 **Note:** `jackson-utils` does not contain dependency to the specific `Jackson Project`
 version, so you have to add it additionally:
 
-## Usage 
+## Usage
 
 To simplify usage of _jackson-utils_, there're following classes:
 *   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
@@ -174,13 +175,13 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "intVal" : 666,
     "strVal" : "omen"
 }
 ```
-```java         
+```java
 try (InputStream in = ...) {
     Data data = JacksonUtils.readValue(in, Data.class);
 }
@@ -195,7 +196,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 [
     {
         "intVal" : 555,
@@ -221,7 +222,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 [
     {
         "intVal" : 555,
@@ -236,7 +237,7 @@ class Data {
 ```java
 try (InputStream in = ...) {
     Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
-    
+
     while (it.hasNext()) {
         Data data = it.next();
     }
@@ -246,7 +247,7 @@ try (InputStream in = ...) {
 
 ###### `InputStream` to a map with `String` keys and `Map` or primitive types as values
 
-```json                        
+```json
 {
     "victory" : {
         "intVal" : 555,
@@ -273,7 +274,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "victory" : {
         "intVal" : 555,
@@ -299,7 +300,7 @@ class Data {
     String strVal;
 }
 ```
-```json                        
+```json
 {
     "1" : {
         "intVal" : 555,

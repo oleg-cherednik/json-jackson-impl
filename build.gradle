@@ -21,7 +21,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.jackson'
-version '2.4'
+version '2.5'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -49,13 +49,13 @@ dependencies {
 
     testImplementation "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     testImplementation "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
-    testImplementation "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
+    testImplementation "com.fasterxml.jackson.module:jackson-module-parameter-names:2.13.2"
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
     testImplementation 'org.assertj:assertj-core:3.22.0'
     testImplementation 'commons-io:commons-io:2.11.0'
-    testImplementation 'org.mockito:mockito-core:4.3.1'
+    testImplementation 'org.mockito:mockito-core:4.5.1'
 
     testImplementation("org.springframework.boot:spring-boot-starter-web:${property('spring-boot.version')}") {
         exclude group: 'org.junit.jupiter'

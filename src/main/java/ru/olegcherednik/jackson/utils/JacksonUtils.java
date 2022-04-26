@@ -173,6 +173,12 @@ public final class JacksonUtils {
         return PRETTY_PRINT_DELEGATE;
     }
 
+    // ---------- convert ----------
+
+    public static <V> Map<String, Object> convertToMap(V obj) {
+        return print().convertToMap(obj);
+    }
+
     private JacksonUtils() {
     }
 
