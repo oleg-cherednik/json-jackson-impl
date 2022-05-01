@@ -45,7 +45,7 @@ public class ZonedDateTimeJacksonUtilsTest {
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() {
-        ObjectMapperDecorator jsonUtils = JacksonHelper.createMapperDecorator(
+        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
         Map<String, ZonedDateTime> map = createData();
@@ -57,7 +57,7 @@ public class ZonedDateTimeJacksonUtilsTest {
     }
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() {
-        ObjectMapperDecorator jsonUtils = JacksonHelper.createMapperDecorator(
+        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL).get());
 
         Map<String, ZonedDateTime> map = createData();

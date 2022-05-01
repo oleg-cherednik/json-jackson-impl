@@ -44,7 +44,7 @@ public class ZonedDateTimePrettyPrintJacksonUtilsTest {
     }
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
-        ObjectMapperDecorator jsonUtils = JacksonHelper.createPrettyPrintMapperDecorator(
+        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createPrettyPrintMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();

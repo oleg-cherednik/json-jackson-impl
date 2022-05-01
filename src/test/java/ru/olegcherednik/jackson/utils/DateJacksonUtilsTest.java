@@ -47,7 +47,7 @@ public class DateJacksonUtilsTest {
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteDateSingaporeZone() throws ParseException {
-        ObjectMapperDecorator jsonUtils = JacksonHelper.createMapperDecorator(
+        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
 
         Map<String, Date> map = createData();
@@ -59,7 +59,7 @@ public class DateJacksonUtilsTest {
     }
 
     public void shouldRetrieveJsonWithUTCZoneWhenWriteDateWithSameZone() throws ParseException {
-        ObjectMapperDecorator jsonUtils = JacksonHelper.createMapperDecorator(
+        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
                 () -> new JacksonObjectMapperBuilder(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL).get());
 
         Map<String, Date> map = createData();

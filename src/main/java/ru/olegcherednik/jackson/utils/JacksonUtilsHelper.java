@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
-public final class JacksonHelper {
+public final class JacksonUtilsHelper {
 
     public static final Supplier<ObjectMapper> DEFAULT_BUILDER = new JacksonObjectMapperBuilder();
 
@@ -74,15 +74,15 @@ public final class JacksonHelper {
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
         mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_BUILDER);
 
-        if (mapperBuilder == JacksonHelper.mapperBuilder)
+        if (mapperBuilder == JacksonUtilsHelper.mapperBuilder)
             return;
 
-        JacksonHelper.mapperBuilder = mapperBuilder;
+        JacksonUtilsHelper.mapperBuilder = mapperBuilder;
         mapper = createMapper();
         prettyPrintMapper = createPrettyPrintMapper();
     }
 
-    private JacksonHelper() {
+    private JacksonUtilsHelper() {
     }
 
 }

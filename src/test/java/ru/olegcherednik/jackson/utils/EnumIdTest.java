@@ -56,8 +56,8 @@ public class EnumIdTest {
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() throws JsonProcessingException {
         Data data = new Data(Auto.MERCEDES, Color.BLUE);
-        ObjectMapper mapper = JacksonHelper.createMapper()
-                                           .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
+                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
         String json = mapper.writeValueAsString(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
                 + "\"nullAuto\":null,\"nullColor\":null}");
@@ -68,10 +68,10 @@ public class EnumIdTest {
         data.setNotNullAuto(Auto.MERCEDES);
         data.setNotNullColor(Color.BLUE);
 
-        ObjectMapper mapper = JacksonHelper.createMapper()
-                                           .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
-                                           .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY)
-                                           .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
+                                                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+                                                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY)
+                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
 
         String json = mapper.writeValueAsString(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
