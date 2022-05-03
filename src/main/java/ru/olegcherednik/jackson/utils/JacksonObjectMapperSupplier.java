@@ -1,0 +1,160 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package ru.olegcherednik.jackson.utils;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import ru.olegcherednik.jackson.utils.enumid.EnumIdModule;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsDateSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsInstantSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsLocalDateTimeSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsLocalTimeSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsOffsetDateTimeSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsOffsetTimeSerializer;
+import ru.olegcherednik.jackson.utils.serializers.JacksonUtilsZonedDateTimeSerializer;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+
+/**
+ * @author Oleg Cherednik
+ * @since 02.01.2021
+ */
+public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
+
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
+
+    protected final UnaryOperator<ZoneId> zoneModifier;
+    protected final boolean withMilliseconds;
+
+    public static JacksonObjectMapperSupplier.Builder builder() {
+        return new Builder();
+    }
+
+    protected JacksonObjectMapperSupplier(Builder builder) {
+        zoneModifier = builder.zoneModifier;
+        withMilliseconds = builder.withMilliseconds;
+    }
+
+    @Override
+    public ObjectMapper get() {
+        ObjectMapper mapper = new ObjectMapper();
+        config(mapper);
+        registerModule(mapper);
+        return mapper;
+    }
+
+    protected ObjectMapper config(ObjectMapper mapper) {
+        return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+                     .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+
+                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                     .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+
+                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                     .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
+
+                     .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+                     .enable(JsonParser.Feature.ALLOW_COMMENTS)
+                     .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
+    }
+
+    protected ObjectMapper registerModule(ObjectMapper mapper) {
+        JacksonUtilsInstantSerializer instantSerializer =
+                new JacksonUtilsInstantSerializer(zoneModifier, withMilliseconds);
+        JacksonUtilsLocalDateTimeSerializer localDateTimeSerializer =
+                new JacksonUtilsLocalDateTimeSerializer(withMilliseconds);
+        JacksonUtilsLocalTimeSerializer localTimeSerializer = new JacksonUtilsLocalTimeSerializer(withMilliseconds);
+        JacksonUtilsOffsetDateTimeSerializer offsetDateTimeSerializer =
+                new JacksonUtilsOffsetDateTimeSerializer(zoneModifier, withMilliseconds);
+        JacksonUtilsOffsetTimeSerializer offsetTimeSerializer =
+                new JacksonUtilsOffsetTimeSerializer(zoneModifier, withMilliseconds);
+        JacksonUtilsZonedDateTimeSerializer dateTimeSerializer =
+                new JacksonUtilsZonedDateTimeSerializer(zoneModifier, withMilliseconds);
+        JacksonUtilsDateSerializer dateSerializer = new JacksonUtilsDateSerializer(instantSerializer);
+
+        return mapper.registerModule(new ParameterNamesModule())
+                     .registerModule(new AfterburnerModule())
+                     .registerModule(new EnumIdModule())
+                     .registerModule(new JavaTimeModule().addSerializer(Instant.class, instantSerializer)
+                                                         .addSerializer(LocalDateTime.class, localDateTimeSerializer)
+                                                         .addSerializer(LocalTime.class, localTimeSerializer)
+                                                         .addSerializer(OffsetDateTime.class, offsetDateTimeSerializer)
+                                                         .addSerializer(OffsetTime.class, offsetTimeSerializer)
+                                                         .addSerializer(ZonedDateTime.class, dateTimeSerializer)
+                                                         .addSerializer(Date.class, dateSerializer)
+                                                         .addKeySerializer(Instant.class, instantSerializer)
+                                                         .addKeySerializer(LocalDateTime.class, localDateTimeSerializer)
+                                                         .addKeySerializer(LocalTime.class, localTimeSerializer)
+                                                         .addKeySerializer(OffsetDateTime.class, offsetDateTimeSerializer)
+                                                         .addKeySerializer(OffsetTime.class, offsetTimeSerializer)
+                                                         .addKeySerializer(ZonedDateTime.class, dateTimeSerializer)
+                                                         .addKeySerializer(Date.class, dateSerializer));
+    }
+
+    public static class Builder {
+
+        private UnaryOperator<ZoneId> zoneModifier = ZONE_MODIFIER_TO_UTC;
+        private boolean withMilliseconds = true;
+
+        protected Builder() {
+        }
+
+        public Builder zone(ZoneId zone) {
+            return zoneModifier(z -> zone);
+        }
+
+        public Builder zoneModifier(UnaryOperator<ZoneId> zoneModifier) {
+            this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(ZONE_MODIFIER_TO_UTC);
+            return this;
+        }
+
+        public Builder withMilliseconds(boolean withMilliseconds) {
+            this.withMilliseconds = withMilliseconds;
+            return this;
+        }
+
+        public JacksonObjectMapperSupplier build() {
+            return new JacksonObjectMapperSupplier(this);
+        }
+
+    }
+
+}

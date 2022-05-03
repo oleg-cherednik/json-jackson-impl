@@ -32,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -262,7 +263,7 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     private static ByteBuffer getResourceAsByteBuffer(String name) throws IOException {
-        try (InputStream in = ByteBufferJacksonUtilsTest.class.getResourceAsStream(name)) {
+        try (InputStream in = Objects.requireNonNull(ByteBufferJacksonUtilsTest.class.getResourceAsStream(name))) {
             return ByteBuffer.wrap(IOUtils.toByteArray(in));
         }
     }
