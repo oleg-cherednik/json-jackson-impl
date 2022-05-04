@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetTimeSerializer;
+import ru.olegcherednik.jackson.utils.JacksonObjectMapperSupplier;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -30,6 +31,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -44,7 +46,8 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
     private final boolean withMilliseconds;
 
     public JacksonUtilsOffsetTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
-        this.zoneModifier = zoneModifier;
+        this.zoneModifier = Optional.ofNullable(zoneModifier)
+                                    .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
         this.withMilliseconds = withMilliseconds;
     }
 

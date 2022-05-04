@@ -30,14 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 02.01.2021
  */
-@SuppressWarnings("NewClassNamingConvention")
 @Test
+@SuppressWarnings("NewClassNamingConvention")
 public class JacksonUtilsZonedDateTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithFeature() {
-        LocalZonedDateTimeSerializer ser = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
-        assertThat(ser.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
-        assertThat(ser.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
+        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
+        assertThat(actual.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
+        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
     }
 
     private static final class LocalZonedDateTimeSerializer extends JacksonUtilsZonedDateTimeSerializer {
@@ -61,3 +61,4 @@ public class JacksonUtilsZonedDateTimeSerializerTest {
     }
 
 }
+

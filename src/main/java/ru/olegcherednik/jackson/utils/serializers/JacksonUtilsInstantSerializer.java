@@ -21,12 +21,14 @@ package ru.olegcherednik.jackson.utils.serializers;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import ru.olegcherednik.jackson.utils.JacksonObjectMapperSupplier;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -41,21 +43,22 @@ public class JacksonUtilsInstantSerializer extends InstantSerializer {
     private final boolean withMilliseconds;
 
     public JacksonUtilsInstantSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
-        this.zoneModifier = zoneModifier;
+        this.zoneModifier = Optional.ofNullable(zoneModifier)
+                                    .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
         this.withMilliseconds = withMilliseconds;
     }
 
     protected JacksonUtilsInstantSerializer(JacksonUtilsInstantSerializer base,
                                             Boolean useTimestamp,
                                             DateTimeFormatter formatter) {
-        this(base, useTimestamp, false, formatter);
+        this(base, useTimestamp, base._useNanoseconds, formatter);
     }
 
     protected JacksonUtilsInstantSerializer(JacksonUtilsInstantSerializer base,
                                             Boolean useTimestamp,
                                             Boolean useNanoseconds,
                                             DateTimeFormatter formatter) {
-        super(base, useTimestamp, false, formatter);
+        super(base, useTimestamp, useNanoseconds, formatter);
         zoneModifier = base.zoneModifier;
         withMilliseconds = base.withMilliseconds;
     }

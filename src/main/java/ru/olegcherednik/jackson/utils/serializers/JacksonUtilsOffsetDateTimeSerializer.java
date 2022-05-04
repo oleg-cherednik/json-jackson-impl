@@ -21,12 +21,14 @@ package ru.olegcherednik.jackson.utils.serializers;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
+import ru.olegcherednik.jackson.utils.JacksonObjectMapperSupplier;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -41,7 +43,8 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
     private final boolean withMilliseconds;
 
     public JacksonUtilsOffsetDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
-        this.zoneModifier = zoneModifier;
+        this.zoneModifier = Optional.ofNullable(zoneModifier)
+                                    .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
         this.withMilliseconds = withMilliseconds;
     }
 
