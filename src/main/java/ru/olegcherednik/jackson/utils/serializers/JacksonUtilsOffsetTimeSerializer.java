@@ -43,12 +43,12 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
     private static final long serialVersionUID = -3191910142081421330L;
 
     private final UnaryOperator<ZoneId> zoneModifier;
-    private final boolean withMilliseconds;
+    private final boolean useMilliseconds;
 
-    public JacksonUtilsOffsetTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
+    public JacksonUtilsOffsetTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean useMilliseconds) {
         this.zoneModifier = Optional.ofNullable(zoneModifier)
                                     .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
-        this.withMilliseconds = withMilliseconds;
+        this.useMilliseconds = useMilliseconds;
     }
 
     protected JacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
@@ -56,7 +56,7 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
                                                DateTimeFormatter formatter) {
         super(base, useTimestamp, formatter);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     protected JacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
@@ -65,7 +65,7 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
                                                DateTimeFormatter formatter) {
         super(base, useTimestamp, useNanoseconds, formatter);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
             ZoneId zone = zoneModifier.apply(value.getOffset());
             ZoneOffset offset = zone.getRules().getOffset(Instant.now());
             value = value.withOffsetSameInstant(offset);
-            value = withMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
+            value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
         }
 
         super.serialize(value, gen, provider);

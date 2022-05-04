@@ -40,12 +40,12 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
     private static final long serialVersionUID = -3716814686096490966L;
 
     private final UnaryOperator<ZoneId> zoneModifier;
-    private final boolean withMilliseconds;
+    private final boolean useMilliseconds;
 
-    public JacksonUtilsOffsetDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
+    public JacksonUtilsOffsetDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean useMilliseconds) {
         this.zoneModifier = Optional.ofNullable(zoneModifier)
                                     .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
-        this.withMilliseconds = withMilliseconds;
+        this.useMilliseconds = useMilliseconds;
     }
 
     protected JacksonUtilsOffsetDateTimeSerializer(JacksonUtilsOffsetDateTimeSerializer base,
@@ -53,7 +53,7 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
                                                    DateTimeFormatter formatter) {
         super(base, useTimestamp, formatter);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     protected JacksonUtilsOffsetDateTimeSerializer(JacksonUtilsOffsetDateTimeSerializer base,
@@ -62,7 +62,7 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
                                                    DateTimeFormatter formatter) {
         super(base, useTimestamp, useNanoseconds, formatter);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     @Override
@@ -73,8 +73,8 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
     }
 
     @Override
-    protected JacksonUtilsOffsetDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
-        return new JacksonUtilsOffsetDateTimeSerializer(this, _useTimestamp, writeNanoseconds, _formatter);
+    protected JacksonUtilsOffsetDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean useNanoseconds) {
+        return new JacksonUtilsOffsetDateTimeSerializer(this, _useTimestamp, useNanoseconds, _formatter);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
             ZoneId zone = zoneModifier.apply(value.getOffset());
             ZoneOffset offset = zone.getRules().getOffset(value.toInstant());
             value = value.withOffsetSameInstant(offset);
-            value = withMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
+            value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
         }
 
         return super.formatValue(value, provider);

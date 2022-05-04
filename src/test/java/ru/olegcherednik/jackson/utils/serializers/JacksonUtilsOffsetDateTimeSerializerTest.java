@@ -51,8 +51,8 @@ public class JacksonUtilsOffsetDateTimeSerializerTest {
                                                                                                        formatter);
         assertThat(FieldUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
                 .isSameAs(FieldUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
-        assertThat(FieldUtils.<Boolean>getFieldValue(actual, "withMilliseconds"))
-                .isEqualTo(FieldUtils.<Boolean>getFieldValue(base, "withMilliseconds"));
+        assertThat(FieldUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
+                .isEqualTo(FieldUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
         assertThat(FieldUtils.<Boolean>getFieldValue(actual, "_useTimestamp")).isSameAs(useTimestamp);
         assertThat(FieldUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isSameAs(useNanoseconds);
         assertThat(FieldUtils.<DateTimeFormatter>getFieldValue(actual, "_formatter")).isSameAs(formatter);
@@ -71,8 +71,8 @@ public class JacksonUtilsOffsetDateTimeSerializerTest {
         assertThat(actual).isNotSameAs(base);
         assertThat(FieldUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
                 .isSameAs(FieldUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
-        assertThat(FieldUtils.<Boolean>getFieldValue(actual, "withMilliseconds"))
-                .isEqualTo(FieldUtils.<Boolean>getFieldValue(base, "withMilliseconds"));
+        assertThat(FieldUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
+                .isEqualTo(FieldUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
         assertThat(FieldUtils.<Boolean>getFieldValue(actual, "_useTimestamp"))
                 .isEqualTo(FieldUtils.<Boolean>getFieldValue(base, "_useTimestamp"));
         assertThat(FieldUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isTrue();

@@ -36,28 +36,28 @@ public class JacksonUtilsLocalTimeSerializer extends LocalTimeSerializer {
 
     private static final long serialVersionUID = -499291458929437608L;
 
-    private final boolean withMilliseconds;
+    private final boolean useMilliseconds;
 
-    public JacksonUtilsLocalTimeSerializer(boolean withMilliseconds) {
-        this(null, withMilliseconds);
+    public JacksonUtilsLocalTimeSerializer(boolean useMilliseconds) {
+        this(null, useMilliseconds);
     }
 
-    public JacksonUtilsLocalTimeSerializer(DateTimeFormatter df, boolean withMilliseconds) {
-        super(df);
-        this.withMilliseconds = withMilliseconds;
+    public JacksonUtilsLocalTimeSerializer(DateTimeFormatter formatter, boolean useMilliseconds) {
+        super(formatter);
+        this.useMilliseconds = useMilliseconds;
     }
 
     @Override
     protected JacksonUtilsLocalTimeSerializer withFormat(Boolean useTimestamp,
-                                                         DateTimeFormatter df,
+                                                         DateTimeFormatter formatter,
                                                          JsonFormat.Shape shape) {
-        return new JacksonUtilsLocalTimeSerializer(df, withMilliseconds);
+        return new JacksonUtilsLocalTimeSerializer(formatter, useMilliseconds);
     }
 
     @Override
     public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         if (_formatter == null) {
-            value = withMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
+            value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
         }
 
         super.serialize(value, gen, provider);

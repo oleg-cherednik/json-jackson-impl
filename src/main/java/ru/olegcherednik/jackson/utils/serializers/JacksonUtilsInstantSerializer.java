@@ -40,12 +40,12 @@ public class JacksonUtilsInstantSerializer extends InstantSerializer {
     private static final long serialVersionUID = 4402811900481017128L;
 
     private final UnaryOperator<ZoneId> zoneModifier;
-    private final boolean withMilliseconds;
+    private final boolean useMilliseconds;
 
-    public JacksonUtilsInstantSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
+    public JacksonUtilsInstantSerializer(UnaryOperator<ZoneId> zoneModifier, boolean useMilliseconds) {
         this.zoneModifier = Optional.ofNullable(zoneModifier)
                                     .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
-        this.withMilliseconds = withMilliseconds;
+        this.useMilliseconds = useMilliseconds;
     }
 
     protected JacksonUtilsInstantSerializer(JacksonUtilsInstantSerializer base,
@@ -60,7 +60,7 @@ public class JacksonUtilsInstantSerializer extends InstantSerializer {
                                             DateTimeFormatter formatter) {
         super(base, useTimestamp, useNanoseconds, formatter);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class JacksonUtilsInstantSerializer extends InstantSerializer {
     @Override
     protected String formatValue(Instant value, SerializerProvider provider) {
         if (_formatter == null) {
-            value = withMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
+            value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
             ZoneId zone = zoneModifier.apply(ZoneOffset.UTC);
             DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(zone);
             return formatter.format(value);

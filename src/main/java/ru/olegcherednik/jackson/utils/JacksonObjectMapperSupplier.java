@@ -60,7 +60,7 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
     public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
     protected final UnaryOperator<ZoneId> zoneModifier;
-    protected final boolean withMilliseconds;
+    protected final boolean useMilliseconds;
 
     public static JacksonObjectMapperSupplier.Builder builder() {
         return new Builder();
@@ -68,7 +68,7 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
 
     protected JacksonObjectMapperSupplier(Builder builder) {
         zoneModifier = builder.zoneModifier;
-        withMilliseconds = builder.withMilliseconds;
+        useMilliseconds = builder.useMilliseconds;
     }
 
     @Override
@@ -98,16 +98,16 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
 
     protected ObjectMapper registerModule(ObjectMapper mapper) {
         JacksonUtilsInstantSerializer instantSerializer =
-                new JacksonUtilsInstantSerializer(zoneModifier, withMilliseconds);
+                new JacksonUtilsInstantSerializer(zoneModifier, useMilliseconds);
         JacksonUtilsLocalDateTimeSerializer localDateTimeSerializer =
-                new JacksonUtilsLocalDateTimeSerializer(withMilliseconds);
-        JacksonUtilsLocalTimeSerializer localTimeSerializer = new JacksonUtilsLocalTimeSerializer(withMilliseconds);
+                new JacksonUtilsLocalDateTimeSerializer(useMilliseconds);
+        JacksonUtilsLocalTimeSerializer localTimeSerializer = new JacksonUtilsLocalTimeSerializer(useMilliseconds);
         JacksonUtilsOffsetDateTimeSerializer offsetDateTimeSerializer =
-                new JacksonUtilsOffsetDateTimeSerializer(zoneModifier, withMilliseconds);
+                new JacksonUtilsOffsetDateTimeSerializer(zoneModifier, useMilliseconds);
         JacksonUtilsOffsetTimeSerializer offsetTimeSerializer =
-                new JacksonUtilsOffsetTimeSerializer(zoneModifier, withMilliseconds);
+                new JacksonUtilsOffsetTimeSerializer(zoneModifier, useMilliseconds);
         JacksonUtilsZonedDateTimeSerializer dateTimeSerializer =
-                new JacksonUtilsZonedDateTimeSerializer(zoneModifier, withMilliseconds);
+                new JacksonUtilsZonedDateTimeSerializer(zoneModifier, useMilliseconds);
         JacksonUtilsDateSerializer dateSerializer = new JacksonUtilsDateSerializer(instantSerializer);
 
         return mapper.registerModule(new ParameterNamesModule())
@@ -132,7 +132,7 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
     public static class Builder {
 
         private UnaryOperator<ZoneId> zoneModifier = ZONE_MODIFIER_TO_UTC;
-        private boolean withMilliseconds = true;
+        private boolean useMilliseconds = true;
 
         protected Builder() {
         }
@@ -146,8 +146,8 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
             return this;
         }
 
-        public Builder withMilliseconds(boolean withMilliseconds) {
-            this.withMilliseconds = withMilliseconds;
+        public Builder withUseMilliseconds(boolean useMilliseconds) {
+            this.useMilliseconds = useMilliseconds;
             return this;
         }
 

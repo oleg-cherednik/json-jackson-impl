@@ -39,19 +39,19 @@ public class JacksonUtilsZonedDateTimeSerializer extends ZonedDateTimeSerializer
     private static final long serialVersionUID = -2135138754031293296L;
 
     private final UnaryOperator<ZoneId> zoneModifier;
-    private final boolean withMilliseconds;
+    private final boolean useMilliseconds;
 
-    public JacksonUtilsZonedDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean withMilliseconds) {
+    public JacksonUtilsZonedDateTimeSerializer(UnaryOperator<ZoneId> zoneModifier, boolean useMilliseconds) {
         this.zoneModifier = Optional.ofNullable(zoneModifier)
                                     .orElse(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL);
-        this.withMilliseconds = withMilliseconds;
+        this.useMilliseconds = useMilliseconds;
     }
 
     protected JacksonUtilsZonedDateTimeSerializer(JacksonUtilsZonedDateTimeSerializer base,
                                                   Boolean useTimestamp,
                                                   DateTimeFormatter formatter,
                                                   Boolean writeZoneId) {
-        this(base, useTimestamp, null, formatter, writeZoneId);
+        this(base, useTimestamp, base._useNanoseconds, formatter, writeZoneId);
     }
 
     protected JacksonUtilsZonedDateTimeSerializer(JacksonUtilsZonedDateTimeSerializer base,
@@ -61,7 +61,7 @@ public class JacksonUtilsZonedDateTimeSerializer extends ZonedDateTimeSerializer
                                                   Boolean writeZoneId) {
         super(base, useTimestamp, useNanoseconds, formatter, writeZoneId);
         zoneModifier = base.zoneModifier;
-        withMilliseconds = base.withMilliseconds;
+        useMilliseconds = base.useMilliseconds;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class JacksonUtilsZonedDateTimeSerializer extends ZonedDateTimeSerializer
         if (_formatter == null) {
             ZoneId zone = zoneModifier.apply(value.getZone());
             value = value.withZoneSameInstant(zone);
-            value = withMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
+            value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);
         }
 
         return super.formatValue(value, provider);

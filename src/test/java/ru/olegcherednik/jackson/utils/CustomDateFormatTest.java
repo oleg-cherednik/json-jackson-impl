@@ -71,7 +71,7 @@ public class CustomDateFormatTest {
 
     public void shouldCreateJsonWithoutMsDateWhenNoMillisecondSettings() {
         Supplier<ObjectMapper> mapperSupplier = JacksonObjectMapperSupplier.builder()
-                                                                           .withMilliseconds(false)
+                                                                           .withUseMilliseconds(false)
                                                                            .build();
         ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createPrettyPrintMapperDecorator(mapperSupplier);
         Data data = createData();
