@@ -20,6 +20,11 @@ package ru.olegcherednik.jackson.utils;
 
 import java.time.ZoneId;
 
+/**
+ * @author Oleg Cherednik
+ * @since 04.05.2022
+ */
+@SuppressWarnings("PMD.ClassNamingConventions")
 public final class LocalZoneId {
 
     public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
