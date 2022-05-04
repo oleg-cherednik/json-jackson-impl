@@ -78,6 +78,7 @@ public class JacksonUtilsOffsetDateTimeSerializer extends OffsetDateTimeSerializ
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     protected String formatValue(OffsetDateTime value, SerializerProvider provider) {
         if (_formatter == null) {
             ZoneId zone = zoneModifier.apply(value.getOffset());

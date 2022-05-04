@@ -81,6 +81,7 @@ public class JacksonUtilsZonedDateTimeSerializer extends ZonedDateTimeSerializer
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     protected String formatValue(ZonedDateTime value, SerializerProvider provider) {
         if (_formatter == null) {
             ZoneId zone = zoneModifier.apply(value.getZone());

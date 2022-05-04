@@ -44,7 +44,7 @@ final class ByteBufferInputStream extends InputStream {
     public int read(byte[] buf, int offs, int len) throws IOException {
         if (this.buf.hasRemaining()) {
             len = Math.min(len, this.buf.remaining());
-            this.buf.get(buf, offs, Math.min(len, this.buf.remaining()));
+            this.buf.get(buf, offs, len);
         } else
             len = -1;
 

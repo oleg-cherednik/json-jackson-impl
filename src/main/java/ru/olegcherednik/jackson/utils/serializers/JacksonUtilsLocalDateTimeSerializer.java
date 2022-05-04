@@ -55,6 +55,7 @@ public class JacksonUtilsLocalDateTimeSerializer extends LocalDateTimeSerializer
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         if (_formatter == null) {
             value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);

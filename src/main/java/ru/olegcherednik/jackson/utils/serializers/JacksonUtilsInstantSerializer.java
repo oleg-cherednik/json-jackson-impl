@@ -76,6 +76,7 @@ public class JacksonUtilsInstantSerializer extends InstantSerializer {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     protected String formatValue(Instant value, SerializerProvider provider) {
         if (_formatter == null) {
             value = useMilliseconds ? value : value.truncatedTo(ChronoUnit.SECONDS);

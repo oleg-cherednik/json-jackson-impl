@@ -81,6 +81,7 @@ public class JacksonUtilsOffsetTimeSerializer extends OffsetTimeSerializer {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
     public void serialize(OffsetTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         if (_formatter == null) {
             ZoneId zone = zoneModifier.apply(value.getOffset());
