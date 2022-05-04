@@ -16,39 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.jackson.utils;
+package ru.olegcherednik.jackson.utils.serializers;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * @author Oleg Cherednik
- * @since 18.02.2022
+ * @since 13.03.2022
  */
-final class ByteBufferInputStream extends InputStream {
+public class JacksonUtilsDateSerializer extends DateSerializer {
 
-    private final ByteBuffer buf;
+    private static final long serialVersionUID = 2194687081370953275L;
 
-    public ByteBufferInputStream(ByteBuffer buf) {
-        this.buf = buf;
+    private final JsonSerializer<Instant> delegate;
+
+    public JacksonUtilsDateSerializer(JsonSerializer<Instant> delegate) {
+        this.delegate = delegate;
     }
 
     @Override
-    public int read() throws IOException {
-        return buf.hasRemaining() ? buf.get() & 0xFF : -1;
-    }
-
-    @Override
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
-    public int read(byte[] buf, int offs, int len) throws IOException {
-        if (this.buf.hasRemaining()) {
-            len = Math.min(len, this.buf.remaining());
-            this.buf.get(buf, offs, len);
-        } else
-            len = -1;
-
-        return len;
+    public void _serializeAsString(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        delegate.serialize(date.toInstant(), gen, serializers);
     }
 
 }

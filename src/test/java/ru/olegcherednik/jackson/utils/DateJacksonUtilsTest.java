@@ -18,15 +18,16 @@
  */
 package ru.olegcherednik.jackson.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.text.ParseException;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,32 +43,36 @@ public class DateJacksonUtilsTest {
         String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
-                "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
-                "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+                                             "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
+                                             "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteDateSingaporeZone() throws ParseException {
-        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
-                () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
-
+        Supplier<ObjectMapper> mapperSupplier = JacksonObjectMapperSupplier.builder()
+                                                                           .zone(LocalZoneId.ASIA_SINGAPORE)
+                                                                           .build();
+        ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createMapperDecorator(mapperSupplier);
         Map<String, Date> map = createData();
-        String actual = jsonUtils.writeValue(map);
+        String actual = jacksonUtils.writeValue(map);
+
+        System.out.println(actual);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"," +
-                "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\"," +
-                "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00\"}");
+                                             "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\"," +
+                                             "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00\"}");
     }
 
     public void shouldRetrieveJsonWithUTCZoneWhenWriteDateWithSameZone() throws ParseException {
-        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createMapperDecorator(
-                () -> new JacksonObjectMapperBuilder(JacksonObjectMapperBuilder.ZONE_MODIFIER_USE_ORIGINAL).get());
-
+        Supplier<ObjectMapper> mapperSupplier = JacksonObjectMapperSupplier.builder()
+                                                                           .zoneModifier(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL)
+                                                                           .build();
+        ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createMapperDecorator(mapperSupplier);
         Map<String, Date> map = createData();
-        String actual = jsonUtils.writeValue(map);
+        String actual = jacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
-                "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
-                "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+                                             "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
+                                             "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveDeserializedDateMapWhenReadJsonAsMap() throws ParseException {
@@ -86,8 +91,8 @@ public class DateJacksonUtilsTest {
 
         return MapUtils.of(
                 "UTC", Date.from(ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC)).toInstant()),
-                "Asia/Singapore", Date.from(ZonedDateTime.parse(str, df.withZone(ZoneId.of("Asia/Singapore"))).toInstant()),
-                "Australia/Sydney", Date.from(ZonedDateTime.parse(str, df.withZone(ZoneId.of("Australia/Sydney"))).toInstant()));
+                "Asia/Singapore", Date.from(ZonedDateTime.parse(str, df.withZone(LocalZoneId.ASIA_SINGAPORE)).toInstant()),
+                "Australia/Sydney", Date.from(ZonedDateTime.parse(str, df.withZone(LocalZoneId.AUSTRALIA_SYDNEY)).toInstant()));
     }
 
 }

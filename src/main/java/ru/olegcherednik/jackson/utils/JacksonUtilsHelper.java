@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  */
 public final class JacksonUtilsHelper {
 
-    public static final Supplier<ObjectMapper> DEFAULT_BUILDER = new JacksonObjectMapperBuilder();
+    public static final Supplier<ObjectMapper> DEFAULT_BUILDER = JacksonObjectMapperSupplier.builder().build();
 
     private static Supplier<ObjectMapper> mapperBuilder = DEFAULT_BUILDER;
     private static ObjectMapper mapper = createMapper();
@@ -54,30 +54,30 @@ public final class JacksonUtilsHelper {
         return mapperBuilder.get().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public static ObjectMapper createMapper(Supplier<ObjectMapper> mapperBuilder) {
-        return mapperBuilder.get();
+    public static ObjectMapper createMapper(Supplier<ObjectMapper> mapperSupplier) {
+        return mapperSupplier.get();
     }
 
-    public static ObjectMapper createPrettyPrintMapper(Supplier<ObjectMapper> mapperBuilder) {
-        return mapperBuilder.get().enable(SerializationFeature.INDENT_OUTPUT);
+    public static ObjectMapper createPrettyPrintMapper(Supplier<ObjectMapper> mapperSupplier) {
+        return mapperSupplier.get().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public static ObjectMapperDecorator createMapperDecorator(Supplier<ObjectMapper> mapperBuilder) {
-        return new ObjectMapperDecorator(createMapper(mapperBuilder));
+    public static ObjectMapperDecorator createPrettyPrintMapperDecorator(Supplier<ObjectMapper> mapperSupplier) {
+        return new ObjectMapperDecorator(createPrettyPrintMapper(mapperSupplier));
     }
 
-    public static ObjectMapperDecorator createPrettyPrintMapperDecorator(Supplier<ObjectMapper> mapperBuilder) {
-        return new ObjectMapperDecorator(createPrettyPrintMapper(mapperBuilder));
+    public static ObjectMapperDecorator createMapperDecorator(Supplier<ObjectMapper> mapperSupplier) {
+        return new ObjectMapperDecorator(createMapper(mapperSupplier));
     }
 
     @SuppressWarnings({ "PMD.AvoidReassigningParameters", "PMD.CompareObjectsWithEquals" })
-    public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperBuilder) {
-        mapperBuilder = Optional.ofNullable(mapperBuilder).orElse(DEFAULT_BUILDER);
+    public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperSupplier) {
+        mapperSupplier = Optional.ofNullable(mapperSupplier).orElse(DEFAULT_BUILDER);
 
-        if (mapperBuilder == JacksonUtilsHelper.mapperBuilder)
+        if (mapperSupplier == JacksonUtilsHelper.mapperBuilder)
             return;
 
-        JacksonUtilsHelper.mapperBuilder = mapperBuilder;
+        JacksonUtilsHelper.mapperBuilder = mapperSupplier;
         mapper = createMapper();
         prettyPrintMapper = createPrettyPrintMapper();
     }

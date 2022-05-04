@@ -18,11 +18,12 @@
  */
 package ru.olegcherednik.jackson.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
+@SuppressWarnings("NewClassNamingConvention")
 @Test
 public class ZonedDateTimePrettyPrintJacksonUtilsTest {
 
@@ -37,23 +39,24 @@ public class ZonedDateTimePrettyPrintJacksonUtilsTest {
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
         String actual = JacksonUtils.prettyPrint().writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"," + System.lineSeparator() +
-                "  \"Asia/Singapore\" : \"2017-07-23T05:57:14.225Z\"," + System.lineSeparator() +
-                "  \"Australia/Sydney\" : \"2017-07-23T03:57:14.225Z\"" + System.lineSeparator() +
-                '}');
+                                             "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"," + System.lineSeparator() +
+                                             "  \"Asia/Singapore\" : \"2017-07-23T05:57:14.225Z\"," + System.lineSeparator() +
+                                             "  \"Australia/Sydney\" : \"2017-07-23T03:57:14.225Z\"" + System.lineSeparator() +
+                                             '}');
     }
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
-        ObjectMapperDecorator jsonUtils = JacksonUtilsHelper.createPrettyPrintMapperDecorator(
-                () -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
-
+        Supplier<ObjectMapper> mapperSupplier = JacksonObjectMapperSupplier.builder()
+                                                                           .zone(LocalZoneId.ASIA_SINGAPORE)
+                                                                           .build();
+        ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createPrettyPrintMapperDecorator(mapperSupplier);
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
-        String actual = jsonUtils.writeValue(map);
+        String actual = jacksonUtils.writeValue(map);
         assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"," + System.lineSeparator() +
-                "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00\"," + System.lineSeparator() +
-                "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00\"" + System.lineSeparator() +
-                '}');
+                                             "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"," + System.lineSeparator() +
+                                             "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00\"," + System.lineSeparator() +
+                                             "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00\"" + System.lineSeparator() +
+                                             '}');
     }
 
 }

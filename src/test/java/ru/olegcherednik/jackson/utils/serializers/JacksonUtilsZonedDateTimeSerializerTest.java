@@ -19,6 +19,7 @@
 package ru.olegcherednik.jackson.utils.serializers;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.jackson.utils.LocalZoneId;
 
 import java.time.ZoneId;
 import java.util.function.UnaryOperator;
@@ -30,32 +31,34 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 02.01.2021
  */
 @Test
-public class ZoneIdZonedDateTimeSerializerTest {
+@SuppressWarnings("NewClassNamingConvention")
+public class JacksonUtilsZonedDateTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithFeature() {
-        LocalZonedDateTimeSerializer ser = new LocalZonedDateTimeSerializer(zoneId -> ZoneId.of("Asia/Singapore"));
-        assertThat(ser.withFeatures(false)).isExactlyInstanceOf(ZoneIdZonedDateTimeSerializer.class);
-        assertThat(ser.withFeatures(false, false)).isExactlyInstanceOf(ZoneIdZonedDateTimeSerializer.class);
+        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
+        assertThat(actual.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
+        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
     }
 
-    private static final class LocalZonedDateTimeSerializer extends ZoneIdZonedDateTimeSerializer {
+    private static final class LocalZonedDateTimeSerializer extends JacksonUtilsZonedDateTimeSerializer {
 
         private static final long serialVersionUID = 1319340992384997514L;
 
         public LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
-            super(withZone);
+            super(withZone, false);
         }
 
         @Override
-        public ZoneIdZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
+        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
             return super.withFeatures(writeZoneId);
         }
 
         @Override
-        public ZoneIdZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
+        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
             return super.withFeatures(writeZoneId, writeNanoseconds);
         }
 
     }
 
 }
+

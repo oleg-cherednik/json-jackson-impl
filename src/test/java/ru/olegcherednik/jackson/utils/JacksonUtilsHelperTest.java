@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,13 +45,14 @@ public class JacksonUtilsHelperTest {
         Map<String, ZonedDateTime> map = createData();
         assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"}");
         assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + System.lineSeparator() +
-                '}');
+                                                                                 "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + System.lineSeparator() +
+                                                                                 '}');
 
-        JacksonUtilsHelper.setMapperBuilder(() -> new JacksonObjectMapperBuilder(ZoneId.of("Asia/Singapore")).get());
+        JacksonUtilsHelper.setMapperBuilder(JacksonObjectMapperSupplier.builder().zone(LocalZoneId.ASIA_SINGAPORE).build());
         assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"}");
         assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
-                "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"" + System.lineSeparator() + '}');
+                                                                                 "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"" +
+                                                                                 System.lineSeparator() + '}');
     }
 
     public void shouldNotRebuildMapperWhenSetSameBuilder() {
