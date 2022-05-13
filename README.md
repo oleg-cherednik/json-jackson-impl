@@ -9,35 +9,38 @@
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
 
 # jackson-utils
+
 > [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
 > It's designed to add additional features like easy and centralized configuration,
 > builder or static method set. Artifact does not include direct `Jackson Project`.
 > It is up to you to add them into your project.
 
 ## Features
-*   Encapsulate all checked exceptions from Jackson with custom runtime exception;
-*   A central place for configuration;
-*   A central place for holding `ObjectMapper` instances;
-*   Utility class to make most common operations much more comfortable to use;
-*   Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
-*   `ByteBuffer`/`InputStream` support for objects, lists and maps;
-*   Lazy read support for list from `Writer`;
-*   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
-*   Advanced `Reader`/`Writer` support for `enum`.
+
+* Encapsulate all checked exceptions from Jackson with custom runtime exception;
+* A central place for configuration;
+* A central place for holding `ObjectMapper` instances;
+* Utility class to make most common operations much more comfortable to use;
+* Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
+* `ByteBuffer`/`InputStream` support for objects, lists and maps;
+* Lazy read support for list from `Writer`;
+* Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
+* Advanced `Reader`/`Writer` support for `enum`.
 
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.jackson:jackson-utils:2.5'
+compile 'ru.oleg-cherednik.jackson:jackson-utils:2.6'
 ```
 
 ## Maven
 
 ```xml
+
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.5</version>
+    <version>2.6</version>
 </dependency>
 ```
 
@@ -47,8 +50,9 @@ version, so you have to add it additionally:
 ## Usage
 
 To simplify usage of _jackson-utils_, there're following classes:
-*   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
-*   [EnumId](#work-with-enum) - advanced enum serialization support.
+
+* [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
+* [EnumId](#work-with-enum) - advanced enum serialization support.
 
 ### JacksonUtils class
 
@@ -58,30 +62,34 @@ To simplify usage of _jackson-utils_, there're following classes:
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```java
-String json = """
+String json="""
               {
                   "intVal" : 666,
                   "strVal" : "omen"
               }
               """;
-Data data = JacksonUtils.readValue(json, Data.class);
+        Data data=JacksonUtils.readValue(json,Data.class);
 ```
 
 ##### `String` to a list of custom object type
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```java
-String json = """
+String json="""
               [
                   {
                       "intVal" : 555,
@@ -93,7 +101,7 @@ String json = """
                   }
               ]
               """;
-List<Data> res = JacksonUtils.readList(json, Data.class);
+        List<Data> res=JacksonUtils.readList(json,Data.class);
 ```
 
 ##### `String` to a map of custom object type
@@ -101,7 +109,7 @@ List<Data> res = JacksonUtils.readList(json, Data.class);
 ###### Map with `String` keys and `Map` or primitive types as values
 
 ```java
-String json = """
+String json="""
               {
                   "victory" : {
                       "intVal" : 555,
@@ -113,20 +121,23 @@ String json = """
                   }
               }
               """;
-Map<String, ?> map = JacksonUtils.readMap(json);
+        Map<String, Object> map=JacksonUtils.readMap(json);
 ```
+
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
 ###### `String` to a map with `String` keys and given type as value
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```java
-String json = """
+String json="""
               {
                   "victory" : {
                       "intVal" : 555,
@@ -138,19 +149,21 @@ String json = """
                   }
               }
               """;
-Map<String, Data> map = JacksonUtils.readMap(json, Data.class);
+        Map<String, Data> map=JacksonUtils.readMap(json,Data.class);
 ```
 
 ###### `String` to a map with `Integer` keys and given type as value
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```java
-String json = """
+String json="""
               {
                   "1" : {
                       "intVal" : 555,
@@ -162,7 +175,7 @@ String json = """
                   }
               }
               """;
-Map<Integer, Data> map = JacksonUtils.readMap(json, Integer.class, Data.class);
+        Map<Integer, Data> map=JacksonUtils.readMap(json,Integer.class,Data.class);
 ```
 
 #### Read json from `InputStream`
@@ -171,157 +184,176 @@ Map<Integer, Data> map = JacksonUtils.readMap(json, Integer.class, Data.class);
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```json
 {
-    "intVal" : 666,
-    "strVal" : "omen"
+  "intVal": 666,
+  "strVal": "omen"
 }
 ```
+
 ```java
-try (InputStream in = ...) {
-    Data data = JacksonUtils.readValue(in, Data.class);
-}
+try(InputStream in=...){
+        Data data=JacksonUtils.readValue(in,Data.class);
+        }
 ```
 
 ##### `InputStream` to a list of custom object type
 
 ##### Read eager
+
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```json
 [
-    {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
+  {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  {
+    "intVal": 666,
+    "strVal": "omen"
+  }
 ]
 ```
+
 ```java
-try (InputStream in = ...) {
-    List<Data> res = JacksonUtils.readList(in, Data.class);
-}
+try(InputStream in=...){
+        List<Data> res=JacksonUtils.readList(in,Data.class);
+        }
 ```
 
 ##### Read lazy
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```json
 [
-    {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
+  {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  {
+    "intVal": 666,
+    "strVal": "omen"
+  }
 ]
 ```
-```java
-try (InputStream in = ...) {
-    Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
 
-    while (it.hasNext()) {
-        Data data = it.next();
-    }
-}
+```java
+try(InputStream in=...){
+        Iterator<Data> it=JacksonUtils.readListLazy(in,Data.class);
+
+        while(it.hasNext()){
+        Data data=it.next();
+        }
+        }
 ```
+
 ##### `InputStream` to a map of custom object type
 
 ###### `InputStream` to a map with `String` keys and `Map` or primitive types as values
 
 ```json
 {
-    "victory" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "omen" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
+  "victory": {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  "omen": {
+    "intVal": 666,
+    "strVal": "omen"
+  }
 }
 ```
+
 ```java
-try (InputStream in = ...) {
-    Map<String, ?> map = JacksonUtils.readMap(in);
-}
+try(InputStream in=...){
+        Map<String, Object> map=JacksonUtils.readMap(in);
+        }
 ```
+
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
 ###### `InputStream` to a map with `String` keys and given type as value
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```json
 {
-    "victory" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "omen" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
+  "victory": {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  "omen": {
+    "intVal": 666,
+    "strVal": "omen"
+  }
 }
 ```
+
 ```java
-try (InputStream in = ...) {
-    Map<String, ?> map = JacksonUtils.readMap(in, Data.class);
-}
+try(InputStream in=...){
+        Map<String, Object> map=JacksonUtils.readMap(in,Data.class);
+        }
 ```
 
 ###### Map with `Integer` keys and given type as value
 
 ```java
 class Data {
+
     int intVal;
     String strVal;
 }
 ```
+
 ```json
 {
-    "1" : {
-        "intVal" : 555,
-        "strVal" : "victory"
-    },
-    "2" : {
-        "intVal" : 666,
-        "strVal" : "omen"
-    }
+  "1": {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  "2": {
+    "intVal": 666,
+    "strVal": "omen"
+  }
 }
 ```
+
 ```java
-try (InputStream in = ...) {
-    Map<Integer, Data> map = JacksonUtils.readMap(in, Integer.class, Data.class);
-}
+try(InputStream in=...){
+        Map<Integer, Data> map=JacksonUtils.readMap(in,Integer.class,Data.class);
+        }
 ```
 
 ##### Links
 
-*   Home page: https://github.com/oleg-cherednik/jackson-utils
+* Home page: https://github.com/oleg-cherednik/jackson-utils
 
-*   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils
+* Maven:
+    * **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
+    * **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils
