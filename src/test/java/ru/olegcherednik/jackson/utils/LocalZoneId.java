@@ -18,37 +18,19 @@
  */
 package ru.olegcherednik.jackson.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
+import java.time.ZoneId;
 
 /**
  * @author Oleg Cherednik
- * @since 18.02.2022
+ * @since 04.05.2022
  */
-final class ByteBufferInputStream extends InputStream {
+@SuppressWarnings("PMD.ClassNamingConventions")
+public final class LocalZoneId {
 
-    private final ByteBuffer buf;
+    public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
+    public static final ZoneId AUSTRALIA_SYDNEY = ZoneId.of("Australia/Sydney");
 
-    public ByteBufferInputStream(ByteBuffer buf) {
-        this.buf = buf;
-    }
-
-    @Override
-    public int read() throws IOException {
-        return buf.hasRemaining() ? buf.get() & 0xFF : -1;
-    }
-
-    @Override
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
-    public int read(byte[] buf, int offs, int len) throws IOException {
-        if (this.buf.hasRemaining()) {
-            len = Math.min(len, this.buf.remaining());
-            this.buf.get(buf, offs, len);
-        } else
-            len = -1;
-
-        return len;
+    private LocalZoneId() {
     }
 
 }

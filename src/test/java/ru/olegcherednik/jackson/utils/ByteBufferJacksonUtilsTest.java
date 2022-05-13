@@ -32,6 +32,8 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,6 +49,8 @@ public class ByteBufferJacksonUtilsTest {
         assertThat(JacksonUtils.readValue((ByteBuffer)null, Object.class)).isNull();
         assertThat(JacksonUtils.readList((ByteBuffer)null)).isNull();
         assertThat(JacksonUtils.readList((ByteBuffer)null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((ByteBuffer)null)).isNull();
+        assertThat(JacksonUtils.readSet((ByteBuffer)null, Object.class)).isNull();
         assertThat(JacksonUtils.readListLazy((ByteBuffer)null)).isNull();
         assertThat(JacksonUtils.readListLazy((ByteBuffer)null, Object.class)).isNull();
         assertThat(JacksonUtils.readListOfMap((ByteBuffer)null)).isNull();
@@ -70,16 +74,36 @@ public class ByteBufferJacksonUtilsTest {
         assertThat(actual).isEqualTo(new Data());
     }
 
-    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumeric() {
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() {
         ByteBuffer buf = convertToByteBuffer("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
         List<Object> actual = JacksonUtils.readList(buf);
 
         assertThat(actual).hasSize(5);
-        assertThat(actual.get(0)).isEqualTo(1);
-        assertThat(actual.get(1)).isEqualTo(2.0);
-        assertThat(actual.get(2)).isEqualTo(3.1);
-        assertThat(actual.get(3)).isEqualTo(12345678912L);
-        assertThat(actual.get(4)).isEqualTo(new BigInteger("123456789123456789123456789123456789"));
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
+    }
+
+    public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() {
+        ByteBuffer buf = convertToByteBuffer("[\"one\",\"two\",\"three\",\"two\",\"one\"]");
+        Set<String> actual = JacksonUtils.readSet(buf, String.class);
+
+        assertThat(actual).hasSize(3);
+        assertThat(actual).containsExactly("one", "two", "three");
+    }
+
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() {
+        ByteBuffer buf = convertToByteBuffer("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
+        Set<Object> actual = JacksonUtils.readSet(buf);
+
+        assertThat(actual).hasSize(5);
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
@@ -242,6 +266,8 @@ public class ByteBufferJacksonUtilsTest {
     public void shouldRetrieveEmptyListWhenReadEmptyByteBufferAsList() {
         assertThat(JacksonUtils.readList(convertToByteBuffer("[]"))).isEmpty();
         assertThat(JacksonUtils.readList(convertToByteBuffer("[]"), Data.class)).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToByteBuffer("[]"))).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToByteBuffer("[]"), Data.class)).isEmpty();
         assertThat(JacksonUtils.readListOfMap(convertToByteBuffer("[]"))).isEmpty();
         assertThat(JacksonUtils.readMap(convertToByteBuffer("{}"))).isEmpty();
         assertThat(JacksonUtils.readMap(convertToByteBuffer("{}"), Data.class)).isEmpty();
@@ -262,7 +288,7 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     private static ByteBuffer getResourceAsByteBuffer(String name) throws IOException {
-        try (InputStream in = ByteBufferJacksonUtilsTest.class.getResourceAsStream(name)) {
+        try (InputStream in = Objects.requireNonNull(ByteBufferJacksonUtilsTest.class.getResourceAsStream(name))) {
             return ByteBuffer.wrap(IOUtils.toByteArray(in));
         }
     }

@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -49,7 +50,7 @@ public class StringJacksonUtilsTest {
             Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
-        } catch (Exception ignored) {
+        } catch(Exception ignored) {
         }
     }
 
@@ -57,6 +58,8 @@ public class StringJacksonUtilsTest {
         assertThat(JacksonUtils.readValue((String)null, Object.class)).isNull();
         assertThat(JacksonUtils.readList((String)null)).isNull();
         assertThat(JacksonUtils.readList((String)null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((String)null)).isNull();
+        assertThat(JacksonUtils.readSet((String)null, Object.class)).isNull();
         assertThat(JacksonUtils.readListOfMap((String)null)).isNull();
         assertThat(JacksonUtils.readMap((String)null)).isNull();
         assertThat(JacksonUtils.readMap((String)null, Object.class)).isNull();
@@ -76,16 +79,36 @@ public class StringJacksonUtilsTest {
         assertThat(actual).isEqualTo(new Data());
     }
 
-    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumeric() {
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() {
         String json = "[1,2.0,3.1,12345678912,123456789123456789123456789123456789]";
         List<Object> actual = JacksonUtils.readList(json);
 
         assertThat(actual).hasSize(5);
-        assertThat(actual.get(0)).isEqualTo(1);
-        assertThat(actual.get(1)).isEqualTo(2.0);
-        assertThat(actual.get(2)).isEqualTo(3.1);
-        assertThat(actual.get(3)).isEqualTo(12345678912L);
-        assertThat(actual.get(4)).isEqualTo(new BigInteger("123456789123456789123456789123456789"));
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
+    }
+
+    public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() {
+        String json = "[\"one\",\"two\",\"three\",\"two\",\"one\"]";
+        Set<String> actual = JacksonUtils.readSet(json, String.class);
+
+        assertThat(actual).hasSize(3);
+        assertThat(actual).containsExactly("one", "two", "three");
+    }
+
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() {
+        String json = "[1,2.0,3.1,12345678912,123456789123456789123456789123456789]";
+        Set<Object> actual = JacksonUtils.readSet(json);
+
+        assertThat(actual).hasSize(5);
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
@@ -167,6 +190,8 @@ public class StringJacksonUtilsTest {
     public void shouldRetrieveEmptyListWhenReadEmptyJsonAsList() {
         assertThat(JacksonUtils.readList("[]")).isEmpty();
         assertThat(JacksonUtils.readList("[]", Data.class)).isEmpty();
+        assertThat(JacksonUtils.readSet("[]")).isEmpty();
+        assertThat(JacksonUtils.readSet("[]", Data.class)).isEmpty();
         assertThat(JacksonUtils.readListOfMap("[]")).isEmpty();
         assertThat(JacksonUtils.readMap("{}")).isEmpty();
         assertThat(JacksonUtils.readMap("{}", Data.class)).isEmpty();

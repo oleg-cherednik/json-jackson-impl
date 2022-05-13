@@ -18,6 +18,7 @@
  */
 package ru.olegcherednik.jackson.utils;
 
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
@@ -29,9 +30,11 @@ import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -75,7 +78,29 @@ public class ObjectMapperDecorator {
 
         return withRuntimeException(() -> {
             ObjectReader reader = supplier.get().readerFor(valueClass);
-            return reader.<V>readValues(json).readAll();
+
+            try (MappingIterator<V> it = reader.readValues(json)) {
+                return it.readAll();
+            }
+        });
+    }
+
+    public Set<Object> readSet(String json) {
+        return readSet(json, Object.class);
+    }
+
+    public <V> Set<V> readSet(String json, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (json == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectReader reader = supplier.get().readerFor(valueClass);
+
+            try (MappingIterator<V> it = reader.readValues(json)) {
+                return it.readAll(new LinkedHashSet<>());
+            }
         });
     }
 
@@ -140,6 +165,22 @@ public class ObjectMapperDecorator {
             return null;
 
         return withInputStream(buf, in -> readList(in, valueClass));
+    }
+
+    public Set<Object> readSet(ByteBuffer buf) {
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, this::readSet);
+    }
+
+    public <V> Set<V> readSet(ByteBuffer buf, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (buf == null)
+            return null;
+
+        return withInputStream(buf, in -> readSet(in, valueClass));
     }
 
     public Iterator<Object> readListLazy(ByteBuffer buf) {
@@ -222,6 +263,22 @@ public class ObjectMapperDecorator {
         return withRuntimeException(() -> {
             ObjectReader reader = supplier.get().readerFor(valueClass);
             return reader.<V>readValues(in).readAll();
+        });
+    }
+
+    public Set<Object> readSet(InputStream in) {
+        return readSet(in, Object.class);
+    }
+
+    public <V> Set<V> readSet(InputStream in, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> {
+            ObjectReader reader = supplier.get().readerFor(valueClass);
+            return reader.<V>readValues(in).readAll(new LinkedHashSet<>());
         });
     }
 
@@ -334,7 +391,7 @@ public class ObjectMapperDecorator {
     private static <V> V withRuntimeException(Callable<V> task) {
         try {
             return task.call();
-        } catch (Exception e) {
+        } catch(Exception e) {
             throw new JacksonUtilsException(e);
         }
     }
@@ -342,7 +399,7 @@ public class ObjectMapperDecorator {
     private static <V> V withInputStream(ByteBuffer buf, Function<InputStream, V> task) {
         try (InputStream in = new ByteBufferInputStream(buf)) {
             return task.apply(in);
-        } catch (Exception e) {
+        } catch(Exception e) {
             throw new JacksonUtilsException(e);
         }
     }

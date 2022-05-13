@@ -31,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,6 +47,8 @@ public class InputStreamJacksonUtilsTest {
         assertThat(JacksonUtils.readValue((InputStream)null, Object.class)).isNull();
         assertThat(JacksonUtils.readList((InputStream)null)).isNull();
         assertThat(JacksonUtils.readList((InputStream)null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((InputStream)null)).isNull();
+        assertThat(JacksonUtils.readSet((InputStream)null, Object.class)).isNull();
         assertThat(JacksonUtils.readListLazy((InputStream)null)).isNull();
         assertThat(JacksonUtils.readListLazy((InputStream)null, Object.class)).isNull();
         assertThat(JacksonUtils.readListOfMap((InputStream)null)).isNull();
@@ -69,16 +72,36 @@ public class InputStreamJacksonUtilsTest {
         assertThat(actual).isEqualTo(new Data());
     }
 
-    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumeric() {
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() {
         InputStream in = convertToInputStream("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
         List<Object> actual = JacksonUtils.readList(in);
 
         assertThat(actual).hasSize(5);
-        assertThat(actual.get(0)).isEqualTo(1);
-        assertThat(actual.get(1)).isEqualTo(2.0);
-        assertThat(actual.get(2)).isEqualTo(3.1);
-        assertThat(actual.get(3)).isEqualTo(12345678912L);
-        assertThat(actual.get(4)).isEqualTo(new BigInteger("123456789123456789123456789123456789"));
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
+    }
+
+    public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() {
+        InputStream in = convertToInputStream("[\"one\",\"two\",\"three\",\"two\",\"one\"]");
+        Set<Object> actual = JacksonUtils.readSet(in);
+
+        assertThat(actual).hasSize(3);
+        assertThat(actual).containsExactly("one", "two", "three");
+    }
+
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() {
+        InputStream in = convertToInputStream("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
+        Set<Object> actual = JacksonUtils.readSet(in);
+
+        assertThat(actual).hasSize(5);
+        assertThat(actual).containsExactly(1,
+                                           2.0,
+                                           3.1,
+                                           12345678912L,
+                                           new BigInteger("123456789123456789123456789123456789"));
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
@@ -241,6 +264,8 @@ public class InputStreamJacksonUtilsTest {
     public void shouldRetrieveEmptyListWhenReadEmptyByteBufferAsList() {
         assertThat(JacksonUtils.readList(convertToInputStream("[]"))).isEmpty();
         assertThat(JacksonUtils.readList(convertToInputStream("[]"), Data.class)).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToInputStream("[]"))).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToInputStream("[]"), Data.class)).isEmpty();
         assertThat(JacksonUtils.readListOfMap(convertToInputStream("[]"))).isEmpty();
         assertThat(JacksonUtils.readMap(convertToInputStream("{}"))).isEmpty();
         assertThat(JacksonUtils.readMap(convertToInputStream("{}"), Data.class)).isEmpty();
@@ -248,15 +273,13 @@ public class InputStreamJacksonUtilsTest {
     }
 
     public void shouldThrowJacksonUtilsExceptionWhenReadIncorrectByteBuffer() {
-        InputStream in = convertToInputStream("incorrect");
-
-        assertThatThrownBy(() -> JacksonUtils.readValue(in, Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readValue(convertToInputStream("incorrect"), Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(in))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect")))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(in, Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect"), Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(in, String.class, Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect"), String.class, Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
     }
 

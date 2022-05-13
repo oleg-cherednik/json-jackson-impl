@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Oleg Cherednik
@@ -32,8 +33,8 @@ import java.util.Map;
  */
 public final class JacksonUtils {
 
-    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonHelper::mapper);
-    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(JacksonHelper::prettyPrintMapper);
+    private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonUtilsHelper::mapper);
+    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(JacksonUtilsHelper::prettyPrintMapper);
 
     // ---------- read String ----------
 
@@ -47,6 +48,14 @@ public final class JacksonUtils {
 
     public static <V> List<V> readList(String json, Class<V> valueClass) {
         return print().readList(json, valueClass);
+    }
+
+    public static Set<Object> readSet(String json) {
+        return print().readSet(json);
+    }
+
+    public static <V> Set<V> readSet(String json, Class<V> valueClass) {
+        return print().readSet(json, valueClass);
     }
 
     public static List<Map<String, Object>> readListOfMap(String json) {
@@ -77,6 +86,14 @@ public final class JacksonUtils {
 
     public static <V> List<V> readList(ByteBuffer buf, Class<V> valueClass) {
         return print().readList(buf, valueClass);
+    }
+
+    public static Set<Object> readSet(ByteBuffer buf) {
+        return print().readSet(buf);
+    }
+
+    public static <V> Set<V> readSet(ByteBuffer buf, Class<V> valueClass) {
+        return print().readSet(buf, valueClass);
     }
 
     public static Iterator<Object> readListLazy(ByteBuffer buf) {
@@ -119,6 +136,14 @@ public final class JacksonUtils {
 
     public static <V> List<V> readList(InputStream in, Class<V> valueClass) {
         return print().readList(in, valueClass);
+    }
+
+    public static Set<Object> readSet(InputStream in) {
+        return print().readSet(in);
+    }
+
+    public static <V> Set<V> readSet(InputStream in, Class<V> valueClass) {
+        return print().readSet(in, valueClass);
     }
 
     public static List<Map<String, Object>> readListOfMap(InputStream in) {
