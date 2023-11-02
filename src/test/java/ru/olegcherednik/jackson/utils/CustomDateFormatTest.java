@@ -50,7 +50,6 @@ public class CustomDateFormatTest {
         assertThat(json).isNotBlank();
 
         Map<String, String> actual = JacksonUtils.readMap(json, String.class, String.class);
-        System.out.println(actual);
         Map<String, String> expected = MapUtils.of("instant", "2017-07-23T13:57:14.225Z",
                                                    "localDateTime", "2017-07-23T13:57:14.225",
                                                    "localTime", "13:57:14.225",
@@ -80,7 +79,6 @@ public class CustomDateFormatTest {
         assertThat(json).isNotBlank();
 
         Map<String, String> actual = jacksonUtils.readMap(json, String.class, String.class);
-        System.out.println(actual);
         Map<String, String> expected = MapUtils.of("instant", "2017-07-23T13:57:14Z",
                                                    "localDateTime", "2017-07-23T13:57:14",
                                                    "localTime", "13:57:14",

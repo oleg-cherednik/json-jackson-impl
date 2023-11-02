@@ -55,7 +55,6 @@ public class DateJacksonUtilsTest {
         Map<String, Date> map = createData();
         String actual = jacksonUtils.writeValue(map);
 
-        System.out.println(actual);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"," +
                                              "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\"," +
