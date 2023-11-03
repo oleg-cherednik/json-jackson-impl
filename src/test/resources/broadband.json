@@ -1,0 +1,63 @@
+{
+  "code": 1000,
+  "message": "Success",
+  "data": {
+    "results": [
+      {
+        "lineId": "C4000LG2020253739",
+        "lineDiagnostics": {
+          "C4000LG2020253739": {
+            "ap": {
+              "broadbanddsthroughput": {
+                "broadbandDsThroughput": [
+                  {
+                    "average": 104830,
+                    "std": 0,
+                    "detection": 0,
+                    "numErrorFreeSamples": 1,
+                    "sampleMaxPercentile": 107673,
+                    "latestSampleTimestamp": 1698160893000,
+                    "sampleMax": 107673,
+                    "url": "http://blah-blah.com",
+                    "videoQuality": 7,
+                    "serviceDetection": -1,
+                    "percentile": [
+                      104830
+                    ],
+                    "latestSample": 104830,
+                    "primaryIp": "205.171.3.100",
+                    "speedTestTrafficMB": 56.9910995
+                  }
+                ]
+              },
+              "broadbandusthroughput": {
+                "broadbandUsThroughput": [
+                  {
+                    "average": 37828,
+                    "std": 0,
+                    "numErrorFreeSamples": 1,
+                    "sampleMaxPercentile": 38393,
+                    "latestSampleTimestamp": 1698160893000,
+                    "sampleMax": 38393,
+                    "url": "http://blah-blah.com",
+                    "serviceDetection": -1,
+                    "percentile": [
+                      37828
+                    ],
+                    "latestSample": 37828,
+                    "primaryIp": "205.171.3.100",
+                    "speedTestTrafficMB": 21.8231345
+                  }
+                ]
+              }
+            },
+            "interface": {},
+            "station": {},
+            "multiWan": {}
+          }
+        },
+        "analysisDay": 20231024
+      }
+    ]
+  }
+}
