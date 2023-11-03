@@ -30,6 +30,10 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:unchecked']
+}
+
 configurations {
     jar.archiveFileName = "${rootProject.name}-${version}.jar"
 }
