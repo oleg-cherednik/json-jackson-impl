@@ -94,16 +94,17 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
 ```java
 String json="""
-              {
-                  "intVal" : 666,
-                  "strVal" : "omen"
-              }
-              """;
+            {
+                "intVal" : 666,
+                "strVal" : "omen"
+            }
+            """;
         Data data=JacksonUtils.readValue(json,Data.class);
 ```
 
@@ -114,22 +115,23 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
 ```java
 String json="""
-              [
-                  {
-                      "intVal" : 555,
-                      "strVal" : "victory"
-                  },
-                  {
-                      "intVal" : 666,
-                      "strVal" : "omen"
-                  }
-              ]
-              """;
+            [
+                {
+                    "intVal" : 555,
+                    "strVal" : "victory"
+                },
+                {
+                    "intVal" : 666,
+                    "strVal" : "omen"
+                }
+            ]
+            """;
         List<Data> res=JacksonUtils.readList(json,Data.class);
 ```
 
@@ -139,17 +141,17 @@ String json="""
 
 ```java
 String json="""
-              {
-                  "victory" : {
-                      "intVal" : 555,
-                      "strVal" : "victory"
-                  },
-                  "omen" : {
-                      "intVal" : 666,
-                      "strVal" : "omen"
-                  }
-              }
-              """;
+            {
+                "victory" : {
+                    "intVal" : 555,
+                    "strVal" : "victory"
+                },
+                "omen" : {
+                    "intVal" : 666,
+                    "strVal" : "omen"
+                }
+            }
+            """;
         Map<String, Object> map=JacksonUtils.readMap(json);
 ```
 
@@ -162,22 +164,23 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
 ```java
 String json="""
-              {
-                  "victory" : {
-                      "intVal" : 555,
-                      "strVal" : "victory"
-                  },
-                  "omen" : {
-                      "intVal" : 666,
-                      "strVal" : "omen"
-                  }
-              }
-              """;
+            {
+                "victory" : {
+                    "intVal" : 555,
+                    "strVal" : "victory"
+                },
+                "omen" : {
+                    "intVal" : 666,
+                    "strVal" : "omen"
+                }
+            }
+            """;
         Map<String, Data> map=JacksonUtils.readMap(json,Data.class);
 ```
 
@@ -188,22 +191,23 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
 ```java
 String json="""
-              {
-                  "1" : {
-                      "intVal" : 555,
-                      "strVal" : "victory"
-                  },
-                  "2" : {
-                      "intVal" : 666,
-                      "strVal" : "omen"
-                  }
-              }
-              """;
+            {
+                "1" : {
+                    "intVal" : 555,
+                    "strVal" : "victory"
+                },
+                "2" : {
+                    "intVal" : 666,
+                    "strVal" : "omen"
+                }
+            }
+            """;
         Map<Integer, Data> map=JacksonUtils.readMap(json,Integer.class,Data.class);
 ```
 
@@ -216,6 +220,7 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
@@ -227,9 +232,9 @@ class Data {
 ```
 
 ```java
-try(InputStream in=...){
-        Data data=JacksonUtils.readValue(in,Data.class);
-        }
+try (InputStream in = ...) {
+    Data data=JacksonUtils.readValue(in, Data.class);
+}
 ```
 
 ##### `InputStream` to a list of custom object type
@@ -241,6 +246,7 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
@@ -258,9 +264,9 @@ class Data {
 ```
 
 ```java
-try(InputStream in=...){
-        List<Data> res=JacksonUtils.readList(in,Data.class);
-        }
+try (InputStream in = ...) {
+    List<Data> res = JacksonUtils.readList(in, Data.class);
+}
 ```
 
 ##### Read lazy
@@ -270,6 +276,7 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
@@ -287,13 +294,13 @@ class Data {
 ```
 
 ```java
-try(InputStream in=...){
-        Iterator<Data> it=JacksonUtils.readListLazy(in,Data.class);
+try (InputStream in = ...) {
+    Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
 
-        while(it.hasNext()){
-        Data data=it.next();
-        }
-        }
+    while (it.hasNext()) {
+        Data data = it.next();
+    }
+}
 ```
 
 ##### `InputStream` to a map of custom object type
@@ -314,9 +321,9 @@ try(InputStream in=...){
 ```
 
 ```java
-try(InputStream in=...){
-        Map<String, Object> map=JacksonUtils.readMap(in);
-        }
+try (InputStream in = ...) {
+    Map<String, Object> map = JacksonUtils.readMap(in);
+}
 ```
 
 **Note:** `map` values have either primitive type or `Map` or `List`.
@@ -328,6 +335,7 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
@@ -345,9 +353,9 @@ class Data {
 ```
 
 ```java
-try(InputStream in=...){
-        Map<String, Object> map=JacksonUtils.readMap(in,Data.class);
-        }
+try (InputStream in = ...) {
+    Map<String, Object> map = JacksonUtils.readMap(in, Data.class);
+}
 ```
 
 ###### Map with `Integer` keys and given type as value
@@ -357,6 +365,7 @@ class Data {
 
     int intVal;
     String strVal;
+    
 }
 ```
 
@@ -374,9 +383,9 @@ class Data {
 ```
 
 ```java
-try(InputStream in=...){
-        Map<Integer, Data> map=JacksonUtils.readMap(in,Integer.class,Data.class);
-        }
+try (InputStream in = ...) {
+    Map<Integer, Data> map = JacksonUtils.readMap(in, Integer.class, Data.class);
+}
 ```
 
 ##### Links
