@@ -18,6 +18,9 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,6 +29,7 @@ import java.util.Map;
  * @author Oleg Cherednik
  * @since 22.12.2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MapUtils {
 
     public static <K, V> Map<K, V> of(K k1, V v1) {
@@ -95,9 +99,6 @@ public final class MapUtils {
         map.put(k13, v13);
         map.put(k14, v14);
         return Collections.unmodifiableMap(map);
-    }
-
-    private MapUtils() {
     }
 
 }

@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +51,7 @@ public class StringJacksonUtilsTest {
             Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
-        } catch(Exception ignored) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -213,7 +214,7 @@ public class StringJacksonUtilsTest {
 
     private static String getResourceAsString(String name) throws IOException {
         try (InputStream in = StringJacksonUtilsTest.class.getResourceAsStream(name)) {
-            return IOUtils.toString(in, StandardCharsets.UTF_8);
+            return IOUtils.toString(Objects.requireNonNull(in), StandardCharsets.UTF_8);
         }
     }
 

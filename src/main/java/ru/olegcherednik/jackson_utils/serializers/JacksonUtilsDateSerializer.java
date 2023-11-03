@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -31,15 +32,12 @@ import java.util.Date;
  * @author Oleg Cherednik
  * @since 13.03.2022
  */
+@RequiredArgsConstructor
 public class JacksonUtilsDateSerializer extends DateSerializer {
 
     private static final long serialVersionUID = 2194687081370953275L;
 
     private final JsonSerializer<Instant> delegate;
-
-    public JacksonUtilsDateSerializer(JsonSerializer<Instant> delegate) {
-        this.delegate = delegate;
-    }
 
     @Override
     public void _serializeAsString(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {

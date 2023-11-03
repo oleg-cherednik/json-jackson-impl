@@ -18,6 +18,9 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -31,6 +34,7 @@ import java.util.Set;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JacksonUtils {
 
     private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonUtilsHelper::mapper);
@@ -202,9 +206,6 @@ public final class JacksonUtils {
 
     public static <V> Map<String, Object> convertToMap(V obj) {
         return print().convertToMap(obj);
-    }
-
-    private JacksonUtils() {
     }
 
 }

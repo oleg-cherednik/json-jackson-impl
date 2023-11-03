@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.jackson_utils.JacksonUtilsException;
 import ru.olegcherednik.utils.reflection.MethodUtils;
 
@@ -40,14 +42,12 @@ import java.util.function.Function;
  * @author Oleg Cherednik
  * @since 27.02.2022
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class EnumIdDeserializers extends SimpleDeserializers {
 
     private static final long serialVersionUID = -6984119149643932744L;
 
     public static final EnumIdDeserializers INSTANCE = new EnumIdDeserializers();
-
-    private EnumIdDeserializers() {
-    }
 
     @Override
     public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc)
@@ -74,7 +74,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         if (methods.size() > 1) {
             return id -> {
                 throw new JacksonUtilsException("Multiple methods with '" + JsonCreator.class.getSimpleName()
-                        + "' annotation was found in '" + rawType.getSimpleName() + "' class");
+                                                        + "' annotation was found in '" + rawType.getSimpleName() + "' class");
             };
         }
 
@@ -86,7 +86,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         if (method == null) {
             return id -> {
                 throw new JacksonUtilsException("Factory method for EnumIs '"
-                        + rawType.getSimpleName() + "' was not found");
+                                                        + rawType.getSimpleName() + "' was not found");
             };
         }
 

@@ -9,6 +9,7 @@ plugins {
     id 'jacoco'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
+    id 'io.franzbecker.gradle-lombok' version '4.0.0'
 
     id 'signing'
     id 'maven-publish'
@@ -46,6 +47,8 @@ dependencies {
 
     implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
     testImplementation('org.testng:testng:7.8.0') {
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.apache.ant', module: 'ant'
@@ -72,6 +75,8 @@ dependencies {
         exclude group: 'org.junit.vintage'
         exclude group: 'org.junit.jupiter'
     }
+
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 jacocoTestReport {

@@ -20,6 +20,8 @@ package ru.olegcherednik.jackson_utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -28,6 +30,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JacksonUtilsHelper {
 
     public static final Supplier<ObjectMapper> DEFAULT_BUILDER = JacksonObjectMapperSupplier.builder().build();
@@ -74,15 +77,12 @@ public final class JacksonUtilsHelper {
     public static synchronized void setMapperBuilder(Supplier<ObjectMapper> mapperSupplier) {
         mapperSupplier = Optional.ofNullable(mapperSupplier).orElse(DEFAULT_BUILDER);
 
-        if (mapperSupplier == JacksonUtilsHelper.mapperBuilder)
+        if (mapperSupplier == mapperBuilder)
             return;
 
-        JacksonUtilsHelper.mapperBuilder = mapperSupplier;
+        mapperBuilder = mapperSupplier;
         mapper = createMapper();
         prettyPrintMapper = createPrettyPrintMapper();
-    }
-
-    private JacksonUtilsHelper() {
     }
 
 }

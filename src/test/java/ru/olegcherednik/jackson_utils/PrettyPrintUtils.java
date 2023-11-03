@@ -18,12 +18,16 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.regex.Pattern;
 
 /**
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class PrettyPrintUtils {
 
     public static final Pattern WIN_LINE_SEPARATOR = Pattern.compile("\r\n");
@@ -31,9 +35,6 @@ final class PrettyPrintUtils {
 
     public static String withUnixLineSeparator(String str) {
         return WIN_LINE_SEPARATOR.matcher(str).replaceAll(UNIX_LINE_SEPARATOR);
-    }
-
-    private PrettyPrintUtils() {
     }
 
 }

@@ -18,6 +18,8 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.RequiredArgsConstructor;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -26,13 +28,10 @@ import java.nio.ByteBuffer;
  * @author Oleg Cherednik
  * @since 18.02.2022
  */
+@RequiredArgsConstructor
 final class ByteBufferInputStream extends InputStream {
 
     private final ByteBuffer buf;
-
-    public ByteBufferInputStream(ByteBuffer buf) {
-        this.buf = buf;
-    }
 
     @Override
     public int read() throws IOException {

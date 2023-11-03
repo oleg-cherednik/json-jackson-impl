@@ -18,6 +18,9 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,15 +29,13 @@ import java.util.List;
  * @author Oleg Cherednik
  * @since 22.12.2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ListUtils {
 
     public static <T> List<T> of(T... elements) {
         if (elements == null || elements.length == 0)
             return Collections.emptyList();
         return Collections.unmodifiableList(Arrays.asList(elements));
-    }
-
-    private ListUtils() {
     }
 
 }

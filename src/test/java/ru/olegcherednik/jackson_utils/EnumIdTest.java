@@ -25,11 +25,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.EnumId;
-import ru.olegcherednik.jackson_utils.JacksonUtils;
-import ru.olegcherednik.jackson_utils.JacksonUtilsException;
-import ru.olegcherednik.jackson_utils.JacksonUtilsHelper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -64,7 +65,7 @@ public class EnumIdTest {
                                                 .setSerializationInclusion(JsonInclude.Include.ALWAYS);
         String json = mapper.writeValueAsString(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-                + "\"nullAuto\":null,\"nullColor\":null}");
+                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNullAngGetters() throws JsonProcessingException {
@@ -79,7 +80,7 @@ public class EnumIdTest {
 
         String json = mapper.writeValueAsString(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-                + "\"nullAuto\":null,\"nullColor\":null}");
+                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
     public void shouldThrowExceptionWhenReadEnumIdNoFactoryMethod() {
@@ -184,7 +185,7 @@ public class EnumIdTest {
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
         public Data(@JsonProperty("notNullAuto") Auto notNullAuto,
-                @JsonProperty("notNullColor") Color notNullColor) {
+                    @JsonProperty("notNullColor") Color notNullColor) {
             this.notNullAuto = notNullAuto;
             this.notNullColor = notNullColor;
         }
@@ -326,19 +327,12 @@ public class EnumIdTest {
     }
 
     @SuppressWarnings("unused")
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
     public enum Country implements EnumId {
         RUSSIAN_FEDERATION("russian-federation");
 
         private final String id;
-
-        Country(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
 
         @JsonCreator
         public static Country one(int id) {
@@ -356,56 +350,15 @@ public class EnumIdTest {
         }
     }
 
+    @Getter
+    @Setter
+    @EqualsAndHashCode
     private static class Book {
 
         private Auto notNullAuto;
         private Color notNullColor;
         private Auto nullAuto;
         private Color nullColor;
-
-        public Auto getNotNullAuto() {
-            return notNullAuto;
-        }
-
-        public void setNotNullAuto(Auto notNullAuto) {
-            this.notNullAuto = notNullAuto;
-        }
-
-        public Color getNotNullColor() {
-            return notNullColor;
-        }
-
-        public void setNotNullColor(Color notNullColor) {
-            this.notNullColor = notNullColor;
-        }
-
-        public Auto getNullAuto() {
-            return nullAuto;
-        }
-
-        public void setNullAuto(Auto nullAuto) {
-            this.nullAuto = nullAuto;
-        }
-
-        public Color getNullColor() {
-            return nullColor;
-        }
-
-        public void setNullColor(Color nullColor) {
-            this.nullColor = nullColor;
-        }
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (!(obj instanceof Data))
-                return false;
-            Data data = (Data)obj;
-            return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
-                    && nullAuto == data.nullAuto && nullColor == data.nullColor;
-        }
 
     }
 

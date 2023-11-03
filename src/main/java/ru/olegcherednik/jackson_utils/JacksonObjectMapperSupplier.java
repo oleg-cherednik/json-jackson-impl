@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.jackson_utils.enumid.EnumIdModule;
 import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsDateSerializer;
 import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsInstantSerializer;
@@ -129,13 +131,11 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
                                                          .addKeySerializer(Date.class, dateSerializer));
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Builder {
 
         private UnaryOperator<ZoneId> zoneModifier = ZONE_MODIFIER_TO_UTC;
         private boolean useMilliseconds = true;
-
-        protected Builder() {
-        }
 
         public Builder zone(ZoneId zone) {
             return zoneModifier(z -> zone);

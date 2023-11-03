@@ -19,6 +19,8 @@
 package ru.olegcherednik.jackson_utils.types;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
@@ -27,11 +29,9 @@ import java.util.Map;
  * @author Oleg Cherednik
  * @since 18.02.2022
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ListMapTypeReference extends TypeReference<List<Map<String, Object>>> {
 
     public static final ListMapTypeReference INSTANCE = new ListMapTypeReference();
-
-    private ListMapTypeReference() {
-    }
 
 }

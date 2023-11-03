@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
+import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.jackson_utils.types.ListMapTypeReference;
 
 import java.io.InputStream;
@@ -43,16 +44,13 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 02.01.2021
  */
+@RequiredArgsConstructor
 public class ObjectMapperDecorator {
 
     protected final Supplier<ObjectMapper> supplier;
 
     public ObjectMapperDecorator(ObjectMapper mapper) {
         this(() -> mapper);
-    }
-
-    public ObjectMapperDecorator(Supplier<ObjectMapper> supplier) {
-        this.supplier = supplier;
     }
 
     // ---------- read String----------
@@ -391,7 +389,7 @@ public class ObjectMapperDecorator {
     private static <V> V withRuntimeException(Callable<V> task) {
         try {
             return task.call();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new JacksonUtilsException(e);
         }
     }
@@ -399,7 +397,7 @@ public class ObjectMapperDecorator {
     private static <V> V withInputStream(ByteBuffer buf, Function<InputStream, V> task) {
         try (InputStream in = new ByteBufferInputStream(buf)) {
             return task.apply(in);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new JacksonUtilsException(e);
         }
     }

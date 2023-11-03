@@ -18,6 +18,9 @@
  */
 package ru.olegcherednik.jackson_utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.ZoneId;
 
 /**
@@ -25,12 +28,10 @@ import java.time.ZoneId;
  * @since 04.05.2022
  */
 @SuppressWarnings("PMD.ClassNamingConventions")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LocalZoneId {
 
     public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
     public static final ZoneId AUSTRALIA_SYDNEY = ZoneId.of("Australia/Sydney");
-
-    private LocalZoneId() {
-    }
 
 }

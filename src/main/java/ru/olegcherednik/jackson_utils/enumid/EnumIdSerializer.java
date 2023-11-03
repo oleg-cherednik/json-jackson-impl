@@ -21,6 +21,8 @@ package ru.olegcherednik.jackson_utils.enumid;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.jackson_utils.EnumId;
 
 import java.io.IOException;
@@ -31,12 +33,10 @@ import java.io.IOException;
  * lower-case enum constant name (instead of upper-case by default). Therefore you have to define {@link com.fasterxml.jackson.annotation.JsonCreator}
  * for every {@link EnumId} instance.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class EnumIdSerializer extends JsonSerializer<EnumId> {
 
     public static final EnumIdSerializer INSTANCE = new EnumIdSerializer();
-
-    private EnumIdSerializer() {
-    }
 
     @Override
     public void serialize(EnumId enumId, JsonGenerator generator, SerializerProvider serializers) throws IOException {
