@@ -30,7 +30,7 @@
 ## Gradle
 
 ```groovy
-implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.6'
+implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 ```
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
 ```groovy
@@ -47,7 +47,7 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.6</version>
+    <version>2.7</version>
 </dependency>
 ```
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
