@@ -44,19 +44,14 @@
 implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 ```
 
-<details><summary><i>Optional dependencies</i></summary>
-<p>
-<i>e.g. Jackson of version <strong>2.15.3</strong>:</i>
+_Optional dependencies (e.g. Jackson of version __2.15.3__):_
 
-<code class="language-groovy">
+```groovy
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.15.3'
 implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.15.3'
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.3'
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
-</code>
-
-</p>
-</details>
+```
 
 ## Maven
 
@@ -68,10 +63,9 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 </dependency>
 ```
 
-<details><summary><i>Optional dependencies</i></summary>
-<p>
-<i>e.g. Jackson of version <strong>2.15.3</strong>:</i>
-<code class="language-xml">
+_Optional dependencies (e.g. Jackson of version __2.15.3__):_
+
+```xml
 <dependencies>
    <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
@@ -94,9 +88,7 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
       <version>2.15.3</version>
    </dependency>
 </dependencies>
-</code>
-</p>
-</details>
+```
 
 **Note:** `jackson-utils` does not contain dependency to the specific `Jackson Project`
 version, so you have to add any version additionally
