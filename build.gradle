@@ -38,7 +38,6 @@ tasks.withType(JavaCompile).configureEach {
 configurations {
     jar.archiveFileName = "${rootProject.name}-${version}.jar"
 }
-
 dependencies {
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
@@ -50,7 +49,7 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    testImplementation('org.testng:testng:7.8.0') {
+    testImplementation('org.testng:testng:7.5.1') {
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.apache.ant', module: 'ant'
     }
@@ -63,7 +62,7 @@ dependencies {
 
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'commons-io:commons-io:2.15.0'
-    testImplementation 'org.mockito:mockito-core:5.6.0'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
 
     testImplementation("org.springframework.boot:spring-boot-starter-web:${property('spring-boot.version')}") {
         exclude group: 'org.junit.jupiter'
