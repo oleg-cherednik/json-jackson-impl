@@ -3,7 +3,7 @@
 [![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-![example branch parameter](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/hello-world/badge.svg?branch=master)
+![example branch parameter](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/hello-world.yml/badge.svg?branch=master)
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev.svg?style=svg)](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev)
 [![vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
