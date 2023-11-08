@@ -3,7 +3,7 @@
 [![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/hello-world.yml/badge.svg?branch=master&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
+[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/build-ci.yml/badge.svg?branch=master&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
 [![vulnerabilities](https://snyk.io/test/github/oleg-cherednik/jackson-utils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/jackson-utils?targetFile=build.gradle)
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade&branch=master)
@@ -12,7 +12,7 @@
 <details><summary>develop</summary>
 <p>
 
-[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/hello-world.yml/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
+[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/build-ci.yml/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade&branch=develop)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage&branch=develop)
 
@@ -89,7 +89,7 @@ _Optional dependencies (e.g. Jackson of version __2.15.3__):_
    </dependency>
 </dependencies>
 ```
-  
+
 __Note:__ `jackson-utils` does not contain dependency to the specific `Jackson Project`
 version, so you have to add any version additionally
 
@@ -111,7 +111,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -132,7 +132,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -180,7 +180,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -207,7 +207,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -236,7 +236,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -262,7 +262,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -292,7 +292,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -312,7 +312,7 @@ class Data {
 ```java
 try(InputStream in = ...) {
     Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
-    
+
     while (it.hasNext()) {
         Data data = it.next();
     }
@@ -351,7 +351,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
@@ -381,7 +381,7 @@ class Data {
 
     int intVal;
     String strVal;
-    
+
 }
 ```
 
