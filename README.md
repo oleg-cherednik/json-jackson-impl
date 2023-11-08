@@ -28,15 +28,15 @@
 
 ## Features
 
-* Encapsulate all checked exceptions from Jackson with custom runtime exception;
-* A central place for configuration;
-* A central place for holding `ObjectMapper` instances;
-* Utility class to make most common operations much more comfortable to use;
-* Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
-* `ByteBuffer`/`InputStream` support for objects, lists and maps;
-* Lazy read support for list from `Writer`;
-* Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
-* Advanced `Reader`/`Writer` support for `enum`.
+  * Encapsulate all checked exceptions from Jackson with custom runtime exception;
+  * A central place for configuration;
+  * A central place for holding `ObjectMapper` instances;
+  * Utility class to make most common operations much more comfortable to use;
+  * Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
+  * `ByteBuffer`/`InputStream` support for objects, lists and maps;
+  * Lazy read support for list from `Writer`;
+  * Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
+  * Advanced `Reader`/`Writer` support for `enum`.
 
 ## Gradle
 
@@ -91,8 +91,8 @@ version, so you have to add any version additionally
 
 To simplify usage of _jackson-utils_, there're following classes:
 
-* [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
-* [EnumId](#work-with-enum) - advanced enum serialization support.
+  * [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
+  * [EnumId](#work-with-enum) - advanced enum serialization support.
 
 ### JacksonUtils class
 
