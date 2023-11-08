@@ -1,4 +1,4 @@
-name: hello-world
+name: build-ci
 on: push
 jobs:
   build:
