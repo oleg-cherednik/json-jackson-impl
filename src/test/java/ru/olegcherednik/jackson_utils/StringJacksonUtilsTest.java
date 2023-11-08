@@ -18,21 +18,17 @@
  */
 package ru.olegcherednik.jackson_utils;
 
-import org.apache.commons.io.IOUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import ru.olegcherednik.jackson_utils.data.Book;
 import ru.olegcherednik.jackson_utils.data.Data;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,7 +64,7 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {
-        String json = getResourceAsString("/data.json");
+        String json = ResourceData.getResourceAsString("/data.json");
         Data actual = JacksonUtils.readValue(json, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(new Data(666, "omen"));
@@ -113,14 +109,14 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
-        String json = getResourceAsString("/data_list.json");
+        String json = ResourceData.getResourceAsString("/data_list.json");
         List<Data> actual = JacksonUtils.readList(json, Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
     }
 
     public void shouldRetrieveListOfMapWhenRead() throws IOException {
-        String json = getResourceAsString("/data_list.json");
+        String json = ResourceData.getResourceAsString("/data_list.json");
         List<Map<String, Object>> actual = JacksonUtils.readListOfMap(json);
 
         assertThat(actual).hasSize(2);
@@ -133,7 +129,7 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveDataMapWhenReadAsMapWithStringKey() throws IOException {
-        String json = getResourceAsString("/variable_value_map.json");
+        String json = ResourceData.getResourceAsString("/variable_value_map.json");
         Map<String, Object> actual = JacksonUtils.readMap(json);
         assertThat(actual).isNotNull();
         assertThat(actual.keySet()).containsExactly("sample", "order");
@@ -142,7 +138,7 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveStringValueMapWhenReadAsMapWithStringKeyAndType() throws IOException {
-        String json = getResourceAsString("/string_value_map_s.json");
+        String json = ResourceData.getResourceAsString("/string_value_map_s.json");
         Map<String, String> actual = JacksonUtils.readMap(json, String.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(MapUtils.of("auto", "Audi", "model", "RS3"));
@@ -162,7 +158,7 @@ public class StringJacksonUtilsTest {
                         ListUtils.of("Oleg Cherednik"))
         );
 
-        String json = getResourceAsString("/books_dict_string_key.json");
+        String json = ResourceData.getResourceAsString("/books_dict_string_key.json");
         Map<String, Book> actual = JacksonUtils.readMap(json, Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
@@ -182,7 +178,7 @@ public class StringJacksonUtilsTest {
                         ListUtils.of("Oleg Cherednik"))
         );
 
-        String json = getResourceAsString("/books_dict_int_key.json");
+        String json = ResourceData.getResourceAsString("/books_dict_int_key.json");
         Map<Integer, Book> actual = JacksonUtils.readMap(json, Integer.class, Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
@@ -210,12 +206,6 @@ public class StringJacksonUtilsTest {
                 .isExactlyInstanceOf(JacksonUtilsException.class);
         assertThatThrownBy(() -> JacksonUtils.readMap("incorrect", String.class, Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-    }
-
-    private static String getResourceAsString(String name) throws IOException {
-        try (InputStream in = StringJacksonUtilsTest.class.getResourceAsStream(name)) {
-            return IOUtils.toString(Objects.requireNonNull(in), StandardCharsets.UTF_8);
-        }
     }
 
 }
