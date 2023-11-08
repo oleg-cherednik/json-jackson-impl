@@ -23,14 +23,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import ru.olegcherednik.jackson_utils.data.Book;
 import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.utils.reflection.ConstructorUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +47,10 @@ public class StringJacksonUtilsTest {
 
     @BeforeClass
     public static void init() {
-        AccessController.doPrivileged((PrivilegedAction<?>)() -> {
-            try {
-                Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                constructor.newInstance();
-            } catch (Exception ignored) {
-            }
-
-            return null;
-        });
+        try {
+            ConstructorUtils.invokeConstructor(JacksonUtils.class);
+        } catch (Exception ignored) {
+        }
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
