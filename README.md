@@ -56,7 +56,6 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 ## Maven
 
 ```xml
-
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
@@ -67,26 +66,25 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
 
 ```xml
-
 <dependency>
     <groupId>com.fasterxml.jackson.module</groupId>
     <artifactId>jackson-module-afterburner</artifactId>
     <version>2.15.3</version>
 </dependency>
 <dependency>
-<groupId>com.fasterxml.jackson.module</groupId>
-<artifactId>jackson-module-parameter-names</artifactId>
-<version>2.15.3</version>
+   <groupId>com.fasterxml.jackson.module</groupId>
+   <artifactId>jackson-module-parameter-names</artifactId>
+   <version>2.15.3</version>
 </dependency>
 <dependency>
-<groupId>com.fasterxml.jackson.datatype</groupId>
-<artifactId>jackson-datatype-jdk8</artifactId>
-<version>2.15.3</version>
+   <groupId>com.fasterxml.jackson.datatype</groupId>
+   <artifactId>jackson-datatype-jdk8</artifactId>
+   <version>2.15.3</version>
 </dependency>
 <dependency>
-<groupId>com.fasterxml.jackson.datatype</groupId>
-<artifactId>jackson-datatype-jsr310</artifactId>
-<version>2.15.3</version>
+   <groupId>com.fasterxml.jackson.datatype</groupId>
+   <artifactId>jackson-datatype-jsr310</artifactId>
+   <version>2.15.3</version>
 </dependency>
 ```
 
