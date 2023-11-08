@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -47,12 +49,16 @@ public class StringJacksonUtilsTest {
 
     @BeforeClass
     public static void init() {
-        try {
-            Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            constructor.newInstance();
-        } catch (Exception ignored) {
-        }
+        AccessController.doPrivileged((PrivilegedAction<?>)() -> {
+            try {
+                Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                constructor.newInstance();
+            } catch (Exception ignored) {
+            }
+
+            return null;
+        });
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
