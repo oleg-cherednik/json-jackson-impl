@@ -97,8 +97,8 @@ version, so you have to add any version additionally
 
 To simplify usage of _jackson-utils_, there're following classes:
 
-*  [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
-*  [EnumId](#work-with-enum) - advanced enum serialization support.
+*   [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
+*   [EnumId](#work-with-enum) - advanced enum serialization support.
 
 ### JacksonUtils class
 
@@ -398,8 +398,8 @@ try(InputStream in=...){
 
 ##### Links
 
-*  Home page: https://github.com/oleg-cherednik/jackson-utils
+*   Home page: https://github.com/oleg-cherednik/jackson-utils
 
-*  Maven:
-    *    **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
-    *    **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils
+*   Maven:
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.jackson/jackson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/jackson/jackson-utils
