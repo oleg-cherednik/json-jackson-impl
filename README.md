@@ -44,7 +44,8 @@
 implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 ```
 
-<details><summary>_Optional dependencies (e.g. Jackson of version __2.15.3__):_</summary>
+<details><summary><i>Optional dependencies</i></summary>
+<p>
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
 
 ```groovy
