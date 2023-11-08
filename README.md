@@ -1,6 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.jackson/jackson-utils)
 [![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.jackson/jackson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.jackson/jackson-utils)
-[![java1.8](https://badgen.net/badge/java/1.8/blue)](https://badgen.net/)
+[![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev.svg?style=svg)](https://circleci.com/gh/oleg-cherednik/jackson-utils/tree/dev)
