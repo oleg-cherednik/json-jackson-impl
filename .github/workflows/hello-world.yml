@@ -19,7 +19,7 @@ jobs:
           java-version: '8.0'
           distribution: 'temurin'
       - name: Run a build
-        run: ./gradlew compileJava compileTestJava --stacktrace
+        run: ./gradlew compileJava --stacktrace
       - name: Run tests
         run: ./gradlew test
       - name: Build test coverage report
