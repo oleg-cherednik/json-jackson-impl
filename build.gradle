@@ -38,6 +38,7 @@ tasks.withType(JavaCompile).configureEach {
 configurations {
     jar.archiveFileName = "${rootProject.name}-${version}.jar"
 }
+
 dependencies {
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
