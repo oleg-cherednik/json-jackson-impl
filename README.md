@@ -44,6 +44,7 @@
 implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 ```
 
+<details><summary>_Optional dependencies (e.g. Jackson of version __2.15.3__):_</summary>
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
 
 ```groovy
@@ -52,6 +53,8 @@ implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.15
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.3'
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 ```
+</p>
+</details>
 
 ## Maven
 
