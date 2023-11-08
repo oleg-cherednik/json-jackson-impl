@@ -28,22 +28,24 @@
 
 ## Features
 
-  * Encapsulate all checked exceptions from Jackson with custom runtime exception;
-  * A central place for configuration;
-  * A central place for holding `ObjectMapper` instances;
-  * Utility class to make most common operations much more comfortable to use;
-  * Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
-  * `ByteBuffer`/`InputStream` support for objects, lists and maps;
-  * Lazy read support for list from `Writer`;
-  * Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
-  * Advanced `Reader`/`Writer` support for `enum`.
+* Encapsulate all checked exceptions from Jackson with custom runtime exception;
+* A central place for configuration;
+* A central place for holding `ObjectMapper` instances;
+* Utility class to make most common operations much more comfortable to use;
+* Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
+* `ByteBuffer`/`InputStream` support for objects, lists and maps;
+* Lazy read support for list from `Writer`;
+* Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`);
+* Advanced `Reader`/`Writer` support for `enum`.
 
 ## Gradle
 
 ```groovy
 implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 ```
+
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
+
 ```groovy
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.15.3'
 implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.15.3'
@@ -61,38 +63,42 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
     <version>2.7</version>
 </dependency>
 ```
+
 _Optional dependencies (e.g. Jackson of version __2.15.3__):_
+
 ```xml
+
 <dependency>
-  <groupId>com.fasterxml.jackson.module</groupId>
-  <artifactId>jackson-module-afterburner</artifactId>
-  <version>2.15.3</version>
+    <groupId>com.fasterxml.jackson.module</groupId>
+    <artifactId>jackson-module-afterburner</artifactId>
+    <version>2.15.3</version>
 </dependency>
 <dependency>
-  <groupId>com.fasterxml.jackson.module</groupId>
-  <artifactId>jackson-module-parameter-names</artifactId>
-  <version>2.15.3</version>
+<groupId>com.fasterxml.jackson.module</groupId>
+<artifactId>jackson-module-parameter-names</artifactId>
+<version>2.15.3</version>
 </dependency>
 <dependency>
-  <groupId>com.fasterxml.jackson.datatype</groupId>
-  <artifactId>jackson-datatype-jdk8</artifactId>
-  <version>2.15.3</version>
+<groupId>com.fasterxml.jackson.datatype</groupId>
+<artifactId>jackson-datatype-jdk8</artifactId>
+<version>2.15.3</version>
 </dependency>
 <dependency>
-  <groupId>com.fasterxml.jackson.datatype</groupId>
-  <artifactId>jackson-datatype-jsr310</artifactId>
-  <version>2.15.3</version>
+<groupId>com.fasterxml.jackson.datatype</groupId>
+<artifactId>jackson-datatype-jsr310</artifactId>
+<version>2.15.3</version>
 </dependency>
 ```
+
 **Note:** `jackson-utils` does not contain dependency to the specific `Jackson Project`
-version, so you have to add any version additionally 
+version, so you have to add any version additionally
 
 ## Usage
 
 To simplify usage of _jackson-utils_, there're following classes:
 
-  * [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
-  * [EnumId](#work-with-enum) - advanced enum serialization support.
+* [JacksonUtils](#jacksonutils-class) - utility class with set of methods to use json transformation;
+* [EnumId](#work-with-enum) - advanced enum serialization support.
 
 ### JacksonUtils class
 
