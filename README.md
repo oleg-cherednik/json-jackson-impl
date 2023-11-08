@@ -47,12 +47,12 @@ implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 <details><summary><i>Optional dependencies</i></summary>
 <p>
 <i>e.g. Jackson of version <strong>2.15.3</strong>:</i>
-```groovy
+<code>
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.15.3'
 implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.15.3'
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.3'
 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
-```
+</code>
 </p>
 </details>
 
