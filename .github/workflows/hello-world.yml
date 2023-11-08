@@ -8,10 +8,27 @@ jobs:
   build:
     # операционная система для работы воркфлоу
     runs-on: ubuntu-latest
-    steps: # список шагов, которые надо выполнить
-      # экшен — выполняет какую-то задачу
-      # checkout — клонирует репозиторий
-      - uses: actions/checkout@v3
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       # run – произвольная bash-команда
       # ls -la выведет содержимое текущего репозитория
       - run: ls -la
+
+
+#      - checkout
+#
+#      - run:
+#          name: Run build
+#          command: ./gradlew compileJava compileTestJava --stacktrace
+#      - run:
+#          name: Run tests
+#          command: ./gradlew test
+#      - run:
+#          name: Test coverage report
+#          command: ./gradlew jacocoTestReport
+#      - run:
+#          name: Send test coverage report to CodeCov
+#          command: |
+#            bash <(curl -s https://codecov.io/bash)
+#            bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r build/reports/jacoco/test/jacocoTestReport.xml
