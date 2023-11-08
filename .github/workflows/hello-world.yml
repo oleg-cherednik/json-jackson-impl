@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Run a build
+        run: ./gradlew compileJava compileTestJava --stacktrace
+      - name: Run tests
+        run: ./gradlew test
+      - name: Build test coverage report
+        run: ./gradlew jacocoTestReport
       # run – произвольная bash-команда
       # ls -la выведет содержимое текущего репозитория
       - run: ls -la
