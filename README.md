@@ -46,7 +46,7 @@ implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
 
 <details><summary><i>Optional dependencies</i></summary>
 <p>
-_Optional dependencies (e.g. Jackson of version __2.15.3__):_
+<i>e.g. Jackson of version <strong>2.15.3</strong>:</i>
 
 ```groovy
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.15.3'
