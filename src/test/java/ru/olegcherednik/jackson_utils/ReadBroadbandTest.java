@@ -23,16 +23,12 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -46,15 +42,9 @@ public class ReadBroadbandTest {
 
     public void shouldDeserializeModelWithMap() throws IOException {
         assertThatCode(() -> {
-            String json = getResourceAsString("/broadband.json");
+            String json = ResourceData.getResourceAsString("/broadband.json");
             JacksonUtils.readValue(json, DataModel.class);
         }).doesNotThrowAnyException();
-    }
-
-    private static String getResourceAsString(String name) throws IOException {
-        try (InputStream in = ReadBroadbandTest.class.getResourceAsStream(name)) {
-            return IOUtils.toString(Objects.requireNonNull(in), StandardCharsets.UTF_8);
-        }
     }
 
     @Getter
