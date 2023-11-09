@@ -24,8 +24,8 @@ repositories {
 group 'ru.oleg-cherednik.jackson'
 version '2.7'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
@@ -44,8 +44,6 @@ dependencies {
     compileOnly "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
-
-    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 

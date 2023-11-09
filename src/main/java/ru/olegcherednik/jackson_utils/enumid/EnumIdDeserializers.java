@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.olegcherednik.jackson_utils.JacksonUtilsException;
-import ru.olegcherednik.utils.reflection.MethodUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -85,7 +84,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (method == null) {
             return id -> {
-                throw new JacksonUtilsException("Factory method for EnumIs '"
+                throw new JacksonUtilsException("Factory method for EnumId '"
                                                         + rawType.getSimpleName() + "' was not found");
             };
         }
@@ -95,10 +94,17 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
     private static <T> Function<String, T> createFunc(Method method) {
         return id -> {
+            boolean accessible = method.isAccessible();
+
             try {
-                return MethodUtils.invokeStaticMethod(method, id);
+                method.setAccessible(true);
+                return (T)method.invoke(null, id);
+            } catch (RuntimeException e) {
+                throw e;
             } catch (Exception e) {
-                throw new JacksonUtilsException(e.getCause());
+                throw new JacksonUtilsException(e);
+            } finally {
+                method.setAccessible(accessible);
             }
         };
     }
