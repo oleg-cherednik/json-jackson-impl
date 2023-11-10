@@ -6,15 +6,15 @@
 [![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/github-ci.yml/badge.svg?branch=master&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
 [![vulnerabilities](https://snyk.io/test/github/oleg-cherednik/jackson-utils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/jackson-utils?targetFile=build.gradle)
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
-[![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=master)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?branch=master)
-[![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=master)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=master)
+[![quality](https://app.codacy.com/project/badge/Grade/1d5034efd99f44e59b0247c77c615c97?branch=master)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?branch=master)
+[![coverage](https://app.codacy.com/project/badge/Coverage/1d5034efd99f44e59b0247c77c615c97?branch=master)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=master)
 
 <details><summary>develop</summary>
 <p>
 
 [![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/github-ci.yml/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
-[![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=develop)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?branch=develop)
-[![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=develop)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=develop)
+[![quality](https://app.codacy.com/project/badge/Grade/1d5034efd99f44e59b0247c77c615c97?branch=develop)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?branch=develop)
+[![coverage](https://app.codacy.com/project/badge/Coverage/1d5034efd99f44e59b0247c77c615c97?branch=develop)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=develop)
 
 </p>
 </details>
