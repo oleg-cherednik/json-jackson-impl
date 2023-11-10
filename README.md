@@ -8,6 +8,7 @@
 [![license-scan](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foleg-cherednik%2Fjackson-utils?ref=badge_shield)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade&branch=master)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage&branch=master)
+[![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=master)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=master)
 
 <details><summary>develop</summary>
 <p>
@@ -15,6 +16,7 @@
 [![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/github-ci.yml/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade&branch=develop)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage&branch=develop)
+[![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353?branch=develop)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/coverage/dashboard?branch=develop)
 
 </p>
 </details>
