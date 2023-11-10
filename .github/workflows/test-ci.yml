@@ -1,8 +1,5 @@
-name: github-ci
+name: test-ci
 on: push
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   java-8:
     runs-on: ubuntu-latest
