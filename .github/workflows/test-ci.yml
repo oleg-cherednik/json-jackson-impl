@@ -5,6 +5,7 @@ jobs:
     uses: oleg-cherednik/github-workflows/.github/workflows/gradle-java-build-test.yml@main
     with:
       java-version: '8'
+      codacy-report: true
   java-11:
     uses: oleg-cherednik/github-workflows/.github/workflows/gradle-java-build-test.yml@main
     with:
