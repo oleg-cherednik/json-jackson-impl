@@ -12,7 +12,7 @@
 <details><summary>develop</summary>
 <p>
 
-[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/github-ci/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
+[![github-ci](https://github.com/oleg-cherednik/jackson-utils/actions/workflows/github-ci.yml/badge.svg?branch=develop&event=push)](https://github.com/oleg-cherednik/jackson-utils/actions)
 [![quality](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade&branch=develop)
 [![coverage](https://app.codacy.com/project/badge/Coverage/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://app.codacy.com/gh/oleg-cherednik/jackson-utils/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage&branch=develop)
 
