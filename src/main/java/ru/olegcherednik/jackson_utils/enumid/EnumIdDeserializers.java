@@ -101,8 +101,6 @@ final class EnumIdDeserializers extends SimpleDeserializers {
             try {
                 method.setAccessible(true);
                 return (T)method.invoke(null, id);
-            } catch (RuntimeException e) {
-                throw e;
             } catch (Exception e) {
                 throw new JacksonUtilsException(e);
             } finally {
