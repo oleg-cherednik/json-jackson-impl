@@ -2,7 +2,7 @@ name: test-ci
 on: push
 jobs:
   java-8:
-    uses: oleg-cherednik/jackson-utils/.github/workflows/build.yml@main
+    uses: oleg-cherednik/github-workflows/main/.github/workflows/build.yml@main
     with:
       java-version: '8'
 
