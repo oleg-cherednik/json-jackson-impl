@@ -46,6 +46,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class StringJacksonUtilsTest {
 
     @BeforeClass
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     public static void init() {
         try {
             Constructor<JacksonUtils> constructor = JacksonUtils.class.getDeclaredConstructor();

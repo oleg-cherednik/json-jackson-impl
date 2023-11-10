@@ -14,6 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
 
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     public static <T> T getFieldValue(Object obj, String fieldName) {
         try {
             Field field = getField(obj.getClass(), fieldName);
