@@ -1,3 +1,4 @@
+name: Build and run test under Java
 on:
   workflow_call:
     inputs:
