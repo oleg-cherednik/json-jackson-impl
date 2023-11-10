@@ -1,4 +1,4 @@
-name: build-ci
+name: github-ci
 on: push
 jobs:
   build-java-8:
