@@ -92,6 +92,8 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         return createFunc(method);
     }
 
+
+    @SuppressWarnings({ "deprecation", "PMD.AvoidAccessibilityAlteration" })
     private static <T> Function<String, T> createFunc(Method method) {
         return id -> {
             boolean accessible = method.isAccessible();
