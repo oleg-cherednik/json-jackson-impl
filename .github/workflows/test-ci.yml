@@ -2,15 +2,10 @@ name: test-ci
 on: push
 jobs:
   java-8:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Set up Java 1.8
-        uses: oleg-cherednik/jackson-utils/.github/workflows/build.yml@main
-        with:
-          java-version: '8'
+    uses: oleg-cherednik/jackson-utils/.github/workflows/build.yml@main
+    with:
+      java-version: '8'
+
 #  java-11:
 #    runs-on: ubuntu-latest
 #    permissions:
