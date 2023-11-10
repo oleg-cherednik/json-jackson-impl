@@ -232,7 +232,7 @@
         <module name="OneStatementPerLine">
             <property name="treatTryResourcesAsStatement" value="true"/>
         </module>
-        <module name="OverloadMethodsDeclarationOrder"/>
+        <!--module name="OverloadMethodsDeclarationOrder"/-->
         <module name="PackageDeclaration"/>
         <!-- module name="ParameterAssignment"/ -->
         <module name="RequireThis"/>
