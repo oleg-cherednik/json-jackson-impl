@@ -1,4 +1,4 @@
-name: Build and run tests under Java versions
+name: Build and tests
 on: push
 jobs:
   java-8:
