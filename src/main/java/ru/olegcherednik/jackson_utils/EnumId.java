@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.jackson_utils;
 
 import java.util.Optional;
@@ -26,7 +27,8 @@ import java.util.Optional;
  * all existed database records should be modified as well.<p>
  * For serialization, the enum should override {@link #getId()} to define a string value.<p>
  * For deserialization, the enum should contain exactly one static method with single {@link String} argument
- * and either be annotated with {@link com.fasterxml.jackson.annotation.JsonCreator} annotation or has name <b>parseId</b>.
+ * and either be annotated with {@link com.fasterxml.jackson.annotation.JsonCreator} annotation or has name
+ * <b>parseId</b>.
  *
  * @author Oleg Cherednik
  * @since 17.10.2021

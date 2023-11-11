@@ -7,6 +7,7 @@ buildscript {
 
 plugins {
     id 'jacoco'
+    id 'checkstyle'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
     id 'io.franzbecker.gradle-lombok' version '4.0.0'
@@ -38,6 +39,11 @@ tasks.withType(JavaCompile).configureEach {
 configurations {
     jar.archiveFileName = "${rootProject.name}-${version}.jar"
 }
+
+checkstyle {
+    configFile = 'checkstyle.xml' as File
+}
+
 dependencies {
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
@@ -93,7 +99,6 @@ test {
 license {
     header rootProject.file('APACHE.txt')
     include '**/*.java'
-    newLine false
 }
 
 signing {
