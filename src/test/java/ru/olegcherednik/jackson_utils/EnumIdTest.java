@@ -331,6 +331,7 @@ public class EnumIdTest {
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
     public enum Country implements EnumId {
+
         RUSSIAN_FEDERATION("russian-federation");
 
         private final String id;
@@ -354,7 +355,7 @@ public class EnumIdTest {
     @Getter
     @Setter
     @EqualsAndHashCode
-    private static class Book {
+    private static final class Book {
 
         private Auto notNullAuto;
         private Color notNullColor;
