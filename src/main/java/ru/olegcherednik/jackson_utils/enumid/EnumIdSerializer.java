@@ -29,10 +29,10 @@ import ru.olegcherednik.jackson_utils.EnumId;
 import java.io.IOException;
 
 /**
- * Custom serializer for all {@link EnumId}. It just invoke {@link EnumId#getId()}. Since that, standard {@link
- * com.fasterxml.jackson.databind.deser.std.EnumDeserializer} will not be working for these types, because by default {@link EnumId#getId()} returns
- * lower-case enum constant name (instead of upper-case by default). Therefore you have to define {@link com.fasterxml.jackson.annotation.JsonCreator}
- * for every {@link EnumId} instance.
+ * Custom serializer for all {@link EnumId}. It just invokes {@link EnumId#getId()}. Since that, standard {@link
+ * com.fasterxml.jackson.databind.deser.std.EnumDeserializer} will not be working for these types, because by default
+ * {@link EnumId#getId()} returns lower-case enum constant name (instead of upper-case by default). Therefore, you have
+ * to define {@link com.fasterxml.jackson.annotation.JsonCreator} for every {@link EnumId} instance.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class EnumIdSerializer extends JsonSerializer<EnumId> {

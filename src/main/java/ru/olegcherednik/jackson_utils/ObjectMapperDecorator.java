@@ -381,7 +381,7 @@ public class ObjectMapperDecorator {
 
         return withRuntimeException(() -> {
             ObjectMapper mapper = supplier.get();
-            return (Map<String, Object>)mapper.convertValue(obj, Map.class);
+            return (Map<String, Object>) mapper.convertValue(obj, Map.class);
         });
     }
 

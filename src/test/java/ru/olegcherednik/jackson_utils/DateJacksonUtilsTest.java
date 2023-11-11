@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.text.ParseException;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,13 +40,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class DateJacksonUtilsTest {
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     public void shouldRetrieveJsonUTCZoneWhenWriteDateDefaultSettings() throws ParseException {
         Map<String, Date> map = createData();
         String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
-                                             "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
-                                             "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                                             + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
+                                             + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteDateSingaporeZone() throws ParseException {
@@ -57,28 +59,30 @@ public class DateJacksonUtilsTest {
         String actual = jacksonUtils.writeValue(map);
 
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"," +
-                                             "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\"," +
-                                             "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00\"}");
+        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\","
+                                             + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\","
+                                             + "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00\"}");
     }
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     public void shouldRetrieveJsonWithUTCZoneWhenWriteDateWithSameZone() throws ParseException {
-        Supplier<ObjectMapper> mapperSupplier = JacksonObjectMapperSupplier.builder()
-                                                                           .zoneModifier(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL)
-                                                                           .build();
+        Supplier<ObjectMapper> mapperSupplier =
+                JacksonObjectMapperSupplier.builder()
+                                           .zoneModifier(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL)
+                                           .build();
         ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createMapperDecorator(mapperSupplier);
         Map<String, Date> map = createData();
         String actual = jacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
-                                             "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\"," +
-                                             "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                                             + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
+                                             + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveDeserializedDateMapWhenReadJsonAsMap() throws ParseException {
-        String json = "{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
-                "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\"," +
-                "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00\"}";
+        String json = "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\","
+                + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00\"}";
         Map<String, Date> expected = createData();
         Map<String, Date> actual = JacksonUtils.readMap(json, String.class, Date.class);
         assertThat(actual).isNotNull();
@@ -90,9 +94,13 @@ public class DateJacksonUtilsTest {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         return MapUtils.of(
-                "UTC", Date.from(ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC)).toInstant()),
-                "Asia/Singapore", Date.from(ZonedDateTime.parse(str, df.withZone(LocalZoneId.ASIA_SINGAPORE)).toInstant()),
-                "Australia/Sydney", Date.from(ZonedDateTime.parse(str, df.withZone(LocalZoneId.AUSTRALIA_SYDNEY)).toInstant()));
+                "UTC", toDate(str, ZoneOffset.UTC, df),
+                "Asia/Singapore", toDate(str, LocalZoneId.ASIA_SINGAPORE, df),
+                "Australia/Sydney", toDate(str, LocalZoneId.AUSTRALIA_SYDNEY, df));
+    }
+
+    private static Date toDate(String str, ZoneId zone, DateTimeFormatter df) {
+        return Date.from(ZonedDateTime.parse(str, df.withZone(zone)).toInstant());
     }
 
 }

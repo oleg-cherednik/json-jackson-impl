@@ -45,7 +45,7 @@ public class JacksonUtilsZonedDateTimeSerializerTest {
 
         private static final long serialVersionUID = 1319340992384997514L;
 
-        public LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
+        private LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
             super(withZone, false);
         }
 

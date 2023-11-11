@@ -127,6 +127,7 @@ public class CustomDateFormatTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @SuppressWarnings("VariableDeclarationUsageDistance")
     private static Data createData() {
         String str = "2017-07-23T13:57:14.225";
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -205,13 +206,13 @@ public class CustomDateFormatTest {
          *  serialization with timezone offset only, not timezone id.
          *  But this is configurable.
          */
-//        addSerializer(ZonedDateTime.class, ZonedDateTimeSerializer.INSTANCE);
+        //        addSerializer(ZonedDateTime.class, ZonedDateTimeSerializer.INSTANCE);
 
         // since 2.11: need to override Type Id handling
         // (actual concrete type is `ZoneRegion`, but that's not visible)
-//        addSerializer(ZoneId.class, new ZoneIdSerializer());
-//        addSerializer(ZoneOffset.class, new ToStringSerializer(ZoneOffset.class));
+        //        addSerializer(ZoneId.class, new ZoneIdSerializer());
+        //        addSerializer(ZoneOffset.class, new ToStringSerializer(ZoneOffset.class));
 
-//         */
+        //         */
     }
 }

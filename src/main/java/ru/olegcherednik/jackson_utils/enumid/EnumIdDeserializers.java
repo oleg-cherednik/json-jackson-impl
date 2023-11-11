@@ -50,7 +50,9 @@ final class EnumIdDeserializers extends SimpleDeserializers {
     public static final EnumIdDeserializers INSTANCE = new EnumIdDeserializers();
 
     @Override
-    public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc)
+    public JsonDeserializer<?> findEnumDeserializer(Class<?> type,
+                                                    DeserializationConfig config,
+                                                    BeanDescription beanDesc)
             throws JsonMappingException {
         Function<String, ?> read = createReadFunc(type);
 
@@ -73,8 +75,11 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (methods.size() > 1) {
             return id -> {
-                throw new JacksonUtilsException("Multiple methods with '" + JsonCreator.class.getSimpleName()
-                                                        + "' annotation was found in '" + rawType.getSimpleName() + "' class");
+                throw new JacksonUtilsException("Multiple methods with '"
+                                                        + JsonCreator.class.getSimpleName()
+                                                        + "' annotation was found in '"
+                                                        + rawType.getSimpleName()
+                                                        + "' class");
             };
         }
 
@@ -101,7 +106,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
             try {
                 method.setAccessible(true);
-                return (T)method.invoke(null, id);
+                return (T) method.invoke(null, id);
             } catch (Exception e) {
                 throw new JacksonUtilsException(e);
             } finally {

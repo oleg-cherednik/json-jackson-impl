@@ -39,9 +39,9 @@ public class EnumIdBeanPropertyWriter extends BeanPropertyWriter {
     @Override
     public void serializeAsField(Object bean, JsonGenerator gen, SerializerProvider prov) throws Exception {
         Object value = _accessorMethod == null ? _field.get(bean)
-                                               : _accessorMethod.invoke(bean, (Object[])null);
+                                               : _accessorMethod.invoke(bean, (Object[]) null);
 
-        if (value == null || ((EnumId)value).getId() == null) {
+        if (value == null || ((EnumId) value).getId() == null) {
             if (_nullSerializer != null) {
                 gen.writeFieldName(_name);
                 _nullSerializer.serialize(null, gen, prov);

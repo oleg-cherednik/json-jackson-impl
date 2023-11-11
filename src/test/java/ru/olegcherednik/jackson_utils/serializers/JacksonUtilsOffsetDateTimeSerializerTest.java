@@ -85,10 +85,10 @@ public class JacksonUtilsOffsetDateTimeSerializerTest {
 
         private static final long serialVersionUID = -1949734232627080273L;
 
-        public LocalJacksonUtilsOffsetDateTimeSerializer(JacksonUtilsOffsetDateTimeSerializer base,
-                                                         Boolean useTimestamp,
-                                                         Boolean useNanoseconds,
-                                                         DateTimeFormatter formatter) {
+        private LocalJacksonUtilsOffsetDateTimeSerializer(JacksonUtilsOffsetDateTimeSerializer base,
+                                                          Boolean useTimestamp,
+                                                          Boolean useNanoseconds,
+                                                          DateTimeFormatter formatter) {
             super(base, useTimestamp, useNanoseconds, formatter);
         }
 

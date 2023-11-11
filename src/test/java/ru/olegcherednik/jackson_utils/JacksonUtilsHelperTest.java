@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.LINE_SEPARATOR;
 
 /**
  * @author Oleg Cherednik
@@ -45,15 +46,19 @@ public class JacksonUtilsHelperTest {
     public void shouldUseNewBuilderWhenSetNotNullBuilderToJacksonHelper() {
         Map<String, ZonedDateTime> map = createData();
         assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"}");
-        assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
-                                                                                 "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + System.lineSeparator() +
-                                                                                 '}');
+        assertThat(JacksonUtils.prettyPrint().writeValue(map))
+                .isEqualTo('{' + LINE_SEPARATOR
+                                   + "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"" + LINE_SEPARATOR
+                                   + '}');
 
-        JacksonUtilsHelper.setMapperBuilder(JacksonObjectMapperSupplier.builder().zone(LocalZoneId.ASIA_SINGAPORE).build());
+        JacksonUtilsHelper.setMapperBuilder(JacksonObjectMapperSupplier.builder()
+                                                                       .zone(LocalZoneId.ASIA_SINGAPORE)
+                                                                       .build());
         assertThat(JacksonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00\"}");
-        assertThat(JacksonUtils.prettyPrint().writeValue(map)).isEqualTo('{' + System.lineSeparator() +
-                                                                                 "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"" +
-                                                                                 System.lineSeparator() + '}');
+        assertThat(JacksonUtils.prettyPrint().writeValue(map))
+                .isEqualTo('{' + LINE_SEPARATOR
+                                   + "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"" + LINE_SEPARATOR
+                                   + '}');
     }
 
     public void shouldNotRebuildMapperWhenSetSameBuilder() {

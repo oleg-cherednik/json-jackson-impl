@@ -35,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.LINE_SEPARATOR;
 
 /**
  * @author Oleg Cherednik
@@ -72,7 +73,8 @@ public class WriteJacksonUtilsTest {
                 "omen", new Data(666, "omen"));
         String actual = JacksonUtils.writeValue(map);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"},\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}");
+        assertThat(actual).isEqualTo("{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"}"
+                                             + ",\"omen\":{\"intVal\":666,\"strVal\":\"omen\"}}");
     }
 
     public void shouldRetrieveJsonWhenWriteListObject() {
@@ -107,10 +109,10 @@ public class WriteJacksonUtilsTest {
         Data data = new Data(555, "victory");
         String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"intVal\" : 555," + System.lineSeparator() +
-                "  \"strVal\" : \"victory\"" + System.lineSeparator() +
-                '}');
+        assertThat(actual).isEqualTo('{' + LINE_SEPARATOR
+                                             + "  \"intVal\" : 555," + LINE_SEPARATOR
+                                             + "  \"strVal\" : \"victory\"" + LINE_SEPARATOR
+                                             + '}');
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteMapObjectWithPrettyPrint() {
@@ -118,39 +120,39 @@ public class WriteJacksonUtilsTest {
                 "victory", new Data(555, "victory"),
                 "omen", new Data(666, "omen"));
         String actual = JacksonUtils.prettyPrint().writeValue(data);
-        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"victory\" : {" + System.lineSeparator() +
-                "    \"intVal\" : 555," + System.lineSeparator() +
-                "    \"strVal\" : \"victory\"" + System.lineSeparator() +
-                "  }," + System.lineSeparator() +
-                "  \"omen\" : {" + System.lineSeparator() +
-                "    \"intVal\" : 666," + System.lineSeparator() +
-                "    \"strVal\" : \"omen\"" + System.lineSeparator() +
-                "  }" + System.lineSeparator() +
-                '}');
+        assertThat(actual).isEqualTo('{' + LINE_SEPARATOR
+                                             + "  \"victory\" : {" + LINE_SEPARATOR
+                                             + "    \"intVal\" : 555," + LINE_SEPARATOR
+                                             + "    \"strVal\" : \"victory\"" + LINE_SEPARATOR
+                                             + "  }," + LINE_SEPARATOR
+                                             + "  \"omen\" : {" + LINE_SEPARATOR
+                                             + "    \"intVal\" : 666," + LINE_SEPARATOR
+                                             + "    \"strVal\" : \"omen\"" + LINE_SEPARATOR
+                                             + "  }" + LINE_SEPARATOR
+                                             + '}');
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() {
         List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
         String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("[ {" + System.lineSeparator() +
-                "  \"intVal\" : 555," + System.lineSeparator() +
-                "  \"strVal\" : \"victory\"" + System.lineSeparator() +
-                "}, {" + System.lineSeparator() +
-                "  \"intVal\" : 666," + System.lineSeparator() +
-                "  \"strVal\" : \"omen\"" + System.lineSeparator() +
-                "} ]");
+        assertThat(actual).isEqualTo("[ {" + LINE_SEPARATOR
+                                             + "  \"intVal\" : 555," + LINE_SEPARATOR
+                                             + "  \"strVal\" : \"victory\"" + LINE_SEPARATOR
+                                             + "}, {" + LINE_SEPARATOR
+                                             + "  \"intVal\" : 666," + LINE_SEPARATOR
+                                             + "  \"strVal\" : \"omen\"" + LINE_SEPARATOR
+                                             + "} ]");
     }
 
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToWriter() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
             JacksonUtils.prettyPrint().writeValue(data, out);
-            assertThat(out).hasToString('{' + System.lineSeparator() +
-                    "  \"intVal\" : 666," + System.lineSeparator() +
-                    "  \"strVal\" : \"omen\"" + System.lineSeparator() +
-                    '}');
+            assertThat(out).hasToString('{' + LINE_SEPARATOR
+                                                + "  \"intVal\" : 666," + LINE_SEPARATOR
+                                                + "  \"strVal\" : \"omen\"" + LINE_SEPARATOR
+                                                + '}');
         }
     }
 
@@ -158,21 +160,21 @@ public class WriteJacksonUtilsTest {
         try (OutputStream out = new ByteArrayOutputStream()) {
             Data data = new Data(666, "omen");
             JacksonUtils.prettyPrint().writeValue(data, out);
-            assertThat(out).hasToString('{' + System.lineSeparator() +
-                    "  \"intVal\" : 666," + System.lineSeparator() +
-                    "  \"strVal\" : \"omen\"" + System.lineSeparator() +
-                    '}');
+            assertThat(out).hasToString('{' + LINE_SEPARATOR
+                                                + "  \"intVal\" : 666," + LINE_SEPARATOR
+                                                + "  \"strVal\" : \"omen\"" + LINE_SEPARATOR
+                                                + '}');
         }
     }
 
     public void shouldThrownExceptionWhenOutputStreamNull() {
-        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (OutputStream)null))
+        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (OutputStream) null))
                 .isExactlyInstanceOf(NullPointerException.class)
                 .hasMessage("'out' should not be null");
     }
 
     public void shouldThrownExceptionWhenWriterNull() {
-        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (Writer)null))
+        assertThatThrownBy(() -> JacksonUtils.writeValue("aaa", (Writer) null))
                 .isExactlyInstanceOf(NullPointerException.class)
                 .hasMessage("'out' should not be null");
     }

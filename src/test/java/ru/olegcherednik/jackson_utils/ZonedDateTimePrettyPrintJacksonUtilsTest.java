@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.LINE_SEPARATOR;
 
 /**
  * @author Oleg Cherednik
@@ -36,14 +37,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class ZonedDateTimePrettyPrintJacksonUtilsTest {
 
+    @SuppressWarnings("AbbreviationAsWordInName")
     public void shouldRetrievePrettyPrintJsonUTCZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
         String actual = JacksonUtils.prettyPrint().writeValue(map);
-        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                                             "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"," + System.lineSeparator() +
-                                             "  \"Asia/Singapore\" : \"2017-07-23T05:57:14.225Z\"," + System.lineSeparator() +
-                                             "  \"Australia/Sydney\" : \"2017-07-23T03:57:14.225Z\"" + System.lineSeparator() +
-                                             '}');
+        assertThat(actual)
+                .isEqualTo('{' + LINE_SEPARATOR
+                                   + "  \"UTC\" : \"2017-07-23T13:57:14.225Z\"," + LINE_SEPARATOR
+                                   + "  \"Asia/Singapore\" : \"2017-07-23T05:57:14.225Z\"," + LINE_SEPARATOR
+                                   + "  \"Australia/Sydney\" : \"2017-07-23T03:57:14.225Z\"" + LINE_SEPARATOR
+                                   + '}');
     }
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
@@ -53,11 +56,12 @@ public class ZonedDateTimePrettyPrintJacksonUtilsTest {
         ObjectMapperDecorator jacksonUtils = JacksonUtilsHelper.createPrettyPrintMapperDecorator(mapperSupplier);
         Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
         String actual = jacksonUtils.writeValue(map);
-        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                                             "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"," + System.lineSeparator() +
-                                             "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00\"," + System.lineSeparator() +
-                                             "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00\"" + System.lineSeparator() +
-                                             '}');
+        assertThat(actual).isEqualTo(
+                '{' + LINE_SEPARATOR
+                        + "  \"UTC\" : \"2017-07-23T21:57:14.225+08:00\"," + LINE_SEPARATOR
+                        + "  \"Asia/Singapore\" : \"2017-07-23T13:57:14.225+08:00\"," + LINE_SEPARATOR
+                        + "  \"Australia/Sydney\" : \"2017-07-23T11:57:14.225+08:00\"" + LINE_SEPARATOR
+                        + '}');
     }
 
 }

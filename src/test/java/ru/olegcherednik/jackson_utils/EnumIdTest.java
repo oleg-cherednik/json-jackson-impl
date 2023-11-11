@@ -176,8 +176,8 @@ public class EnumIdTest {
         assertThat(EnumId.getId(null, Auto.BMW)).isSameAs(Auto.BMW.getId());
     }
 
-    @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode" })
-    private static class Data {
+    @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode", "EqualsHashCode" })
+    private static final class Data {
 
         private final Auto notNullAuto;
         private final Color notNullColor;
@@ -185,8 +185,8 @@ public class EnumIdTest {
         private final Color nullColor = null;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        public Data(@JsonProperty("notNullAuto") Auto notNullAuto,
-                    @JsonProperty("notNullColor") Color notNullColor) {
+        private Data(@JsonProperty("notNullAuto") Auto notNullAuto,
+                     @JsonProperty("notNullColor") Color notNullColor) {
             this.notNullAuto = notNullAuto;
             this.notNullColor = notNullColor;
         }
@@ -198,7 +198,7 @@ public class EnumIdTest {
                 return true;
             if (!(obj instanceof Data))
                 return false;
-            Data data = (Data)obj;
+            Data data = (Data) obj;
             return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
                     && nullAuto == data.nullAuto && nullColor == data.nullColor;
         }

@@ -43,10 +43,11 @@ public class WritePrettyPrintJacksonUtilsTest {
         Data data = new Data(555, "victory");
         String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
-        assertThat(withUnixLineSeparator(actual)).isEqualTo('{' + UNIX_LINE_SEPARATOR +
-                "  \"intVal\" : 555," + UNIX_LINE_SEPARATOR +
-                "  \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR +
-                '}');
+        assertThat(withUnixLineSeparator(actual))
+                .isEqualTo('{' + UNIX_LINE_SEPARATOR
+                                   + "  \"intVal\" : 555," + UNIX_LINE_SEPARATOR
+                                   + "  \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR
+                                   + '}');
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteMapObjectWithPrettyPrint() {
@@ -54,39 +55,42 @@ public class WritePrettyPrintJacksonUtilsTest {
                 "victory", new Data(555, "victory"),
                 "omen", new Data(666, "omen"));
         String actual = JacksonUtils.prettyPrint().writeValue(data);
-        assertThat(withUnixLineSeparator(actual)).isEqualTo('{' + UNIX_LINE_SEPARATOR +
-                "  \"victory\" : {" + UNIX_LINE_SEPARATOR +
-                "    \"intVal\" : 555," + UNIX_LINE_SEPARATOR +
-                "    \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR +
-                "  }," + UNIX_LINE_SEPARATOR +
-                "  \"omen\" : {" + UNIX_LINE_SEPARATOR +
-                "    \"intVal\" : 666," + UNIX_LINE_SEPARATOR +
-                "    \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR +
-                "  }" + UNIX_LINE_SEPARATOR +
-                '}');
+        assertThat(withUnixLineSeparator(actual))
+                .isEqualTo('{' + UNIX_LINE_SEPARATOR
+                                   + "  \"victory\" : {" + UNIX_LINE_SEPARATOR
+                                   + "    \"intVal\" : 555," + UNIX_LINE_SEPARATOR
+                                   + "    \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR
+                                   + "  }," + UNIX_LINE_SEPARATOR
+                                   + "  \"omen\" : {" + UNIX_LINE_SEPARATOR
+                                   + "    \"intVal\" : 666," + UNIX_LINE_SEPARATOR
+                                   + "    \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR
+                                   + "  }" + UNIX_LINE_SEPARATOR
+                                   + '}');
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() {
         List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
         String actual = JacksonUtils.prettyPrint().writeValue(data);
         assertThat(actual).isNotNull();
-        assertThat(withUnixLineSeparator(actual)).isEqualTo("[ {" + UNIX_LINE_SEPARATOR +
-                "  \"intVal\" : 555," + UNIX_LINE_SEPARATOR +
-                "  \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR +
-                "}, {" + UNIX_LINE_SEPARATOR +
-                "  \"intVal\" : 666," + UNIX_LINE_SEPARATOR +
-                "  \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR +
-                "} ]");
+        assertThat(withUnixLineSeparator(actual))
+                .isEqualTo("[ {" + UNIX_LINE_SEPARATOR
+                                   + "  \"intVal\" : 555," + UNIX_LINE_SEPARATOR
+                                   + "  \"strVal\" : \"victory\"" + UNIX_LINE_SEPARATOR
+                                   + "}, {" + UNIX_LINE_SEPARATOR
+                                   + "  \"intVal\" : 666," + UNIX_LINE_SEPARATOR
+                                   + "  \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR
+                                   + "} ]");
     }
 
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToStream() throws IOException {
         try (Writer out = new StringWriter()) {
             Data data = new Data(666, "omen");
             JacksonUtils.prettyPrint().writeValue(data, out);
-            assertThat(withUnixLineSeparator(out.toString())).isEqualTo('{' + UNIX_LINE_SEPARATOR +
-                    "  \"intVal\" : 666," + UNIX_LINE_SEPARATOR +
-                    "  \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR +
-                    '}');
+            assertThat(withUnixLineSeparator(out.toString()))
+                    .isEqualTo('{' + UNIX_LINE_SEPARATOR
+                                       + "  \"intVal\" : 666," + UNIX_LINE_SEPARATOR
+                                       + "  \"strVal\" : \"omen\"" + UNIX_LINE_SEPARATOR
+                                       + '}');
         }
     }
 

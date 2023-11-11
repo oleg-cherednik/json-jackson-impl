@@ -45,18 +45,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class InputStreamJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JacksonUtils.readValue((InputStream)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readList((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readList((InputStream)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readSet((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readSet((InputStream)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListLazy((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readListLazy((InputStream)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMap((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readListOfMapLazy((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readMap((InputStream)null)).isNull();
-        assertThat(JacksonUtils.readMap((InputStream)null, String.class)).isNull();
-        assertThat(JacksonUtils.readMap((InputStream)null, String.class, String.class)).isNull();
+        assertThat(JacksonUtils.readValue((InputStream) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readList((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readList((InputStream) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readSet((InputStream) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListLazy((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readListLazy((InputStream) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListOfMap((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readListOfMapLazy((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readMap((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readMap((InputStream) null, String.class)).isNull();
+        assertThat(JacksonUtils.readMap((InputStream) null, String.class, String.class)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {

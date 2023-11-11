@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.LINE_SEPARATOR;
 
 /**
  * @author Oleg Cherednik
@@ -45,9 +46,9 @@ public class LocalDateTimeJacksonUtilsTest {
     public void shouldRetrievePrettyPrintJsonWhenWriteLocalDateTimeMapWithPrettyPrint() {
         Map<String, LocalDateTime> map = createData();
         String actual = JacksonUtils.prettyPrint().writeValue(map);
-        assertThat(actual).isEqualTo('{' + System.lineSeparator() +
-                "  \"local\" : \"2017-07-23T13:57:14.225\"" + System.lineSeparator() +
-                '}');
+        assertThat(actual).isEqualTo('{' + LINE_SEPARATOR
+                                             + "  \"local\" : \"2017-07-23T13:57:14.225\"" + LINE_SEPARATOR
+                                             + '}');
     }
 
     public void shouldRetrieveDeserializedLocalDateTimeMapWhenReadJsonAsMap() {

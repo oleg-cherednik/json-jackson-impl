@@ -47,18 +47,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ByteBufferJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JacksonUtils.readValue((ByteBuffer)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readList((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readList((ByteBuffer)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readSet((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readSet((ByteBuffer)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListLazy((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readListLazy((ByteBuffer)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMap((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readListOfMapLazy((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer)null)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer)null, String.class)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer)null, String.class, String.class)).isNull();
+        assertThat(JacksonUtils.readValue((ByteBuffer) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readList((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readList((ByteBuffer) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readSet((ByteBuffer) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListLazy((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readListLazy((ByteBuffer) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListOfMap((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readListOfMapLazy((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null)).isNull();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class)).isNull();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class, String.class)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {

@@ -48,25 +48,29 @@ public class JacksonUtilsZonedDateTimeSerializer extends ZonedDateTimeSerializer
         this.useMilliseconds = useMilliseconds;
     }
 
-    protected JacksonUtilsZonedDateTimeSerializer(JacksonUtilsZonedDateTimeSerializer base,
-                                                  Boolean useTimestamp,
-                                                  DateTimeFormatter formatter,
-                                                  Boolean writeZoneId) {
+    protected JacksonUtilsZonedDateTimeSerializer(
+            JacksonUtilsZonedDateTimeSerializer base,
+            Boolean useTimestamp,
+            DateTimeFormatter formatter,
+            Boolean writeZoneId) {
         this(base, useTimestamp, base._useNanoseconds, formatter, writeZoneId);
     }
 
-    protected JacksonUtilsZonedDateTimeSerializer(JacksonUtilsZonedDateTimeSerializer base,
-                                                  Boolean useTimestamp,
-                                                  Boolean useNanoseconds,
-                                                  DateTimeFormatter formatter,
-                                                  Boolean writeZoneId) {
+    protected JacksonUtilsZonedDateTimeSerializer(
+            JacksonUtilsZonedDateTimeSerializer base,
+            Boolean useTimestamp,
+            Boolean useNanoseconds,
+            DateTimeFormatter formatter,
+            Boolean writeZoneId) {
         super(base, useTimestamp, useNanoseconds, formatter, writeZoneId);
         zoneModifier = base.zoneModifier;
         useMilliseconds = base.useMilliseconds;
     }
 
     @Override
-    protected JacksonUtilsZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter formatter, JsonFormat.Shape shape) {
+    protected JacksonUtilsZonedDateTimeSerializer withFormat(Boolean useTimestamp,
+                                                             DateTimeFormatter formatter,
+                                                             JsonFormat.Shape shape) {
         return new JacksonUtilsZonedDateTimeSerializer(this, useTimestamp, formatter, false);
     }
 

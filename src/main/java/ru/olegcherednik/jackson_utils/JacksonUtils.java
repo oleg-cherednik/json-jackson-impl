@@ -39,7 +39,8 @@ import java.util.Set;
 public final class JacksonUtils {
 
     private static final ObjectMapperDecorator DELEGATE = new ObjectMapperDecorator(JacksonUtilsHelper::mapper);
-    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE = new ObjectMapperDecorator(JacksonUtilsHelper::prettyPrintMapper);
+    private static final ObjectMapperDecorator PRETTY_PRINT_DELEGATE =
+            new ObjectMapperDecorator(JacksonUtilsHelper::prettyPrintMapper);
 
     // ---------- read String ----------
 

@@ -58,15 +58,15 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JacksonUtils.readValue((String)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readList((String)null)).isNull();
-        assertThat(JacksonUtils.readList((String)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readSet((String)null)).isNull();
-        assertThat(JacksonUtils.readSet((String)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMap((String)null)).isNull();
-        assertThat(JacksonUtils.readMap((String)null)).isNull();
-        assertThat(JacksonUtils.readMap((String)null, Object.class)).isNull();
-        assertThat(JacksonUtils.readMap((String)null, String.class, String.class)).isNull();
+        assertThat(JacksonUtils.readValue((String) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readList((String) null)).isNull();
+        assertThat(JacksonUtils.readList((String) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readSet((String) null)).isNull();
+        assertThat(JacksonUtils.readSet((String) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListOfMap((String) null)).isNull();
+        assertThat(JacksonUtils.readMap((String) null)).isNull();
+        assertThat(JacksonUtils.readMap((String) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readMap((String) null, String.class, String.class)).isNull();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {

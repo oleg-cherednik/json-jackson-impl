@@ -38,7 +38,7 @@ public final class ReflectionUtils {
         try {
             Field field = getField(obj.getClass(), fieldName);
             field.setAccessible(true);
-            return (T)field.get(obj);
+            return (T) field.get(obj);
         } catch (Exception e) {
             throw new JacksonUtilsException(e);
         }
