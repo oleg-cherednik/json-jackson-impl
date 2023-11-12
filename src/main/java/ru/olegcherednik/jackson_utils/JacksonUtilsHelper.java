@@ -31,6 +31,7 @@ import java.util.function.Supplier;
  * @author Oleg Cherednik
  * @since 19.11.2014
  */
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JacksonUtilsHelper {
 

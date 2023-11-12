@@ -41,6 +41,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
  * @since 03.11.2023
  */
 @Test
+@SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 public class ReadBroadbandTest {
 
     public void shouldDeserializeModelWithMap() throws IOException {
@@ -109,7 +110,7 @@ public class ReadBroadbandTest {
 
         @Getter
         @Setter
-        @SuppressWarnings("NewClassNamingConvention")
+        @SuppressWarnings({ "NewClassNamingConvention", "PMD.ShortClassName" })
         public static class Ap {
 
             @JsonProperty("broadbanddsthroughput")

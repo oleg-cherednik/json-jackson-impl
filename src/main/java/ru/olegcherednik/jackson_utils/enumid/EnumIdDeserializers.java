@@ -70,6 +70,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         };
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     private static <T> Function<String, T> createReadFunc(Class<T> rawType) {
         List<Method> methods = getJsonCreateMethods(rawType);
 
@@ -130,7 +131,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         return res;
     }
 
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
+    @SuppressWarnings({ "PMD.AvoidReassigningParameters", "PMD.EmptyCatchBlock" })
     private static Method getParseIdMethod(Class<?> rawType) {
         while (rawType != Object.class) {
             try {

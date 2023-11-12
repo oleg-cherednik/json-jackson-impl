@@ -44,21 +44,25 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 19.02.2022
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class ByteBufferJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(JacksonUtils.readValue((ByteBuffer) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readList((ByteBuffer) null)).isNull();
-        assertThat(JacksonUtils.readList((ByteBuffer) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readSet((ByteBuffer) null)).isNull();
-        assertThat(JacksonUtils.readSet((ByteBuffer) null, Object.class)).isNull();
         assertThat(JacksonUtils.readListLazy((ByteBuffer) null)).isNull();
         assertThat(JacksonUtils.readListLazy((ByteBuffer) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMap((ByteBuffer) null)).isNull();
         assertThat(JacksonUtils.readListOfMapLazy((ByteBuffer) null)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer) null)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class)).isNull();
-        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class, String.class)).isNull();
+    }
+
+    public void shouldRetrieveEmptyCollectionWhenObjectNull() {
+        assertThat(JacksonUtils.readList((ByteBuffer) null)).isEmpty();
+        assertThat(JacksonUtils.readList((ByteBuffer) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readSet((ByteBuffer) null)).isEmpty();
+        assertThat(JacksonUtils.readSet((ByteBuffer) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readListOfMap((ByteBuffer) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class)).isEmpty();
+        assertThat(JacksonUtils.readMap((ByteBuffer) null, String.class, String.class)).isEmpty();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {

@@ -59,14 +59,17 @@ public class StringJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(JacksonUtils.readValue((String) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readList((String) null)).isNull();
-        assertThat(JacksonUtils.readList((String) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readSet((String) null)).isNull();
-        assertThat(JacksonUtils.readSet((String) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMap((String) null)).isNull();
-        assertThat(JacksonUtils.readMap((String) null)).isNull();
-        assertThat(JacksonUtils.readMap((String) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readMap((String) null, String.class, String.class)).isNull();
+    }
+
+    public void shouldRetrieveEmptyCollectionWhenObjectNull() {
+        assertThat(JacksonUtils.readList((String) null)).isEmpty();
+        assertThat(JacksonUtils.readList((String) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readSet((String) null)).isEmpty();
+        assertThat(JacksonUtils.readSet((String) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readListOfMap((String) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((String) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((String) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readMap((String) null, String.class, String.class)).isEmpty();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {
@@ -201,6 +204,7 @@ public class StringJacksonUtilsTest {
         assertThat(JacksonUtils.readMap("{}", String.class, Data.class)).isEmpty();
     }
 
+    @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     public void shouldThrowJacksonUtilsExceptionWhenReadIncorrectJson() {
         assertThatThrownBy(() -> JacksonUtils.readValue("incorrect", Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);

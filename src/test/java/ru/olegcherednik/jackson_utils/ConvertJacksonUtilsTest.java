@@ -33,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class ConvertJacksonUtilsTest {
 
-    public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JacksonUtils.convertToMap(null)).isNull();
+    public void shouldRetrieveEmptyCollectionWhenObjectNull() {
+        assertThat(JacksonUtils.convertToMap(null)).isEmpty();
     }
 
     public void shouldRetrieveMapWhenConvertToMap() {

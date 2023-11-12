@@ -37,6 +37,7 @@ import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.withUnixLineSepara
  * @since 07.01.2021
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class WritePrettyPrintJacksonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() {

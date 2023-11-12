@@ -42,22 +42,25 @@ import static ru.olegcherednik.jackson_utils.PrettyPrintUtils.LINE_SEPARATOR;
  * @since 07.01.2021
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class WriteJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(JacksonUtils.writeValue(null)).isNull();
     }
 
-    public void shouldNotWriteToOutputStreamWhenObjectNull() {
-        OutputStream out = mock(OutputStream.class);
-        JacksonUtils.writeValue(null, out);
-        verifyNoInteractions(out);
+    public void shouldNotWriteToOutputStreamWhenObjectNull() throws IOException {
+        try (OutputStream out = mock(OutputStream.class)) {
+            JacksonUtils.writeValue(null, out);
+            verifyNoInteractions(out);
+        }
     }
 
-    public void shouldNotWriteToWriterWhenObjectNull() {
-        Writer out = mock(Writer.class);
-        JacksonUtils.writeValue(null, out);
-        verifyNoInteractions(out);
+    public void shouldNotWriteToWriterWhenObjectNull() throws IOException {
+        try (Writer out = mock(Writer.class)) {
+            JacksonUtils.writeValue(null, out);
+            verifyNoInteractions(out);
+        }
     }
 
     public void shouldRetrieveJsonWhenWriteObject() {

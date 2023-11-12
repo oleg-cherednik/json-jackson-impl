@@ -43,6 +43,7 @@ final class EnumIdSerializerModifier extends SerializerModifier {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     protected PropertyAccessorCollector findProperties(
             Class<?> beanClass,
             SerializationConfig config,

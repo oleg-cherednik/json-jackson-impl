@@ -133,6 +133,7 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
                                              .addKeySerializer(Date.class, dateSerializer));
     }
 
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Builder {
 

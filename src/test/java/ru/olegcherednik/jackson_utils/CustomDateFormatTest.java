@@ -42,6 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.05.2022
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class CustomDateFormatTest {
 
     public void shouldCreateJsonWithMsUtcDateWhenDefaultSettings() {

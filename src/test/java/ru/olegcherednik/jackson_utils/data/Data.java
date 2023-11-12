@@ -53,10 +53,11 @@ public class Data {
     }
 
     public void setUnknownValue(String str) {
-        Scanner scan = new Scanner(str);
-        scan.useDelimiter("_");
-        intVal = scan.nextInt();
-        strVal = scan.next();
+        try (Scanner scan = new Scanner(str)) {
+            scan.useDelimiter("_");
+            intVal = scan.nextInt();
+            strVal = scan.next();
+        }
     }
 
 }

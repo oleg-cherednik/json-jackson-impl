@@ -35,7 +35,7 @@ import static org.mockito.Mockito.spy;
  * @since 04.05.2022
  */
 @Test
-@SuppressWarnings("NewClassNamingConvention")
+@SuppressWarnings({ "NewClassNamingConvention", "PMD.AvoidDuplicateLiterals" })
 public class JacksonUtilsOffsetTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithManyParameters() {

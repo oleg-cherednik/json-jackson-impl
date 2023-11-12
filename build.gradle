@@ -8,6 +8,7 @@ buildscript {
 plugins {
     id 'jacoco'
     id 'checkstyle'
+    id 'pmd'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
     id 'io.franzbecker.gradle-lombok' version '4.0.0'
@@ -41,7 +42,20 @@ configurations {
 }
 
 checkstyle {
-    configFile = '/misc/checkstyle/checkstyle.xml' as File
+    configFile = "${projectDir}/misc/checkstyle/checkstyle.xml" as File
+}
+
+pmd {
+    rulesMinimumPriority = 5
+    ruleSets = [
+            "${projectDir}/misc/pmd/bestpractices.xml",
+            "${projectDir}/misc/pmd/codestyle.xml",
+            "${projectDir}/misc/pmd/design.xml",
+            "${projectDir}/misc/pmd/errorprone.xml",
+            "${projectDir}/misc/pmd/multithreading.xml",
+            "${projectDir}/misc/pmd/performance.xml",
+            "${projectDir}/misc/pmd/security.xml"
+    ]
 }
 
 dependencies {

@@ -33,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.testng.annotations.Test;
 
+import java.util.Objects;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -41,6 +43,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
  * @since 17.10.2021
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class EnumIdTest {
 
     public void shouldRetrieveJsonWhenEnumIdValue() {
@@ -203,6 +206,10 @@ public class EnumIdTest {
                     && nullAuto == data.nullAuto && nullColor == data.nullColor;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(notNullAuto, notNullColor);
+        }
     }
 
     public enum Auto implements EnumId {
