@@ -179,7 +179,7 @@ public class EnumIdTest {
         assertThat(EnumId.getId(null, Auto.BMW)).isSameAs(Auto.BMW.getId());
     }
 
-    @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode", "EqualsHashCode" })
+    @SuppressWarnings({ "FieldCanBeLocal", "EqualsHashCode" })
     private static final class Data {
 
         private final Auto notNullAuto;
@@ -213,6 +213,7 @@ public class EnumIdTest {
     }
 
     public enum Auto implements EnumId {
+
         AUDI("audi"),
         BMW("bmw"),
         MERCEDES("mercedes");
@@ -236,6 +237,7 @@ public class EnumIdTest {
     }
 
     public enum Color implements EnumId {
+
         RED("Red"),
         GREEN("Green"),
         BLUE("Blue"),
@@ -259,6 +261,7 @@ public class EnumIdTest {
     }
 
     public enum City implements EnumId {
+
         SAINT_PETERSBURG("Saint-Petersburg");
 
         private final String id;
@@ -275,6 +278,7 @@ public class EnumIdTest {
 
     @SuppressWarnings("unused")
     public enum Shape implements EnumId {
+
         SQUARE;
 
         @JsonCreator
@@ -289,6 +293,7 @@ public class EnumIdTest {
 
     @SuppressWarnings("unused")
     public enum Vodka implements EnumId {
+
         SMIRNOFF("smirnoff");
 
         private final String id;
@@ -315,6 +320,7 @@ public class EnumIdTest {
     }
 
     public enum People implements EnumId {
+
         OLEG_CHEREDNIK("oleg-cherednik");
 
         private final String id;
