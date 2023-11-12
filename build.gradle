@@ -41,7 +41,7 @@ configurations {
 }
 
 checkstyle {
-    configFile = 'checkstyle.xml' as File
+    configFile = '/misc/checkstyle/checkstyle.xml' as File
 }
 
 dependencies {
