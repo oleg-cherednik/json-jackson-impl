@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -178,6 +179,56 @@ public final class JacksonUtils {
 
     public static <K, V> Map<K, V> readMap(InputStream in, Class<K> keyClass, Class<V> valueClass) {
         return print().readMap(in, keyClass, valueClass);
+    }
+
+    // ---------- read Reader ----------
+
+    public static <V> V readValue(Reader reader, Class<V> valueClass) {
+        return print().readValue(reader, valueClass);
+    }
+
+    public static List<Object> readList(Reader reader) {
+        return print().readList(reader);
+    }
+
+    public static <V> List<V> readList(Reader reader, Class<V> valueClass) {
+        return print().readList(reader, valueClass);
+    }
+
+    public static Set<Object> readSet(Reader reader) {
+        return print().readSet(reader);
+    }
+
+    public static <V> Set<V> readSet(Reader reader, Class<V> valueClass) {
+        return print().readSet(reader, valueClass);
+    }
+
+    public static List<Map<String, Object>> readListOfMap(Reader reader) {
+        return print().readListOfMap(reader);
+    }
+
+    public static Iterator<Object> readListLazy(Reader reader) {
+        return print().readListLazy(reader);
+    }
+
+    public static <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) {
+        return print().readListLazy(reader, valueClass);
+    }
+
+    public static Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) {
+        return print().readListOfMapLazy(reader);
+    }
+
+    public static Map<String, Object> readMap(Reader reader) {
+        return print().readMap(reader);
+    }
+
+    public static <V> Map<String, V> readMap(Reader reader, Class<V> valueClass) {
+        return print().readMap(reader, valueClass);
+    }
+
+    public static <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) {
+        return print().readMap(reader, keyClass, valueClass);
     }
 
     // ---------- write ----------

@@ -19,19 +19,21 @@
 
 package ru.olegcherednik.jackson_utils;
 
-import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 import ru.olegcherednik.jackson_utils.data.Book;
 import ru.olegcherednik.jackson_utils.data.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,45 +41,45 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Oleg Cherednik
- * @since 03.01.2021
+ * @since 19.11.2023
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class InputStreamJacksonUtilsTest {
+public class ReaderJacksonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(JacksonUtils.readValue((InputStream) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListLazy((InputStream) null)).isNull();
-        assertThat(JacksonUtils.readListLazy((InputStream) null, Object.class)).isNull();
-        assertThat(JacksonUtils.readListOfMapLazy((InputStream) null)).isNull();
+        assertThat(JacksonUtils.readValue((Reader) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListLazy((Reader) null)).isNull();
+        assertThat(JacksonUtils.readListLazy((Reader) null, Object.class)).isNull();
+        assertThat(JacksonUtils.readListOfMapLazy((Reader) null)).isNull();
     }
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {
-        assertThat(JacksonUtils.readList((InputStream) null)).isEmpty();
-        assertThat(JacksonUtils.readList((InputStream) null, Object.class)).isEmpty();
-        assertThat(JacksonUtils.readSet((InputStream) null)).isEmpty();
-        assertThat(JacksonUtils.readSet((InputStream) null, Object.class)).isEmpty();
-        assertThat(JacksonUtils.readListOfMap((InputStream) null)).isEmpty();
-        assertThat(JacksonUtils.readMap((InputStream) null)).isEmpty();
-        assertThat(JacksonUtils.readMap((InputStream) null, String.class)).isEmpty();
-        assertThat(JacksonUtils.readMap((InputStream) null, String.class, String.class)).isEmpty();
+        assertThat(JacksonUtils.readList((Reader) null)).isEmpty();
+        assertThat(JacksonUtils.readList((Reader) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readSet((Reader) null)).isEmpty();
+        assertThat(JacksonUtils.readSet((Reader) null, Object.class)).isEmpty();
+        assertThat(JacksonUtils.readListOfMap((Reader) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((Reader) null)).isEmpty();
+        assertThat(JacksonUtils.readMap((Reader) null, String.class)).isEmpty();
+        assertThat(JacksonUtils.readMap((Reader) null, String.class, String.class)).isEmpty();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {
-        Data actual = JacksonUtils.readValue(getResourceAsInputStream("/data.json"), Data.class);
+        Data actual = JacksonUtils.readValue(getResourceAsReader("/data.json"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(new Data(666, "omen"));
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyValue() throws IOException {
-        Data actual = JacksonUtils.readValue(convertToInputStream("{}"), Data.class);
+        Data actual = JacksonUtils.readValue(convertToReader("{}"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(new Data());
     }
 
     public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() throws IOException {
         List<Object> actual = JacksonUtils.readList(
-                convertToInputStream("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
+                convertToReader("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
 
         assertThat(actual).hasSize(5);
         assertThat(actual).containsExactly(1,
@@ -88,7 +90,7 @@ public class InputStreamJacksonUtilsTest {
     }
 
     public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() throws IOException {
-        Set<Object> actual = JacksonUtils.readSet(convertToInputStream("[\"one\",\"two\",\"three\",\"two\",\"one\"]"));
+        Set<Object> actual = JacksonUtils.readSet(convertToReader("[\"one\",\"two\",\"three\",\"two\",\"one\"]"));
 
         assertThat(actual).hasSize(3);
         assertThat(actual).containsExactly("one", "two", "three");
@@ -96,7 +98,7 @@ public class InputStreamJacksonUtilsTest {
 
     public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() throws IOException {
         Set<Object> actual = JacksonUtils.readSet(
-                convertToInputStream("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
+                convertToReader("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
 
         assertThat(actual).hasSize(5);
         assertThat(actual).containsExactly(1,
@@ -107,7 +109,7 @@ public class InputStreamJacksonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
-        List<Data> actual = JacksonUtils.readList(getResourceAsInputStream("/data_list.json"), Data.class);
+        List<Data> actual = JacksonUtils.readList(getResourceAsReader("/data_list.json"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
     }
@@ -124,7 +126,7 @@ public class InputStreamJacksonUtilsTest {
                 "year", 2020,
                 "authors", ListUtils.of("Oleg Cherednik"));
 
-        Iterator<Object> it = JacksonUtils.readListLazy(getResourceAsInputStream("/books.json"));
+        Iterator<Object> it = JacksonUtils.readListLazy(getResourceAsReader("/books.json"));
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -150,7 +152,7 @@ public class InputStreamJacksonUtilsTest {
                 2020,
                 ListUtils.of("Oleg Cherednik"));
 
-        Iterator<Book> it = JacksonUtils.readListLazy(getResourceAsInputStream("/books.json"), Book.class);
+        Iterator<Book> it = JacksonUtils.readListLazy(getResourceAsReader("/books.json"), Book.class);
         assertThat(it.hasNext()).isTrue();
 
         Book actual1 = it.next();
@@ -165,7 +167,7 @@ public class InputStreamJacksonUtilsTest {
     }
 
     public void shouldRetrieveListOfMapWhenRead() throws IOException {
-        List<Map<String, Object>> actual = JacksonUtils.readListOfMap(getResourceAsInputStream("/data_list.json"));
+        List<Map<String, Object>> actual = JacksonUtils.readListOfMap(getResourceAsReader("/data_list.json"));
 
         assertThat(actual).hasSize(2);
         assertThat(actual.get(0)).hasSize(2);
@@ -188,7 +190,7 @@ public class InputStreamJacksonUtilsTest {
                 "year", 2020,
                 "authors", ListUtils.of("Oleg Cherednik"));
 
-        Iterator<Map<String, Object>> it = JacksonUtils.readListOfMapLazy(getResourceAsInputStream("/books.json"));
+        Iterator<Map<String, Object>> it = JacksonUtils.readListOfMapLazy(getResourceAsReader("/books.json"));
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -203,7 +205,7 @@ public class InputStreamJacksonUtilsTest {
     }
 
     public void shouldRetrieveDataMapWhenReadAsMapWithStringKey() throws IOException {
-        Map<String, Object> actual = JacksonUtils.readMap(getResourceAsInputStream("/variable_value_map.json"));
+        Map<String, Object> actual = JacksonUtils.readMap(getResourceAsReader("/variable_value_map.json"));
         assertThat(actual).isNotNull();
         assertThat(actual.keySet()).containsExactly("sample", "order");
         assertThat(actual).containsEntry("sample", ListUtils.of("one, two", "three"));
@@ -212,7 +214,7 @@ public class InputStreamJacksonUtilsTest {
 
     public void shouldRetrieveStringValueMapWhenReadAsMapWithStringKeyAndType() throws IOException {
         Map<String, String> actual = JacksonUtils.readMap(
-                getResourceAsInputStream("/string_value_map_s.json"), String.class);
+                getResourceAsReader("/string_value_map_s.json"), String.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(MapUtils.of("auto", "Audi", "model", "RS3"));
     }
@@ -232,7 +234,7 @@ public class InputStreamJacksonUtilsTest {
         );
 
         Map<String, Book> actual = JacksonUtils.readMap(
-                getResourceAsInputStream("/books_dict_string_key.json"), Book.class);
+                getResourceAsReader("/books_dict_string_key.json"), Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
@@ -251,40 +253,41 @@ public class InputStreamJacksonUtilsTest {
                         ListUtils.of("Oleg Cherednik"))
         );
 
-        Map<Integer, Book> actual = JacksonUtils.readMap(getResourceAsInputStream("/books_dict_int_key.json"),
+        Map<Integer, Book> actual = JacksonUtils.readMap(getResourceAsReader("/books_dict_int_key.json"),
                                                          Integer.class, Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveEmptyListWhenReadEmptyByteBufferAsList() {
-        assertThat(JacksonUtils.readList(convertToInputStream("[]"))).isEmpty();
-        assertThat(JacksonUtils.readList(convertToInputStream("[]"), Data.class)).isEmpty();
-        assertThat(JacksonUtils.readSet(convertToInputStream("[]"))).isEmpty();
-        assertThat(JacksonUtils.readSet(convertToInputStream("[]"), Data.class)).isEmpty();
-        assertThat(JacksonUtils.readListOfMap(convertToInputStream("[]"))).isEmpty();
-        assertThat(JacksonUtils.readMap(convertToInputStream("{}"))).isEmpty();
-        assertThat(JacksonUtils.readMap(convertToInputStream("{}"), Data.class)).isEmpty();
-        assertThat(JacksonUtils.readMap(convertToInputStream("{}"), String.class, Data.class)).isEmpty();
+        assertThat(JacksonUtils.readList(convertToReader("[]"))).isEmpty();
+        assertThat(JacksonUtils.readList(convertToReader("[]"), Data.class)).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToReader("[]"))).isEmpty();
+        assertThat(JacksonUtils.readSet(convertToReader("[]"), Data.class)).isEmpty();
+        assertThat(JacksonUtils.readListOfMap(convertToReader("[]"))).isEmpty();
+        assertThat(JacksonUtils.readMap(convertToReader("{}"))).isEmpty();
+        assertThat(JacksonUtils.readMap(convertToReader("{}"), Data.class)).isEmpty();
+        assertThat(JacksonUtils.readMap(convertToReader("{}"), String.class, Data.class)).isEmpty();
     }
 
     public void shouldThrowJacksonUtilsExceptionWhenReadIncorrectByteBuffer() {
-        assertThatThrownBy(() -> JacksonUtils.readValue(convertToInputStream("incorrect"), Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readValue(convertToReader("incorrect"), Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect")))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToReader("incorrect")))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect"), Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToReader("incorrect"), Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
-        assertThatThrownBy(() -> JacksonUtils.readMap(convertToInputStream("incorrect"), String.class, Data.class))
+        assertThatThrownBy(() -> JacksonUtils.readMap(convertToReader("incorrect"), String.class, Data.class))
                 .isExactlyInstanceOf(JacksonUtilsException.class);
     }
 
-    private static InputStream getResourceAsInputStream(String name) throws IOException {
-        return InputStreamJacksonUtilsTest.class.getResourceAsStream(name);
+    private static Reader getResourceAsReader(String name) throws IOException {
+        InputStream in = Objects.requireNonNull(ReaderJacksonUtilsTest.class.getResourceAsStream(name));
+        return new InputStreamReader(in);
     }
 
-    private static InputStream convertToInputStream(String str) {
-        return IOUtils.toInputStream(str, StandardCharsets.UTF_8);
+    private static Reader convertToReader(String str) {
+        return new StringReader(str);
     }
 
 }
