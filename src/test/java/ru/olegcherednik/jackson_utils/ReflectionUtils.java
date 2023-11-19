@@ -21,7 +21,6 @@ package ru.olegcherednik.jackson_utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.minidev.asm.ex.NoSuchFieldException;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -51,11 +50,11 @@ public final class ReflectionUtils {
         while (field == null && clazz != null) {
             try {
                 field = clazz.getDeclaredField(fieldName);
-            } catch (java.lang.NoSuchFieldException ignored) {
+            } catch (NoSuchFieldException ignored) {
                 clazz = clazz.getSuperclass();
             }
         }
 
-        return Optional.ofNullable(field).orElseThrow(NoSuchFieldException::new);
+        return Optional.ofNullable(field).orElseThrow(RuntimeException::new);
     }
 }
