@@ -22,16 +22,15 @@ package ru.olegcherednik.jackson_utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * @author Oleg Cherednik
@@ -182,51 +181,54 @@ public final class JacksonUtils {
         return print().readMap(in, keyClass, valueClass);
     }
 
-    // ---------- read InputStream and close ----------
+    // ---------- read Reader ----------
 
-    public static <V> V readValueAndClose(InputStream in, Class<V> valueClass) {
-        return readAndClose(in, () -> readValue(in, valueClass));
+    public static <V> V readValue(Reader reader, Class<V> valueClass) {
+        return print().readValue(reader, valueClass);
     }
 
-    public static List<Object> readListAndClose(InputStream in) {
-        return readAndClose(in, () -> readList(in));
+    public static List<Object> readList(Reader reader) {
+        return print().readList(reader);
     }
 
-    public static <V> List<V> readListAndClose(InputStream in, Class<V> valueClass) {
-        return readAndClose(in, () -> readList(in, valueClass));
+    public static <V> List<V> readList(Reader reader, Class<V> valueClass) {
+        return print().readList(reader, valueClass);
     }
 
-    public static Set<Object> readSetAndClose(InputStream in) {
-        return readAndClose(in, () -> readSet(in));
+    public static Set<Object> readSet(Reader reader) {
+        return print().readSet(reader);
     }
 
-    public static <V> Set<V> readSetAndClose(InputStream in, Class<V> valueClass) {
-        return readAndClose(in, () -> readSet(in, valueClass));
+    public static <V> Set<V> readSet(Reader reader, Class<V> valueClass) {
+        return print().readSet(reader, valueClass);
     }
 
-    public static List<Map<String, Object>> readListOfMapAndClose(InputStream in) {
-        return readAndClose(in, () -> readListOfMap(in));
+    public static List<Map<String, Object>> readListOfMap(Reader reader) {
+        return print().readListOfMap(reader);
     }
 
-    public static Map<String, Object> readMapAndClose(InputStream in) {
-        return readAndClose(in, () -> readMap(in));
+    public static Iterator<Object> readListLazy(Reader reader) {
+        return print().readListLazy(reader);
     }
 
-    public static <V> Map<String, V> readMapAndClose(InputStream in, Class<V> valueClass) {
-        return readAndClose(in, () -> readMap(in, valueClass));
+    public static <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) {
+        return print().readListLazy(reader, valueClass);
     }
 
-    public static <K, V> Map<K, V> readMapAndClose(InputStream in, Class<K> keyClass, Class<V> valueClass) {
-        return readAndClose(in, () -> readMap(in, keyClass, valueClass));
+    public static Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) {
+        return print().readListOfMapLazy(reader);
     }
 
-    @SuppressWarnings({ "LocalVariableNamingConvention", "unused" })
-    private static <T> T readAndClose(InputStream in, Supplier<T> task) {
-        try (InputStream _in = in) {
-            return task.get();
-        } catch (IOException e) {
-            throw new JacksonUtilsException(e);
-        }
+    public static Map<String, Object> readMap(Reader reader) {
+        return print().readMap(reader);
+    }
+
+    public static <V> Map<String, V> readMap(Reader reader, Class<V> valueClass) {
+        return print().readMap(reader, valueClass);
+    }
+
+    public static <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) {
+        return print().readMap(reader, keyClass, valueClass);
     }
 
     // ---------- write ----------

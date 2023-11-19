@@ -95,6 +95,7 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
                      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
 
                      .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+                     .enable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
                      .enable(JsonParser.Feature.ALLOW_COMMENTS)
                      .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
     }

@@ -28,6 +28,7 @@ import ru.olegcherednik.jackson_utils.types.ListMapTypeReference;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.util.Collections;
@@ -365,6 +366,110 @@ public class ObjectMapperDecorator {
             ObjectMapper mapper = supplier.get();
             MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
             return mapper.readValue(in, mapType);
+        });
+    }
+
+    // ---------- read InputStream ----------
+
+    public <V> V readValue(Reader reader, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (reader == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().readValue(reader, valueClass));
+    }
+
+    // @NotNull
+    public List<Object> readList(Reader reader) {
+        return readList(reader, Object.class);
+    }
+
+    // @NotNull
+    public <V> List<V> readList(Reader reader, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (reader == null)
+            return Collections.emptyList();
+
+        return withRuntimeException(() -> supplier.get()
+                                                  .readerFor(valueClass)
+                                                  .<V>readValues(reader).readAll());
+    }
+
+    // @NotNull
+    public Set<Object> readSet(Reader reader) {
+        return readSet(reader, Object.class);
+    }
+
+    // @NotNull
+    public <V> Set<V> readSet(Reader reader, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (reader == null)
+            return Collections.emptySet();
+
+        return withRuntimeException(() -> supplier.get()
+                                                  .readerFor(valueClass)
+                                                  .<V>readValues(reader)
+                                                  .readAll(new LinkedHashSet<>()));
+    }
+
+    // @NotNull
+    public List<Map<String, Object>> readListOfMap(Reader reader) {
+        if (reader == null)
+            return Collections.emptyList();
+
+        return withRuntimeException(() -> supplier.get().readValue(reader, ListMapTypeReference.INSTANCE));
+    }
+
+    public Iterator<Object> readListLazy(Reader reader) {
+        return readListLazy(reader, Object.class);
+    }
+
+    public <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) {
+        requireNotNullValueClass(valueClass);
+
+        if (reader == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().readerFor(valueClass).readValues(reader));
+    }
+
+    public Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) {
+        if (reader == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().readerFor(Map.class).readValues(reader));
+    }
+
+    // @NotNull
+    @SuppressWarnings("PMD.LooseCoupling")
+    public Map<String, Object> readMap(Reader reader) {
+        if (reader == null)
+            return Collections.emptyMap();
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = supplier.get();
+            MapType mapType = mapper.getTypeFactory().constructRawMapType(LinkedHashMap.class);
+            return mapper.readValue(reader, mapType);
+        });
+    }
+
+    // @NotNull
+    public <V> Map<String, V> readMap(Reader reader, Class<V> valueClass) {
+        return readMap(reader, String.class, valueClass);
+    }
+
+    // @NotNull
+    public <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) {
+        if (reader == null)
+            return Collections.emptyMap();
+
+        return withRuntimeException(() -> {
+            ObjectMapper mapper = supplier.get();
+            MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, keyClass, valueClass);
+            return mapper.readValue(reader, mapType);
         });
     }
 
