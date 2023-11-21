@@ -30,7 +30,7 @@ import java.util.List;
  * @author Oleg Cherednik
  * @since 26.02.2022
  */
-@SuppressWarnings({ "AssignmentOrReturnOfFieldWithMutableType", "unused" })
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode

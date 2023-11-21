@@ -30,7 +30,7 @@ import java.util.Scanner;
  * @author Oleg Cherednik
  * @since 07.01.2021
  */
-@SuppressWarnings({ "unused", "LombokGetterMayBeUsed" })
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Data {

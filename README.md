@@ -40,11 +40,14 @@
 
 ## Gradle
 
+_e.g. Jackson of version __2.15.3__:_
+
 ```groovy
 implementation 'ru.oleg-cherednik.jackson:jackson-utils:2.7'
+implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 ```
 
-_Optional dependencies (e.g. Jackson of version __2.15.3__):_
+_Optional dependencies:_
 
 ```groovy
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.15.3'
@@ -55,15 +58,22 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 
 ## Maven
 
+_e.g. Jackson of version __2.15.3__:_
+
 ```xml
 <dependency>
     <groupId>ru.oleg-cherednik.jackson</groupId>
     <artifactId>jackson-utils</artifactId>
     <version>2.7</version>
 </dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.15.3</version>
+</dependency>
 ```
 
-_Optional dependencies (e.g. Jackson of version __2.15.3__):_
+_Optional dependencies:_
 
 ```xml
 <dependencies>

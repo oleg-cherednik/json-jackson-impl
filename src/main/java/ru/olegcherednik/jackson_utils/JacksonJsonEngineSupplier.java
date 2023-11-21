@@ -40,6 +40,7 @@ import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsLocalTimeSerialize
 import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsOffsetDateTimeSerializer;
 import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsOffsetTimeSerializer;
 import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsZonedDateTimeSerializer;
+import ru.olegcherednik.json.JsonEngine;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -56,9 +57,9 @@ import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
- * @since 02.01.2021
+ * @since 20.11.2023
  */
-public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
+public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
 
     public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
     public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
@@ -66,21 +67,29 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
     protected final UnaryOperator<ZoneId> zoneModifier;
     protected final boolean useMilliseconds;
 
-    public static JacksonObjectMapperSupplier.Builder builder() {
+    public static JacksonJsonEngineSupplier.Builder builder() {
         return new Builder();
     }
 
-    protected JacksonObjectMapperSupplier(Builder builder) {
+    protected JacksonJsonEngineSupplier(Builder builder) {
         zoneModifier = builder.zoneModifier;
         useMilliseconds = builder.useMilliseconds;
     }
 
-    @Override
-    public ObjectMapper get() {
+    public JsonEngine getPrettyPrint() {
         ObjectMapper mapper = new ObjectMapper();
         config(mapper);
         registerModule(mapper);
-        return mapper;
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        return new JacksonJsonEngine(mapper);
+    }
+
+    @Override
+    public JsonEngine get() {
+        ObjectMapper mapper = new ObjectMapper();
+        config(mapper);
+        registerModule(mapper);
+        return new JacksonJsonEngine(mapper);
     }
 
     protected ObjectMapper config(ObjectMapper mapper) {
@@ -157,8 +166,8 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
             return this;
         }
 
-        public JacksonObjectMapperSupplier build() {
-            return new JacksonObjectMapperSupplier(this);
+        public JacksonJsonEngineSupplier build() {
+            return new JacksonJsonEngineSupplier(this);
         }
 
     }

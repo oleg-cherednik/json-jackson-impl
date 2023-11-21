@@ -369,7 +369,7 @@ public class ObjectMapperDecorator {
         });
     }
 
-    // ---------- read InputStream ----------
+    // ---------- read Reader ----------
 
     public <V> V readValue(Reader reader, Class<V> valueClass) {
         requireNotNullValueClass(valueClass);

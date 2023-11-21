@@ -24,7 +24,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.jackson'
-version '2.7'
+version '666'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -59,6 +59,7 @@ pmd {
 }
 
 dependencies {
+    compileOnly 'ru.oleg-cherednik.json-api:json-api:666'
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
