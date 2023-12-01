@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.jacksonutils.JacksonUtilsException;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -76,8 +76,8 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (methods.size() > 1) {
             return id -> {
-                throw new JacksonUtilsException("Multiple methods with '%s' annotation was found in '%s' class",
-                                                JsonCreator.class.getSimpleName(), rawType.getSimpleName());
+                throw new JsonException("Multiple methods with '%s' annotation was found in '%s' class",
+                                        JsonCreator.class.getSimpleName(), rawType.getSimpleName());
             };
         }
 
@@ -88,8 +88,8 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (method == null) {
             return id -> {
-                throw new JacksonUtilsException("Factory method for EnumId '%s' was not found",
-                                                rawType.getSimpleName());
+                throw new JsonException("Factory method for EnumId '%s' was not found",
+                                        rawType.getSimpleName());
             };
         }
 
@@ -106,7 +106,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
                 method.setAccessible(true);
                 return (T) method.invoke(null, id);
             } catch (Exception e) {
-                throw new JacksonUtilsException(e);
+                throw new JsonException(e);
             } finally {
                 method.setAccessible(accessible);
             }

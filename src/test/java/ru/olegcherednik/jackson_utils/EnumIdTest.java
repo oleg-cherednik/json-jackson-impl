@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.EnumId;
-import ru.olegcherednik.json.jacksonutils.JacksonUtilsException;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.util.Objects;
 
@@ -334,7 +334,7 @@ public class EnumIdTest {
 
         @JsonCreator
         public static People one(String id) {
-            throw new JacksonUtilsException("Factory method problem");
+            throw new JsonException("Factory method problem");
         }
     }
 
@@ -349,12 +349,12 @@ public class EnumIdTest {
 
         @JsonCreator
         public static Country one(int id) {
-            throw new JacksonUtilsException("Factory method (int) problem");
+            throw new JsonException("Factory method (int) problem");
         }
 
         @JsonCreator
         public static Country two(String id, int param) {
-            throw new JacksonUtilsException("Factory method (two arguments) problem");
+            throw new JsonException("Factory method (two arguments) problem");
         }
 
         @JsonCreator

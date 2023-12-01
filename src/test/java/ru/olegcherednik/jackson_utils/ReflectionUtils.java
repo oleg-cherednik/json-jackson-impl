@@ -21,7 +21,7 @@ package ru.olegcherednik.jackson_utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.jacksonutils.JacksonUtilsException;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -40,7 +40,7 @@ public final class ReflectionUtils {
             field.setAccessible(true);
             return (T) field.get(obj);
         } catch (Exception e) {
-            throw new JacksonUtilsException(e);
+            throw new JsonException(e);
         }
     }
 
