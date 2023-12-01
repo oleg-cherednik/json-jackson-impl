@@ -19,7 +19,6 @@
 
 package ru.olegcherednik.json.jacksonutils.enumid;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -29,9 +28,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.EnumIdJsonCreator;
 import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import java.util.function.Function;
 final class EnumIdDeserializers extends SimpleDeserializers {
 
     private static final long serialVersionUID = -6984119149643932744L;
+    private static final Class<? extends Annotation> CREATOR_CLASS = EnumIdJsonCreator.class;
 
     public static final EnumIdDeserializers INSTANCE = new EnumIdDeserializers();
 
@@ -77,7 +79,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
         if (methods.size() > 1) {
             return id -> {
                 throw new JsonException("Multiple methods with '%s' annotation was found in '%s' class",
-                                        JsonCreator.class.getSimpleName(), rawType.getSimpleName());
+                                        CREATOR_CLASS.getSimpleName(), rawType.getSimpleName());
             };
         }
 
@@ -145,7 +147,7 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
     private static boolean isValidFactoryMethod(Method method) {
         return Modifier.isStatic(method.getModifiers())
-                && method.isAnnotationPresent(JsonCreator.class)
+                && method.isAnnotationPresent(CREATOR_CLASS)
                 && method.getParameterCount() == 1
                 && method.getParameterTypes()[0] == String.class;
     }
