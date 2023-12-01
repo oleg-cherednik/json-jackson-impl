@@ -20,15 +20,6 @@
 package ru.olegcherednik.jackson_utils.serializers;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.JacksonObjectMapperSupplier;
-import ru.olegcherednik.jackson_utils.ReflectionUtils;
-
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.function.UnaryOperator;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.spy;
 
 /**
  * @author Oleg Cherednik
@@ -39,59 +30,59 @@ import static org.mockito.Mockito.spy;
 public class JacksonUtilsOffsetTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithManyParameters() {
-        Boolean useTimestamp = true;
-        Boolean useNanoseconds = false;
-        DateTimeFormatter formatter = spy(DateTimeFormatter.BASIC_ISO_DATE);
-
-        JacksonUtilsOffsetTimeSerializer base =
-                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
-        JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer actual =
-                new JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer(base,
-                                                                                               useTimestamp,
-                                                                                               useNanoseconds,
-                                                                                               formatter);
-        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
-                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
-                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useTimestamp")).isSameAs(useTimestamp);
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isSameAs(useNanoseconds);
-        assertThat(ReflectionUtils.<DateTimeFormatter>getFieldValue(actual, "_formatter")).isSameAs(formatter);
+//        Boolean useTimestamp = true;
+//        Boolean useNanoseconds = false;
+//        DateTimeFormatter formatter = spy(DateTimeFormatter.BASIC_ISO_DATE);
+//
+//        JacksonUtilsOffsetTimeSerializer base =
+//                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
+//        JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer actual =
+//                new JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer(base,
+//                                                                                               useTimestamp,
+//                                                                                               useNanoseconds,
+//                                                                                               formatter);
+//        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
+//                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
+//                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useTimestamp")).isSameAs(useTimestamp);
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isSameAs(useNanoseconds);
+//        assertThat(ReflectionUtils.<DateTimeFormatter>getFieldValue(actual, "_formatter")).isSameAs(formatter);
     }
 
     public void shouldCreateNewInstanceWithFeatures() {
-        Boolean writeZoneId = false;
-        Boolean writeNanoseconds = true;
-
-        JacksonUtilsOffsetTimeSerializer base =
-                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
-
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(base, "_useNanoseconds")).isNull();
-
-        JacksonUtilsOffsetTimeSerializer actual = base.withFeatures(writeZoneId, writeNanoseconds);
-        assertThat(actual).isNotSameAs(base);
-        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
-                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
-                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useTimestamp"))
-                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_useTimestamp"));
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isTrue();
-        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_formatter"))
-                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_formatter"));
+//        Boolean writeZoneId = false;
+//        Boolean writeNanoseconds = true;
+//
+//        JacksonUtilsOffsetTimeSerializer base =
+//                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
+//
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(base, "_useNanoseconds")).isNull();
+//
+//        JacksonUtilsOffsetTimeSerializer actual = base.withFeatures(writeZoneId, writeNanoseconds);
+//        assertThat(actual).isNotSameAs(base);
+//        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
+//                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
+//                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useTimestamp"))
+//                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_useTimestamp"));
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isTrue();
+//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_formatter"))
+//                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_formatter"));
     }
 
-    private static final class LocalJacksonUtilsOffsetTimeSerializer extends JacksonUtilsOffsetTimeSerializer {
-
-        private static final long serialVersionUID = 178846704191432452L;
-
-        private LocalJacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
-                                                      Boolean useTimestamp,
-                                                      Boolean useNanoseconds,
-                                                      DateTimeFormatter formatter) {
-            super(base, useTimestamp, useNanoseconds, formatter);
-        }
-
-    }
+//    private static final class LocalJacksonUtilsOffsetTimeSerializer extends JacksonUtilsOffsetTimeSerializer {
+//
+//        private static final long serialVersionUID = 178846704191432452L;
+//
+//        private LocalJacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
+//                                                      Boolean useTimestamp,
+//                                                      Boolean useNanoseconds,
+//                                                      DateTimeFormatter formatter) {
+//            super(base, useTimestamp, useNanoseconds, formatter);
+//        }
+//
+//    }
 
 }

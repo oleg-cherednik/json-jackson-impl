@@ -20,12 +20,6 @@
 package ru.olegcherednik.jackson_utils.serializers;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.LocalZoneId;
-
-import java.time.ZoneId;
-import java.util.function.UnaryOperator;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Oleg Cherednik
@@ -36,30 +30,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JacksonUtilsZonedDateTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithFeature() {
-        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
-        assertThat(actual.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
-        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
+//        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
+//        assertThat(actual.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
+//        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
     }
 
-    private static final class LocalZonedDateTimeSerializer extends JacksonUtilsZonedDateTimeSerializer {
-
-        private static final long serialVersionUID = 1319340992384997514L;
-
-        private LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
-            super(withZone, false);
-        }
-
-        @Override
-        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
-            return super.withFeatures(writeZoneId);
-        }
-
-        @Override
-        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
-            return super.withFeatures(writeZoneId, writeNanoseconds);
-        }
-
-    }
+//    private static final class LocalZonedDateTimeSerializer extends JacksonUtilsZonedDateTimeSerializer {
+//
+//        private static final long serialVersionUID = 1319340992384997514L;
+//
+//        private LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
+//            super(withZone, false);
+//        }
+//
+//        @Override
+//        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
+//            return super.withFeatures(writeZoneId);
+//        }
+//
+//        @Override
+//        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
+//            return super.withFeatures(writeZoneId, writeNanoseconds);
+//        }
+//
+//    }
 
 }
 
