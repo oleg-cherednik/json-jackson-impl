@@ -17,22 +17,22 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils.types;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Oleg Cherednik
- * @since 22.12.2020
+ * @since 18.02.2022
  */
-public class JacksonUtilsException extends RuntimeException {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ListMapTypeReference extends TypeReference<List<Map<String, Object>>> {
 
-    private static final long serialVersionUID = -8911497717091041951L;
-
-    public JacksonUtilsException(String message) {
-        super(message);
-    }
-
-    public JacksonUtilsException(Throwable cause) {
-        super(cause);
-    }
+    public static final ListMapTypeReference INSTANCE = new ListMapTypeReference();
 
 }

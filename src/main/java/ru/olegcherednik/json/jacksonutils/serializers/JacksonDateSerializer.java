@@ -17,22 +17,32 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.types;
+package ru.olegcherednik.json.jacksonutils.serializers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * @author Oleg Cherednik
- * @since 18.02.2022
+ * @since 13.03.2022
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ListMapTypeReference extends TypeReference<List<Map<String, Object>>> {
+@RequiredArgsConstructor
+public class JacksonDateSerializer extends DateSerializer {
 
-    public static final ListMapTypeReference INSTANCE = new ListMapTypeReference();
+    private static final long serialVersionUID = 2194687081370953275L;
+
+    private final JsonSerializer<Instant> delegate;
+
+    @Override
+    public void _serializeAsString(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        delegate.serialize(date.toInstant(), gen, serializers);
+    }
 
 }

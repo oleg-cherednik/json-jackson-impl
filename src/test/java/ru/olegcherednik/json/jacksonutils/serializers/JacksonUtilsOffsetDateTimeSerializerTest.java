@@ -17,9 +17,13 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.serializers;
+package ru.olegcherednik.json.jacksonutils.serializers;
 
 import org.testng.annotations.Test;
+
+import java.time.format.DateTimeFormatter;
+
+import static org.mockito.Mockito.spy;
 
 /**
  * @author Oleg Cherednik
@@ -27,20 +31,20 @@ import org.testng.annotations.Test;
  */
 @Test
 @SuppressWarnings({ "NewClassNamingConvention", "PMD.AvoidDuplicateLiterals" })
-public class JacksonUtilsOffsetTimeSerializerTest {
+public class JacksonUtilsOffsetDateTimeSerializerTest {
 
     public void shouldCreateNewInstanceWhenCallWithManyParameters() {
-//        Boolean useTimestamp = true;
-//        Boolean useNanoseconds = false;
-//        DateTimeFormatter formatter = spy(DateTimeFormatter.BASIC_ISO_DATE);
-//
-//        JacksonUtilsOffsetTimeSerializer base =
-//                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
-//        JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer actual =
-//                new JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer(base,
-//                                                                                               useTimestamp,
-//                                                                                               useNanoseconds,
-//                                                                                               formatter);
+        Boolean useTimestamp = true;
+        Boolean useNanoseconds = false;
+        DateTimeFormatter formatter = spy(DateTimeFormatter.BASIC_ISO_DATE);
+
+//        JacksonUtilsOffsetDateTimeSerializer base =
+//                new JacksonUtilsOffsetDateTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
+//        JacksonUtilsOffsetDateTimeSerializerTest.LocalJacksonUtilsOffsetDateTimeSerializer actual =
+//                new JacksonUtilsOffsetDateTimeSerializerTest.LocalJacksonUtilsOffsetDateTimeSerializer(base,
+//                                                                                                       useTimestamp,
+//                                                                                                       useNanoseconds,
+//                                                                                                       formatter);
 //        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
 //                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
 //        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
@@ -51,15 +55,15 @@ public class JacksonUtilsOffsetTimeSerializerTest {
     }
 
     public void shouldCreateNewInstanceWithFeatures() {
-//        Boolean writeZoneId = false;
-//        Boolean writeNanoseconds = true;
-//
-//        JacksonUtilsOffsetTimeSerializer base =
-//                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
+        Boolean writeZoneId = false;
+        Boolean writeNanoseconds = true;
+
+//        JacksonUtilsOffsetDateTimeSerializer base =
+//                new JacksonUtilsOffsetDateTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
 //
 //        assertThat(ReflectionUtils.<Boolean>getFieldValue(base, "_useNanoseconds")).isNull();
 //
-//        JacksonUtilsOffsetTimeSerializer actual = base.withFeatures(writeZoneId, writeNanoseconds);
+//        JacksonUtilsOffsetDateTimeSerializer actual = base.withFeatures(writeZoneId, writeNanoseconds);
 //        assertThat(actual).isNotSameAs(base);
 //        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
 //                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
@@ -72,14 +76,14 @@ public class JacksonUtilsOffsetTimeSerializerTest {
 //                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_formatter"));
     }
 
-//    private static final class LocalJacksonUtilsOffsetTimeSerializer extends JacksonUtilsOffsetTimeSerializer {
+//    private static final class LocalJacksonUtilsOffsetDateTimeSerializer extends JacksonUtilsOffsetDateTimeSerializer {
 //
-//        private static final long serialVersionUID = 178846704191432452L;
+//        private static final long serialVersionUID = -1949734232627080273L;
 //
-//        private LocalJacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
-//                                                      Boolean useTimestamp,
-//                                                      Boolean useNanoseconds,
-//                                                      DateTimeFormatter formatter) {
+//        private LocalJacksonUtilsOffsetDateTimeSerializer(JacksonUtilsOffsetDateTimeSerializer base,
+//                                                          Boolean useTimestamp,
+//                                                          Boolean useNanoseconds,
+//                                                          DateTimeFormatter formatter) {
 //            super(base, useTimestamp, useNanoseconds, formatter);
 //        }
 //

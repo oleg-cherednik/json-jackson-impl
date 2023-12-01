@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.serializers;
+package ru.olegcherednik.json.jacksonutils.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 import java.time.format.DateTimeFormatter;
 
@@ -28,26 +28,26 @@ import java.time.format.DateTimeFormatter;
  * @author Oleg Cherednik
  * @since 01.12.2023
  */
-public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
+public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
 
-    private static final long serialVersionUID = 3940453774518006450L;
+    private static final long serialVersionUID = 8966284219834243016L;
 
-    public JacksonLocalDateTimeSerializer(DateTimeFormatter df) {
+    public JacksonLocalTimeSerializer(DateTimeFormatter df) {
         super(JacksonInstantSerializer.withZone(df));
     }
 
-    public JacksonLocalDateTimeSerializer(JacksonLocalDateTimeSerializer base,
-                                          Boolean useTimestamp,
-                                          Boolean useNanoseconds,
-                                          DateTimeFormatter df) {
+    public JacksonLocalTimeSerializer(JacksonLocalTimeSerializer base,
+                                      Boolean useTimestamp,
+                                      Boolean useNanoseconds,
+                                      DateTimeFormatter df) {
         super(base, useTimestamp, useNanoseconds, JacksonInstantSerializer.withZone(df));
     }
 
     @Override
-    protected JacksonLocalDateTimeSerializer withFormat(Boolean useTimestamp,
-                                                        DateTimeFormatter df,
-                                                        JsonFormat.Shape shape) {
-        return new JacksonLocalDateTimeSerializer(this, useTimestamp, _useNanoseconds, df);
+    protected JacksonLocalTimeSerializer withFormat(Boolean useTimestamp,
+                                                    DateTimeFormatter df,
+                                                    JsonFormat.Shape shape) {
+        return new JacksonLocalTimeSerializer(this, useTimestamp, _useNanoseconds, df);
     }
 
 }

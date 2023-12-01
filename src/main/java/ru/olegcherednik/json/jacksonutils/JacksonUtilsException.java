@@ -17,26 +17,22 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.enumid;
+package ru.olegcherednik.json.jacksonutils;
 
-import com.fasterxml.jackson.core.util.VersionUtil;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import ru.olegcherednik.jackson_utils.EnumId;
+/**
+ * @author Oleg Cherednik
+ * @since 22.12.2020
+ */
+public class JacksonUtilsException extends RuntimeException {
 
-public final class EnumIdModule extends SimpleModule {
+    private static final long serialVersionUID = -8911497717091041951L;
 
-    private static final long serialVersionUID = -946898814418994813L;
-
-    public EnumIdModule() {
-        super(VersionUtil.parseVersion("2.13.11", "com.fasterxml.jackson.datatype11", "jackson-datatype-jsr31011"));
-        addSerializer(EnumId.class, EnumIdSerializer.INSTANCE);
-        _deserializers = EnumIdDeserializers.INSTANCE;
+    public JacksonUtilsException(String format, Object... args) {
+        super(String.format(format, args));
     }
 
-    @Override
-    public void setupModule(SetupContext context) {
-        super.setupModule(context);
-        context.addBeanSerializerModifier(EnumIdSerializerModifier.INSTANCE);
+    public JacksonUtilsException(Throwable cause) {
+        super(cause);
     }
 
 }

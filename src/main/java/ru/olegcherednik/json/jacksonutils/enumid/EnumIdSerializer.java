@@ -17,14 +17,14 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.enumid;
+package ru.olegcherednik.json.jacksonutils.enumid;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.jackson_utils.EnumId;
+import ru.olegcherednik.json.api.EnumId;
 
 import java.io.IOException;
 

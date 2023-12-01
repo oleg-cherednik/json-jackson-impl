@@ -2,7 +2,7 @@ package ru.olegcherednik.json.impl;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.jackson_utils.JacksonJsonEngineSupplier;
+import ru.olegcherednik.json.jacksonutils.JacksonJsonEngineSupplier;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;

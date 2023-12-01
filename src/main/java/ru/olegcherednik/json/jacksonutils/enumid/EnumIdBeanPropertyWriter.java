@@ -17,32 +17,37 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.serializers;
+package ru.olegcherednik.json.jacksonutils.enumid;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import lombok.RequiredArgsConstructor;
-
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import ru.olegcherednik.json.api.EnumId;
 
 /**
  * @author Oleg Cherednik
- * @since 13.03.2022
+ * @since 27.02.2022
  */
-@RequiredArgsConstructor
-public class JacksonDateSerializer extends DateSerializer {
+public class EnumIdBeanPropertyWriter extends BeanPropertyWriter {
 
-    private static final long serialVersionUID = 2194687081370953275L;
+    private static final long serialVersionUID = 8137396366436042132L;
 
-    private final JsonSerializer<Instant> delegate;
+    public EnumIdBeanPropertyWriter(BeanPropertyWriter base) {
+        super(base);
+    }
 
     @Override
-    public void _serializeAsString(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        delegate.serialize(date.toInstant(), gen, serializers);
+    public void serializeAsField(Object bean, JsonGenerator gen, SerializerProvider prov) throws Exception {
+        Object value = _accessorMethod == null ? _field.get(bean)
+                                               : _accessorMethod.invoke(bean, (Object[]) null);
+
+        if (value == null || ((EnumId) value).getId() == null) {
+            if (_nullSerializer != null) {
+                gen.writeFieldName(_name);
+                _nullSerializer.serialize(null, gen, prov);
+            }
+        } else
+            super.serializeAsField(bean, gen, prov);
     }
 
 }

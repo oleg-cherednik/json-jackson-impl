@@ -28,6 +28,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.jacksonutils.JacksonUtilsException;
 
 import java.util.Objects;
 

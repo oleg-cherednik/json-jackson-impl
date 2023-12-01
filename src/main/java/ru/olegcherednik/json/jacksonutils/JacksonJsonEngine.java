@@ -1,11 +1,11 @@
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.jackson_utils.types.ListMapTypeReference;
+import ru.olegcherednik.json.jacksonutils.types.ListMapTypeReference;
 import ru.olegcherednik.json.api.JsonEngine;
 
 import java.io.IOException;

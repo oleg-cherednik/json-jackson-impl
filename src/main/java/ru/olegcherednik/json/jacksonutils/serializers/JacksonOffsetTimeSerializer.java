@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.serializers;
+package ru.olegcherednik.json.jacksonutils.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetTimeSerializer;

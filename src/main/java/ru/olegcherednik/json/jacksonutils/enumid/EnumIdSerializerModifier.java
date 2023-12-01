@@ -17,13 +17,13 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.enumid;
+package ru.olegcherednik.json.jacksonutils.enumid;
 
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.afterburner.ser.PropertyAccessorCollector;
 import com.fasterxml.jackson.module.afterburner.ser.SerializerModifier;
-import ru.olegcherednik.jackson_utils.EnumId;
+import ru.olegcherednik.json.api.EnumId;
 
 import java.util.List;
 import java.util.ListIterator;

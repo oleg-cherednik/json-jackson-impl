@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,14 +32,14 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.Getter;
 import lombok.Setter;
-import ru.olegcherednik.jackson_utils.enumid.EnumIdModule;
-import ru.olegcherednik.jackson_utils.serializers.JacksonDateSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonInstantSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonLocalDateTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonLocalTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonOffsetDateTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonOffsetTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonZonedDateTimeSerializer;
+import ru.olegcherednik.json.jacksonutils.enumid.EnumIdModule;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonDateSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonInstantSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateTimeSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalTimeSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetDateTimeSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetTimeSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonZonedDateTimeSerializer;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonSettings;
 

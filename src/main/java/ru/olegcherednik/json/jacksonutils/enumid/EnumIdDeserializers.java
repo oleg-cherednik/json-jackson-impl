@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.enumid;
+package ru.olegcherednik.json.jacksonutils.enumid;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.jackson_utils.JacksonUtilsException;
+import ru.olegcherednik.json.jacksonutils.JacksonUtilsException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -76,11 +76,8 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (methods.size() > 1) {
             return id -> {
-                throw new JacksonUtilsException("Multiple methods with '"
-                                                        + JsonCreator.class.getSimpleName()
-                                                        + "' annotation was found in '"
-                                                        + rawType.getSimpleName()
-                                                        + "' class");
+                throw new JacksonUtilsException("Multiple methods with '%s' annotation was found in '%s' class",
+                                                JsonCreator.class.getSimpleName(), rawType.getSimpleName());
             };
         }
 
@@ -91,8 +88,8 @@ final class EnumIdDeserializers extends SimpleDeserializers {
 
         if (method == null) {
             return id -> {
-                throw new JacksonUtilsException("Factory method for EnumId '"
-                                                        + rawType.getSimpleName() + "' was not found");
+                throw new JacksonUtilsException("Factory method for EnumId '%s' was not found",
+                                                rawType.getSimpleName());
             };
         }
 
