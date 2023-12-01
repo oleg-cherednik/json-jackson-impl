@@ -77,6 +77,8 @@ public class JacksonObjectMapperSupplier implements Supplier<ObjectMapper> {
 
     @Override
     public ObjectMapper get() {
+        String value1 = System.getProperty("json.auto-close-source");
+        String value2 = System.getProperty("json.auto-close-target");
         ObjectMapper mapper = new ObjectMapper();
         config(mapper);
         registerModule(mapper);

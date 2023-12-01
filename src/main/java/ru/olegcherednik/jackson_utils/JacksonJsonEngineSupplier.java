@@ -30,66 +30,53 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import ru.olegcherednik.jackson_utils.enumid.EnumIdModule;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsDateSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsInstantSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsLocalDateTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsLocalTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsOffsetDateTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsOffsetTimeSerializer;
-import ru.olegcherednik.jackson_utils.serializers.JacksonUtilsZonedDateTimeSerializer;
-import ru.olegcherednik.json.JsonEngine;
+import ru.olegcherednik.jackson_utils.serializers.JacksonDateSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonInstantSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonLocalDateTimeSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonLocalTimeSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonOffsetDateTimeSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonOffsetTimeSerializer;
+import ru.olegcherednik.jackson_utils.serializers.JacksonZonedDateTimeSerializer;
+import ru.olegcherednik.json.api.JsonEngine;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
  * @since 20.11.2023
  */
+@Setter
+@Getter
 public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
 
-    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
-    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
-
-    protected final UnaryOperator<ZoneId> zoneModifier;
-    protected final boolean useMilliseconds;
-
-    public static JacksonJsonEngineSupplier.Builder builder() {
-        return new Builder();
-    }
-
-    protected JacksonJsonEngineSupplier(Builder builder) {
-        zoneModifier = builder.zoneModifier;
-        useMilliseconds = builder.useMilliseconds;
-    }
-
-    public JsonEngine getPrettyPrint() {
-        ObjectMapper mapper = new ObjectMapper();
-        config(mapper);
-        registerModule(mapper);
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        return new JacksonJsonEngine(mapper);
-    }
+    private JsonSettings jsonSettings = JsonSettings.builder().build();
 
     @Override
     public JsonEngine get() {
+        return new JacksonJsonEngine(createMapper());
+    }
+
+    public JsonEngine getPrettyPrint() {
+        return new JacksonJsonEngine(createMapper().enable(SerializationFeature.INDENT_OUTPUT));
+    }
+
+    protected ObjectMapper createMapper() {
         ObjectMapper mapper = new ObjectMapper();
         config(mapper);
         registerModule(mapper);
-        return new JacksonJsonEngine(mapper);
+        return mapper;
     }
 
     protected ObjectMapper config(ObjectMapper mapper) {
@@ -112,18 +99,15 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
     }
 
     protected ObjectMapper registerModule(ObjectMapper mapper) {
-        JacksonUtilsInstantSerializer instantSerializer =
-                new JacksonUtilsInstantSerializer(zoneModifier, useMilliseconds);
-        JacksonUtilsLocalDateTimeSerializer localDateTimeSerializer =
-                new JacksonUtilsLocalDateTimeSerializer(useMilliseconds);
-        JacksonUtilsLocalTimeSerializer localTimeSerializer = new JacksonUtilsLocalTimeSerializer(useMilliseconds);
-        JacksonUtilsOffsetDateTimeSerializer offsetDateTimeSerializer =
-                new JacksonUtilsOffsetDateTimeSerializer(zoneModifier, useMilliseconds);
-        JacksonUtilsOffsetTimeSerializer offsetTimeSerializer =
-                new JacksonUtilsOffsetTimeSerializer(zoneModifier, useMilliseconds);
-        JacksonUtilsZonedDateTimeSerializer dateTimeSerializer =
-                new JacksonUtilsZonedDateTimeSerializer(zoneModifier, useMilliseconds);
-        JacksonUtilsDateSerializer dateSerializer = new JacksonUtilsDateSerializer(instantSerializer);
+        DateTimeFormatter df = jsonSettings.getDateTimeFormatter();
+
+        JacksonInstantSerializer instantSerializer = new JacksonInstantSerializer(df);
+        JacksonLocalDateTimeSerializer localDateTimeSerializer = new JacksonLocalDateTimeSerializer(df);
+        JacksonLocalTimeSerializer localTimeSerializer = new JacksonLocalTimeSerializer(df);
+        JacksonOffsetDateTimeSerializer offsetDateTimeSerializer = new JacksonOffsetDateTimeSerializer(df);
+        JacksonOffsetTimeSerializer offsetTimeSerializer = new JacksonOffsetTimeSerializer(df);
+        JacksonZonedDateTimeSerializer dateTimeSerializer = new JacksonZonedDateTimeSerializer(df);
+        JacksonDateSerializer dateSerializer = new JacksonDateSerializer(instantSerializer);
 
         return mapper.registerModule(new ParameterNamesModule())
                      .registerModule(new AfterburnerModule())
@@ -143,33 +127,6 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
                                              .addKeySerializer(OffsetTime.class, offsetTimeSerializer)
                                              .addKeySerializer(ZonedDateTime.class, dateTimeSerializer)
                                              .addKeySerializer(Date.class, dateSerializer));
-    }
-
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Builder {
-
-        private UnaryOperator<ZoneId> zoneModifier = ZONE_MODIFIER_TO_UTC;
-        private boolean useMilliseconds = true;
-
-        public Builder zone(ZoneId zone) {
-            return zoneModifier(z -> zone);
-        }
-
-        public Builder zoneModifier(UnaryOperator<ZoneId> zoneModifier) {
-            this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(ZONE_MODIFIER_TO_UTC);
-            return this;
-        }
-
-        public Builder withUseMilliseconds(boolean useMilliseconds) {
-            this.useMilliseconds = useMilliseconds;
-            return this;
-        }
-
-        public JacksonJsonEngineSupplier build() {
-            return new JacksonJsonEngineSupplier(this);
-        }
-
     }
 
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.jackson_utils.types.ListMapTypeReference;
-import ru.olegcherednik.json.JsonEngine;
+import ru.olegcherednik.json.api.JsonEngine;
 
 import java.io.IOException;
 import java.io.Reader;

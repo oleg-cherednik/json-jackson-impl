@@ -31,9 +31,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-}
-
-tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:unchecked']
 }
 
@@ -59,7 +56,8 @@ pmd {
 }
 
 dependencies {
-    compileOnly 'ru.oleg-cherednik.json-api:json-api:666'
+    api 'ru.oleg-cherednik.json-api:json-api:666'
+
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
