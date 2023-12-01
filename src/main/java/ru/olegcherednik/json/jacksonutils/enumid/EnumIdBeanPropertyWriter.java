@@ -22,7 +22,7 @@ package ru.olegcherednik.json.jacksonutils.enumid;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumId;
 
 /**
  * @author Oleg Cherednik

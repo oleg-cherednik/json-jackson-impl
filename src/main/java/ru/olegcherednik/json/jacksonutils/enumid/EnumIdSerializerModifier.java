@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.afterburner.ser.PropertyAccessorCollector;
 import com.fasterxml.jackson.module.afterburner.ser.SerializerModifier;
-import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumId;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -44,10 +44,9 @@ final class EnumIdSerializerModifier extends SerializerModifier {
 
     @Override
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    protected PropertyAccessorCollector findProperties(
-            Class<?> beanClass,
-            SerializationConfig config,
-            List<BeanPropertyWriter> beanProperties) {
+    protected PropertyAccessorCollector findProperties(Class<?> beanClass,
+                                                       SerializationConfig config,
+                                                       List<BeanPropertyWriter> beanProperties) {
         PropertyAccessorCollector collector = new PropertyAccessorCollector(beanClass);
         ListIterator<BeanPropertyWriter> it = beanProperties.listIterator();
 

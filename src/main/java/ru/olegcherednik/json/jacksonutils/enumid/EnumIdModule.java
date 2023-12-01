@@ -21,7 +21,7 @@ package ru.olegcherednik.json.jacksonutils.enumid;
 
 import com.fasterxml.jackson.core.util.VersionUtil;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumId;
 
 public final class EnumIdModule extends SimpleModule {
 

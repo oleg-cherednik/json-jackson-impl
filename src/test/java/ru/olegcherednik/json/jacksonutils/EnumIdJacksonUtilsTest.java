@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,8 +28,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.api.enumid.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumIdJsonCreator;
 
 import java.util.Objects;
 
@@ -42,23 +44,23 @@ import static org.assertj.core.api.Assertions.assertThatCode;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class EnumIdTest {
+public class EnumIdJacksonUtilsTest {
 
     public void shouldRetrieveJsonWhenEnumIdValue() {
-//        Data data = new Data(Auto.AUDI, Color.RED);
-//        String json = JacksonUtils.writeValue(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\",\"notNullColor\":\"Red\"}");
+        Data data = new Data(Auto.AUDI, Color.RED);
+        String json = Json.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\",\"notNullColor\":\"Red\"}");
     }
 
     @SuppressWarnings("ConstantConditions")
     public void shouldParseJsonWhenEnumIdValue() {
-//        String json = "{\"notNullAuto\":\"bmw\",\"notNullColor\":\"Green\"}";
-//        Data actual = JacksonUtils.readValue(json, Data.class);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual.notNullAuto).isSameAs(Auto.BMW);
-//        assertThat(actual.notNullColor).isSameAs(Color.GREEN);
-//        assertThat(actual.nullAuto).isNull();
-//        assertThat(actual.nullColor).isNull();
+        String json = "{\"notNullAuto\":\"bmw\",\"notNullColor\":\"Green\"}";
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual.notNullAuto).isSameAs(Auto.BMW);
+        assertThat(actual.notNullColor).isSameAs(Color.GREEN);
+        assertThat(actual.nullAuto).isNull();
+        assertThat(actual.nullColor).isNull();
     }
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() throws JsonProcessingException {
@@ -85,44 +87,44 @@ public class EnumIdTest {
 //                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
-    public void shouldThrowExceptionWhenReadEnumIdNoFactoryMethod() {
-//        String json = JacksonUtils.writeValue(City.SAINT_PETERSBURG);
-//        assertThat(json).isEqualTo("\"Saint-Petersburg\"");
-//
-//        assertThatCode(() -> JacksonUtils.readValue(json, City.class))
-//                .isExactlyInstanceOf(JacksonUtilsException.class);
+    public void shouldThrowJsonExceptionWhenReadEnumIdNoFactoryMethod() {
+        String json = Json.writeValue(City.SAINT_PETERSBURG);
+        assertThat(json).isEqualTo("\"Saint-Petersburg\"");
+
+        assertThatCode(() -> Json.readValue(json, City.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
     public void shouldUseJsonCreatorAnnotatedMethodWhenParseIdAlsoExists() {
-//        String json = "\"Square_jsonCreator\"";
-//        Shape actual = JacksonUtils.readValue(json, Shape.class);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isSameAs(Shape.SQUARE);
+        String json = "\"Square_jsonCreator\"";
+        Shape actual = Json.readValue(json, Shape.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isSameAs(Shape.SQUARE);
     }
 
-    public void shouldThrowExceptionWhenDeserializeWithMultipleJsonCreatorMethods() {
-//        String json = JacksonUtils.writeValue(Vodka.SMIRNOFF);
-//        assertThat(json).isEqualTo("\"smirnoff\"");
-//        assertThatCode(() -> JacksonUtils.readValue(json, Vodka.class))
-//                .isExactlyInstanceOf(JacksonUtilsException.class);
+    public void shouldThrowJsonExceptionWhenDeserializeWithMultipleJsonCreatorMethods() {
+        String json = Json.writeValue(Vodka.SMIRNOFF);
+        assertThat(json).isEqualTo("\"smirnoff\"");
+        assertThatCode(() -> Json.readValue(json, Vodka.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
-    public void shouldThrowExceptionWithOriginalMessageWhenUseCustomFactoryMethod() {
-//        String json = JacksonUtils.writeValue(People.OLEG_CHEREDNIK);
-//        assertThat(json).isEqualTo("\"oleg-cherednik\"");
-//        assertThatCode(() -> JacksonUtils.readValue(json, People.class))
-//                .isExactlyInstanceOf(JacksonUtilsException.class);
+    public void shouldThrowJsonExceptionWithOriginalMessageWhenUseCustomFactoryMethod() {
+        String json = Json.writeValue(People.OLEG_CHEREDNIK);
+        assertThat(json).isEqualTo("\"oleg-cherednik\"");
+        assertThatCode(() -> Json.readValue(json, People.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
     public void shouldIgnoreNotCorrectFactoryMethodWhenMultiplePotentialFactoryMethodsExist() {
-//        String json = JacksonUtils.writeValue(Country.RUSSIAN_FEDERATION);
-//        assertThat(json).isEqualTo("\"russian-federation\"");
-//        Country actual = JacksonUtils.readValue(json, Country.class);
-//        assertThat(actual).isSameAs(Country.RUSSIAN_FEDERATION);
+        String json = Json.writeValue(Country.RUSSIAN_FEDERATION);
+        assertThat(json).isEqualTo("\"russian-federation\"");
+        Country actual = Json.readValue(json, Country.class);
+        assertThat(actual).isSameAs(Country.RUSSIAN_FEDERATION);
     }
 
     public void shouldUseNameWhenNoGetId() {
-//        assertThat(JacksonUtils.writeValue(Shape.SQUARE)).isEqualTo("\"SQUARE\"");
+        assertThat(Json.writeValue(Shape.SQUARE)).isEqualTo("\"SQUARE\"");
     }
 
     public void shouldParseByNameCaseInsensitive() {
@@ -163,13 +165,13 @@ public class EnumIdTest {
     }
 
     public void shouldReadWriteConstantWithNullId() {
-//        Data data = new Data(Auto.AUDI, Color.NONE);
-//        String json = JacksonUtils.writeValue(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\"}");
-//
-//        json = "{\"notNullAuto\":\"audi\",\"notNullColor\":null}";
-//        Data actual = JacksonUtils.readValue(json, Data.class);
-//        assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
+        Data data = new Data(Auto.AUDI, Color.NONE);
+        String json = Json.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\"}");
+
+        json = "{\"notNullAuto\":\"audi\",\"notNullColor\":null}";
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
     }
 
     public void shouldRetrieveDefaultWhenObjectNull() {
@@ -227,7 +229,7 @@ public class EnumIdTest {
             return id;
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         @SuppressWarnings("unused")
         public static Auto parseId(String id) {
             return EnumId.parseId(Auto.class, id);
@@ -279,7 +281,7 @@ public class EnumIdTest {
 
         SQUARE;
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Shape jsonCreator(String id) {
             return "Square_jsonCreator".equals(id) ? SQUARE : null;
         }
@@ -305,12 +307,12 @@ public class EnumIdTest {
             return id;
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Vodka one(String id) {
             return EnumId.parseId(Vodka.class, id);
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Vodka two(String id) {
             return EnumId.parseId(Vodka.class, id);
         }
@@ -332,7 +334,7 @@ public class EnumIdTest {
             return id;
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static People one(String id) {
             throw new JsonException("Factory method problem");
         }
@@ -347,17 +349,17 @@ public class EnumIdTest {
 
         private final String id;
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Country one(int id) {
             throw new JsonException("Factory method (int) problem");
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Country two(String id, int param) {
             throw new JsonException("Factory method (two arguments) problem");
         }
 
-        @JsonCreator
+        @EnumIdJsonCreator
         public static Country three(String id) {
             return EnumId.parseId(Country.class, id);
         }
