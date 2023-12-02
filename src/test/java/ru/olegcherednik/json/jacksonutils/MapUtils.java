@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

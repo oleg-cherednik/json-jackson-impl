@@ -17,27 +17,22 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jacksonutils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.time.ZoneId;
 
 /**
  * @author Oleg Cherednik
- * @since 22.12.2020
+ * @since 04.05.2022
  */
-@SuppressWarnings("PMD.ShortMethodName")
+@SuppressWarnings("PMD.ClassNamingConventions")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ListUtils {
+public final class LocalZoneId {
 
-    public static <T> List<T> of(T... elements) {
-        if (elements == null || elements.length == 0)
-            return Collections.emptyList();
-        return Collections.unmodifiableList(Arrays.asList(elements));
-    }
+    public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
+    public static final ZoneId AUSTRALIA_SYDNEY = ZoneId.of("Australia/Sydney");
 
 }

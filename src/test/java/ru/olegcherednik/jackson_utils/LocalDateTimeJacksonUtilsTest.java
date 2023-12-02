@@ -20,6 +20,7 @@
 package ru.olegcherednik.jackson_utils;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.jacksonutils.MapUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

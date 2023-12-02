@@ -20,38 +20,62 @@
 package ru.olegcherednik.json.jacksonutils.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializerBase;
+import ru.olegcherednik.json.api.JsonSettings;
 
+import java.io.IOException;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
  * @since 27.11.2023
  */
-public class JacksonInstantSerializer extends InstantSerializer {
+public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
 
     private static final long serialVersionUID = -4270313943618715425L;
 
-    public JacksonInstantSerializer(DateTimeFormatter df) {
-        super(InstantSerializer.INSTANCE, null, null, withZone(df));
+    public static final JacksonInstantSerializer INSTANCE = new JacksonInstantSerializer();
+
+    private final UnaryOperator<ZoneId> zoneModifier;
+
+    protected JacksonInstantSerializer() {
+        super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond, Instant::getNano,
+              DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
     }
 
-    public JacksonInstantSerializer(JacksonInstantSerializer base,
-                                    Boolean useTimestamp,
-                                    DateTimeFormatter df,
-                                    JsonFormat.Shape shape) {
-        super(base, useTimestamp, withZone(df), shape);
-    }
-
-    protected static DateTimeFormatter withZone(DateTimeFormatter df) {
-        return Objects.requireNonNull(df).getZone() == null ? df.withZone(ZoneId.systemDefault()) : df;
+    protected JacksonInstantSerializer(JacksonInstantSerializer base,
+                                       Boolean useTimestamp,
+                                       DateTimeFormatter df,
+                                       JsonFormat.Shape shape,
+                                       UnaryOperator<ZoneId> zoneModifier) {
+        super(base, useTimestamp, base._useNanoseconds, df, shape);
+        this.zoneModifier = zoneModifier;
     }
 
     @Override
-    public JacksonInstantSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
-        return new JacksonInstantSerializer(this, useTimestamp, df, shape);
+    protected JacksonInstantSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
+        return new JacksonInstantSerializer(this, useTimestamp, df, shape, zoneModifier);
+    }
+
+    public JacksonInstantSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+        return new JacksonInstantSerializer(this, _useTimestamp, df, _shape, zoneModifier);
+    }
+
+    @Override
+    public void serialize(Instant value, JsonGenerator generator, SerializerProvider provider)
+            throws IOException {
+        ZoneId zoneId = zoneModifier.apply(ZoneId.systemDefault());
+
+        if (_formatter == null)
+            super.serialize(value, generator, provider);
+        else
+            generator.writeString(_formatter.withZone(zoneId).format(value));
     }
 
 }

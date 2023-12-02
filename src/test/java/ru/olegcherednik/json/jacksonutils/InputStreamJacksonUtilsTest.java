@@ -21,8 +21,6 @@ package ru.olegcherednik.json.jacksonutils;
 
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.ListUtils;
-import ru.olegcherednik.jackson_utils.MapUtils;
 import ru.olegcherednik.jackson_utils.data.Book;
 import ru.olegcherednik.jackson_utils.data.Data;
 import ru.olegcherednik.json.api.Json;

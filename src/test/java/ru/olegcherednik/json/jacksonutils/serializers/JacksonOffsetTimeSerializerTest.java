@@ -26,31 +26,29 @@ import org.testng.annotations.Test;
  * @since 04.05.2022
  */
 @Test
-@SuppressWarnings({ "NewClassNamingConvention", "PMD.AvoidDuplicateLiterals" })
-public class JacksonUtilsOffsetTimeSerializerTest {
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+public class JacksonOffsetTimeSerializerTest {
 
-    public void shouldCreateNewInstanceWhenCallWithManyParameters() {
-//        Boolean useTimestamp = true;
+//    public void shouldCreateNewInstanceBaseOnAnotherInstance() throws IOException {
+//        Boolean useTimestamp = false;
 //        Boolean useNanoseconds = false;
-//        DateTimeFormatter formatter = spy(DateTimeFormatter.BASIC_ISO_DATE);
+//        DateTimeFormatter df = DateTimeFormatter.ISO_TIME.withZone(ZoneOffset.UTC);
 //
-//        JacksonUtilsOffsetTimeSerializer base =
-//                new JacksonUtilsOffsetTimeSerializer(JacksonObjectMapperSupplier.ZONE_MODIFIER_USE_ORIGINAL, true);
-//        JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer actual =
-//                new JacksonUtilsOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer(base,
-//                                                                                               useTimestamp,
-//                                                                                               useNanoseconds,
-//                                                                                               formatter);
-//        assertThat(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(actual, "zoneModifier"))
-//                .isSameAs(ReflectionUtils.<UnaryOperator<ZoneId>>getFieldValue(base, "zoneModifier"));
-//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "useMilliseconds"))
-//                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "useMilliseconds"));
-//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useTimestamp")).isSameAs(useTimestamp);
-//        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isSameAs(useNanoseconds);
-//        assertThat(ReflectionUtils.<DateTimeFormatter>getFieldValue(actual, "_formatter")).isSameAs(formatter);
-    }
+//        JacksonOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer actual =
+//                new JacksonOffsetTimeSerializerTest.LocalJacksonUtilsOffsetTimeSerializer(
+//                        new JacksonOffsetTimeSerializer(df),
+//                        useTimestamp,
+//                        useNanoseconds,
+//                        df.withZone(LocalZoneId.ASIA_SINGAPORE));
+//
+//        OffsetTime time = OffsetTime.parse("16:28:45.025811+03:00");
+//        JsonGenerator jsonGenerator = mock(JsonGenerator.class);
+//
+//        actual.serialize(time, jsonGenerator, mock(SerializerProvider.class));
+//        verify(jsonGenerator, times(1)).writeString(eq("16:28:45.025811+03:00"));
+//    }
 
-    public void shouldCreateNewInstanceWithFeatures() {
+//    public void shouldCreateNewInstanceWithFeatures() {
 //        Boolean writeZoneId = false;
 //        Boolean writeNanoseconds = true;
 //
@@ -70,17 +68,17 @@ public class JacksonUtilsOffsetTimeSerializerTest {
 //        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_useNanoseconds")).isTrue();
 //        assertThat(ReflectionUtils.<Boolean>getFieldValue(actual, "_formatter"))
 //                .isEqualTo(ReflectionUtils.<Boolean>getFieldValue(base, "_formatter"));
-    }
+//    }
 
-//    private static final class LocalJacksonUtilsOffsetTimeSerializer extends JacksonUtilsOffsetTimeSerializer {
+//    private static final class LocalJacksonUtilsOffsetTimeSerializer extends JacksonOffsetTimeSerializer {
 //
 //        private static final long serialVersionUID = 178846704191432452L;
 //
-//        private LocalJacksonUtilsOffsetTimeSerializer(JacksonUtilsOffsetTimeSerializer base,
+//        private LocalJacksonUtilsOffsetTimeSerializer(JacksonOffsetTimeSerializer base,
 //                                                      Boolean useTimestamp,
 //                                                      Boolean useNanoseconds,
-//                                                      DateTimeFormatter formatter) {
-//            super(base, useTimestamp, useNanoseconds, formatter);
+//                                                      DateTimeFormatter df) {
+//            super(base, useTimestamp, useNanoseconds, df);
 //        }
 //
 //    }

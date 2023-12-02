@@ -26,30 +26,33 @@ import org.testng.annotations.Test;
  * @since 02.01.2021
  */
 @Test
-@SuppressWarnings("NewClassNamingConvention")
-public class JacksonUtilsZonedDateTimeSerializerTest {
+public class JacksonZonedDateTimeSerializerTest {
 
-    public void shouldCreateNewInstanceWhenCallWithFeature() {
-//        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(zoneId -> LocalZoneId.ASIA_SINGAPORE);
-//        assertThat(actual.withFeatures(false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
-//        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonUtilsZonedDateTimeSerializer.class);
-    }
+//    public void shouldCreateNewInstanceWhenCallWithFeature() {
+//        DateTimeFormatter df = DateTimeFormatter.ISO_DATE_TIME.withZone(LocalZoneId.ASIA_SINGAPORE);
+//        LocalZonedDateTimeSerializer actual = new LocalZonedDateTimeSerializer(df);
+//        assertThat(actual.withFormat(false, DateTimeFormatter.ISO_DATE_TIME, null))
+//                .isExactlyInstanceOf(JacksonZonedDateTimeSerializer.class);
+//        assertThat(actual.withFeatures(false, false)).isExactlyInstanceOf(JacksonZonedDateTimeSerializer.class);
+//    }
 
-//    private static final class LocalZonedDateTimeSerializer extends JacksonUtilsZonedDateTimeSerializer {
+//    private static final class LocalZonedDateTimeSerializer extends JacksonZonedDateTimeSerializer {
 //
 //        private static final long serialVersionUID = 1319340992384997514L;
 //
-//        private LocalZonedDateTimeSerializer(UnaryOperator<ZoneId> withZone) {
-//            super(withZone, false);
+//        private LocalZonedDateTimeSerializer(DateTimeFormatter df) {
+//            super(df);
 //        }
 //
 //        @Override
-//        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId) {
-//            return super.withFeatures(writeZoneId);
+//        public JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp,
+//                                                         DateTimeFormatter df,
+//                                                         JsonFormat.Shape shape) {
+//            return super.withFormat(useTimestamp, df, shape);
 //        }
 //
 //        @Override
-//        public JacksonUtilsZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
+//        public JacksonZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
 //            return super.withFeatures(writeZoneId, writeNanoseconds);
 //        }
 //

@@ -32,25 +32,24 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.Getter;
 import lombok.Setter;
+import ru.olegcherednik.json.api.JsonEngine;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jacksonutils.enumid.EnumIdModule;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonDateSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonInstantSerializer;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateTimeSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalTimeSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetDateTimeSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetTimeSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonZonedDateTimeSerializer;
-import ru.olegcherednik.json.api.JsonEngine;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.function.Supplier;
 
 /**
@@ -99,34 +98,44 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
     }
 
     protected ObjectMapper registerModule(ObjectMapper mapper) {
-        DateTimeFormatter df = jsonSettings.getDateTimeFormatter();
-
-        JacksonInstantSerializer instantSerializer = new JacksonInstantSerializer(df);
-        JacksonLocalDateTimeSerializer localDateTimeSerializer = new JacksonLocalDateTimeSerializer(df);
-        JacksonLocalTimeSerializer localTimeSerializer = new JacksonLocalTimeSerializer(df);
-        JacksonOffsetDateTimeSerializer offsetDateTimeSerializer = new JacksonOffsetDateTimeSerializer(df);
-        JacksonOffsetTimeSerializer offsetTimeSerializer = new JacksonOffsetTimeSerializer(df);
-        JacksonZonedDateTimeSerializer dateTimeSerializer = new JacksonZonedDateTimeSerializer(df);
-        JacksonDateSerializer dateSerializer = new JacksonDateSerializer(instantSerializer);
+        JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE
+                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+        JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
+                .with(jsonSettings.getLocalTimeFormatter());
+        JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
+                .with(jsonSettings.getLocalDateFormatter());
+        JacksonLocalDateTimeSerializer localDateTime = JacksonLocalDateTimeSerializer.INSTANCE
+                .with(jsonSettings.getDateTimeFormatter());
+        JacksonOffsetTimeSerializer offsetTime = JacksonOffsetTimeSerializer.INSTANCE
+                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+        JacksonOffsetDateTimeSerializer offsetDateTime = JacksonOffsetDateTimeSerializer.INSTANCE
+                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+        JacksonZonedDateTimeSerializer zonedDateTime = JacksonZonedDateTimeSerializer.INSTANCE
+                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
 
         return mapper.registerModule(new ParameterNamesModule())
                      .registerModule(new AfterburnerModule())
                      .registerModule(new EnumIdModule())
                      .registerModule(new JavaTimeModule()
-                                             .addSerializer(Instant.class, instantSerializer)
-                                             .addSerializer(LocalDateTime.class, localDateTimeSerializer)
-                                             .addSerializer(LocalTime.class, localTimeSerializer)
-                                             .addSerializer(OffsetDateTime.class, offsetDateTimeSerializer)
-                                             .addSerializer(OffsetTime.class, offsetTimeSerializer)
-                                             .addSerializer(ZonedDateTime.class, dateTimeSerializer)
-                                             .addSerializer(Date.class, dateSerializer)
-                                             .addKeySerializer(Instant.class, instantSerializer)
-                                             .addKeySerializer(LocalDateTime.class, localDateTimeSerializer)
-                                             .addKeySerializer(LocalTime.class, localTimeSerializer)
-                                             .addKeySerializer(OffsetDateTime.class, offsetDateTimeSerializer)
-                                             .addKeySerializer(OffsetTime.class, offsetTimeSerializer)
-                                             .addKeySerializer(ZonedDateTime.class, dateTimeSerializer)
-                                             .addKeySerializer(Date.class, dateSerializer));
+                                             // serializer
+                                             .addSerializer(Instant.class, instant)
+                                             .addSerializer(LocalTime.class, localTime)
+                                             .addSerializer(LocalDate.class, localDate)
+                                             .addSerializer(LocalDateTime.class, localDateTime)
+                                             .addSerializer(OffsetTime.class, offsetTime)
+                                             .addSerializer(OffsetDateTime.class, offsetDateTime)
+                                             .addSerializer(ZonedDateTime.class, zonedDateTime)
+//                                             .addSerializer(Date.class, date)
+                                             // key serializer
+                                             .addKeySerializer(Instant.class, instant)
+                                             .addKeySerializer(LocalTime.class, localTime)
+                                             .addKeySerializer(LocalDate.class, localDate)
+                                             .addKeySerializer(LocalDateTime.class, localDateTime)
+                                             .addKeySerializer(OffsetTime.class, offsetTime)
+                                             .addKeySerializer(OffsetDateTime.class, offsetDateTime)
+                                             .addKeySerializer(ZonedDateTime.class, zonedDateTime)
+//                                             .addKeySerializer(Date.class, date)
+                     );
     }
 
 }

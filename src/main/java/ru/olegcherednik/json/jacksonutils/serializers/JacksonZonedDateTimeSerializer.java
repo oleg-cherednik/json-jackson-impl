@@ -20,50 +20,71 @@
 package ru.olegcherednik.json.jacksonutils.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.JsonSettings;
 
+import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
  * @since 01.12.2023
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     private static final long serialVersionUID = -6441103051278765460L;
 
-    public static final JacksonOffsetTimeSerializer INSTANCE = new JacksonOffsetTimeSerializer();
+    public static final JacksonZonedDateTimeSerializer INSTANCE = new JacksonZonedDateTimeSerializer();
 
-    public JacksonZonedDateTimeSerializer(DateTimeFormatter df) {
+    private final UnaryOperator<ZoneId> zoneModifier;
+
+    protected JacksonZonedDateTimeSerializer() {
+        zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
     }
 
-    protected JacksonZonedDateTimeSerializer(ZonedDateTimeSerializer base,
+    protected JacksonZonedDateTimeSerializer(JacksonZonedDateTimeSerializer base,
                                              Boolean useTimestamp,
                                              Boolean useNanoseconds,
                                              DateTimeFormatter df,
                                              JsonFormat.Shape shape,
-                                             Boolean writeZoneId) {
+                                             Boolean writeZoneId,
+                                             UnaryOperator<ZoneId> zoneModifier) {
         super(base, useTimestamp, useNanoseconds, df, shape, writeZoneId);
+        this.zoneModifier = zoneModifier;
+    }
+
+    public JacksonZonedDateTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+        return new JacksonZonedDateTimeSerializer(this, _useTimestamp, _useNanoseconds, df,
+                                                  _shape, _writeZoneId, zoneModifier);
     }
 
     @Override
-    protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp,
-                                                        DateTimeFormatter df,
-                                                        JsonFormat.Shape shape) {
-        return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds, df, shape, _writeZoneId);
+    protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
+        return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
+                                                  _formatter, _shape, _writeZoneId, zoneModifier);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
-        return new JacksonZonedDateTimeSerializer(this,
-                                                  _useTimestamp,
-                                                  writeNanoseconds,
-                                                  _formatter,
-                                                  _shape,
-                                                  writeZoneId);
+        return new JacksonZonedDateTimeSerializer(this, _useTimestamp, writeNanoseconds,
+                                                  _formatter, _shape, writeZoneId, zoneModifier);
+    }
+
+    @Override
+    public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider provider)
+            throws IOException {
+        ZoneId zone = zoneModifier.apply(value.getZone());
+        value = value.withZoneSameInstant(zone);
+
+        if (_formatter == null)
+            super.serialize(value, generator, provider);
+        else
+            generator.writeString(_formatter.format(value));
     }
 
 }
