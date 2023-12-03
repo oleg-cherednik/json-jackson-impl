@@ -31,6 +31,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE;
+
 /**
  * @author Oleg Cherednik
  * @since 27.11.2023
@@ -42,11 +44,18 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     public static final JacksonInstantSerializer INSTANCE = new JacksonInstantSerializer();
 
     private final UnaryOperator<ZoneId> zoneModifier;
+    private final DateTimeFormatter defaultFormat;
 
     protected JacksonInstantSerializer() {
-        super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond, Instant::getNano,
-              DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond,
+              Instant::getNano, getDefaultFormatter());
         zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
+        defaultFormat = getDefaultFormatter();
+    }
+
+    private static DateTimeFormatter getDefaultFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX")
+                                .withZone(ZoneId.systemDefault());
     }
 
     protected JacksonInstantSerializer(JacksonInstantSerializer base,
@@ -56,6 +65,7 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
                                        UnaryOperator<ZoneId> zoneModifier) {
         super(base, useTimestamp, base._useNanoseconds, df, shape);
         this.zoneModifier = zoneModifier;
+        defaultFormat = base.defaultFormat;
     }
 
     @Override
@@ -70,12 +80,25 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     @Override
     public void serialize(Instant value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        ZoneId zoneId = zoneModifier.apply(ZoneId.systemDefault());
-
         if (_formatter == null)
             super.serialize(value, generator, provider);
-        else
+        else {
+            ZoneId zoneId = zoneModifier.apply(defaultFormat.getZone());
             generator.writeString(_formatter.withZone(zoneId).format(value));
+        }
+    }
+
+    @Override
+    protected String formatValue(Instant value, SerializerProvider provider) {
+        assert _formatter == null;
+        assert defaultFormat != null;
+
+        ZoneId zoneId = zoneModifier.apply(defaultFormat.getZone());
+
+        if (provider.getConfig().hasExplicitTimeZone() && provider.isEnabled(WRITE_DATES_WITH_CONTEXT_TIME_ZONE))
+            zoneId = provider.getTimeZone().toZoneId();
+
+        return defaultFormat.withZone(zoneId).format(value);
     }
 
 }

@@ -41,8 +41,9 @@ public class JacksonDateSerializer extends DateSerializer {
     private final JsonSerializer<Instant> delegate;
 
     @Override
-    public void _serializeAsString(Date date, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        delegate.serialize(date.toInstant(), gen, serializers);
+    public void _serializeAsString(Date date, JsonGenerator generator, SerializerProvider serializers)
+            throws IOException {
+        delegate.serialize(date.toInstant(), generator, serializers);
     }
 
 }

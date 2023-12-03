@@ -35,6 +35,7 @@ import lombok.Setter;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jacksonutils.enumid.EnumIdModule;
+import ru.olegcherednik.json.jacksonutils.serializers.JacksonDateSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonInstantSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateSerializer;
 import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateTimeSerializer;
@@ -50,6 +51,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.function.Supplier;
 
 /**
@@ -99,7 +101,7 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
 
     protected ObjectMapper registerModule(ObjectMapper mapper) {
         JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE
-                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+                .with(jsonSettings.getInstantFormatter(), jsonSettings.getZoneModifier());
         JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
                 .with(jsonSettings.getLocalTimeFormatter());
         JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
@@ -112,6 +114,7 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
                 .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
         JacksonZonedDateTimeSerializer zonedDateTime = JacksonZonedDateTimeSerializer.INSTANCE
                 .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+        JacksonDateSerializer date = new JacksonDateSerializer(instant);
 
         return mapper.registerModule(new ParameterNamesModule())
                      .registerModule(new AfterburnerModule())
@@ -125,7 +128,7 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
                                              .addSerializer(OffsetTime.class, offsetTime)
                                              .addSerializer(OffsetDateTime.class, offsetDateTime)
                                              .addSerializer(ZonedDateTime.class, zonedDateTime)
-//                                             .addSerializer(Date.class, date)
+                                             .addSerializer(Date.class, date)
                                              // key serializer
                                              .addKeySerializer(Instant.class, instant)
                                              .addKeySerializer(LocalTime.class, localTime)
@@ -134,8 +137,7 @@ public class JacksonJsonEngineSupplier implements Supplier<JsonEngine> {
                                              .addKeySerializer(OffsetTime.class, offsetTime)
                                              .addKeySerializer(OffsetDateTime.class, offsetDateTime)
                                              .addKeySerializer(ZonedDateTime.class, zonedDateTime)
-//                                             .addKeySerializer(Date.class, date)
-                     );
+                                             .addKeySerializer(Date.class, date));
     }
 
 }
