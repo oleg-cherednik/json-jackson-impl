@@ -1,10 +1,10 @@
 {
-  "victory": {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  "omen": {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    "victory": {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    "omen": {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 }

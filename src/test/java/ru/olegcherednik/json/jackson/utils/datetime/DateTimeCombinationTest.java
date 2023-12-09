@@ -36,8 +36,6 @@ public class DateTimeCombinationTest {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
         DataOne data = new DataOne(zonedDateTime);
 
-        System.out.println(Json.writer().writeValue(data));
-
         String actual = Json.writeValue(data);
         String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json.txt").trim();
         assertThat(actual).isEqualTo(expected);
