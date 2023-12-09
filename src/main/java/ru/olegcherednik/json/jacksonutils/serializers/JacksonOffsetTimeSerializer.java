@@ -75,14 +75,15 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
     @Override
     @SuppressWarnings("PMD.AvoidReassigningParameters")
     public void serialize(OffsetTime value, JsonGenerator generator, SerializerProvider provider) throws IOException {
-        ZoneId zone = zoneModifier.apply(value.getOffset());
-        ZoneOffset offset = zone.getRules().getOffset(Instant.now());
-        value = value.withOffsetSameInstant(offset);
-
-        if (_formatter == null)
+        if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
-        else
-            generator.writeString(_formatter.format(value));
+        else {
+            ZoneId zoneId = _formatter.getZone() == null ? zoneModifier.apply(value.getOffset())
+                                                         : _formatter.getZone();
+            ZoneOffset offset = zoneId.getRules().getOffset(Instant.now());
+            value = value.withOffsetSameInstant(offset);
+            generator.writeString(_formatter.withZone(zoneId).format(value));
+        }
     }
 
 }

@@ -28,7 +28,6 @@ import ru.olegcherednik.json.api.JsonSettings;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 
@@ -76,14 +75,14 @@ public class JacksonOffsetDateTimeSerializer extends OffsetDateTimeSerializer {
     @Override
     public void serialize(OffsetDateTime value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        ZoneId zone = zoneModifier.apply(value.getOffset());
-        ZoneOffset offset = zone.getRules().getOffset(value.toInstant());
-        value = value.withOffsetSameInstant(offset);
-
-        if (_formatter == null)
+        if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
-        else
-            generator.writeString(_formatter.format(value));
+        else {
+            ZoneId zoneId = _formatter.getZone() == null ? zoneModifier.apply(value.getOffset())
+                                                         : _formatter.getZone();
+
+            generator.writeString(_formatter.format(value.atZoneSameInstant(zoneId)));
+        }
     }
 
 }

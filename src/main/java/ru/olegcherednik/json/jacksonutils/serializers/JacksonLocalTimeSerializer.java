@@ -28,6 +28,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -40,6 +41,8 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
     private static final long serialVersionUID = 8966284219834243016L;
 
     public static final JacksonLocalTimeSerializer INSTANCE = new JacksonLocalTimeSerializer();
+
+    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
     protected JacksonLocalTimeSerializer(JacksonLocalTimeSerializer base,
                                          Boolean useTimestamp,
@@ -62,10 +65,9 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
     @Override
     public void serialize(LocalTime value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        if (_formatter == null)
+        if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
         else
-            generator.writeString(_formatter.format(value));
+            generator.writeString(_formatter.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
     }
-
 }

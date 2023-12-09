@@ -80,12 +80,13 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     @Override
     public void serialize(Instant value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        if (_formatter == null)
+        if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
-        else {
+        else if (_formatter.getZone() == null) {
             ZoneId zoneId = zoneModifier.apply(defaultFormat.getZone());
             generator.writeString(_formatter.withZone(zoneId).format(value));
-        }
+        } else
+            generator.writeString(_formatter.format(value));
     }
 
     @Override

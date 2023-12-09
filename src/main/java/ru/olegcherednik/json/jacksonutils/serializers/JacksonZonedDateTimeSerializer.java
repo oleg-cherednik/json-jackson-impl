@@ -60,13 +60,13 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     public JacksonZonedDateTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
         return new JacksonZonedDateTimeSerializer(this, _useTimestamp, _useNanoseconds, df,
-                                                  _shape, _writeZoneId, zoneModifier);
+                                                  _shape, _writeZoneId != null && _writeZoneId, zoneModifier);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
         return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
-                                                  _formatter, _shape, _writeZoneId, zoneModifier);
+                                                  df, shape, _writeZoneId, zoneModifier);
     }
 
     @Override
@@ -78,12 +78,12 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     @Override
     public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        ZoneId zone = zoneModifier.apply(value.getZone());
-        value = value.withZoneSameInstant(zone);
-
-        if (_formatter == null)
+        if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
-        else
+        else if (_formatter.getZone() == null) {
+            ZoneId zoneId = zoneModifier.apply(DateTimeFormatter.ISO_OFFSET_DATE_TIME.getZone());
+            generator.writeString(_formatter.withZone(zoneId).format(value));
+        } else
             generator.writeString(_formatter.format(value));
     }
 
