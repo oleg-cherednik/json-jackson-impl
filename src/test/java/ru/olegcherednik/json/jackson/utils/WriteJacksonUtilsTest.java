@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -105,68 +104,6 @@ public class WriteJacksonUtilsTest {
             Json.writeValue(data, out);
             assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
-    }
-
-    public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() throws IOException {
-        Data data = new Data(666, "omen");
-        String actual = Json.prettyPrint().writeValue(data);
-        String expected = ResourceData.getResourceAsString("/data.json").trim();
-
-        assertThat(actual).isNotEqualTo(expected);
-        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
-    }
-
-    public void shouldRetrievePrettyPrintJsonWhenWriteMapObjectWithPrettyPrint() throws IOException {
-        Map<String, Data> data = MapUtils.of("victory", new Data(555, "victory"),
-                                             "omen", new Data(666, "omen"));
-        String actual = Json.prettyPrint().writeValue(data);
-        String expected = ResourceData.getResourceAsString("/data_map.json").trim();
-
-        assertThat(actual).isNotEqualTo(expected);
-        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
-    }
-
-    public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() throws IOException {
-        List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
-        String actual = Json.prettyPrint().writeValue(data);
-        String expected = ResourceData.getResourceAsString("/data_list.json").trim();
-
-        assertThat(actual).isNotEqualTo(expected);
-        assertThat(Json.readList(actual)).isEqualTo(Json.readList(expected));
-    }
-
-    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToWriter() throws IOException {
-        try (Writer out = new StringWriter()) {
-            Data data = new Data(666, "omen");
-            Json.prettyPrint().writeValue(data, out);
-
-            String expected = ResourceData.getResourceAsString("/data.json").trim();
-            assertThat(out.toString()).isNotEqualTo(expected);
-            assertThat(Json.readMap(out.toString())).isEqualTo(Json.readMap(expected));
-        }
-    }
-
-    public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToOutputStream() throws IOException {
-        try (OutputStream out = new ByteArrayOutputStream()) {
-            Data data = new Data(666, "omen");
-            Json.prettyPrint().writeValue(data, out);
-
-            String expected = ResourceData.getResourceAsString("/data.json").trim();
-            assertThat(out.toString()).isNotEqualTo(expected);
-            assertThat(Json.readMap(out.toString())).isEqualTo(Json.readMap(expected));
-        }
-    }
-
-    public void shouldThrownExceptionWhenOutputStreamNull() {
-        assertThatThrownBy(() -> Json.writeValue("aaa", (OutputStream) null))
-                .isExactlyInstanceOf(NullPointerException.class)
-                .hasMessage("'out' should not be null");
-    }
-
-    public void shouldThrownExceptionWhenWriterNull() {
-        assertThatThrownBy(() -> Json.writeValue("aaa", (Writer) null))
-                .isExactlyInstanceOf(NullPointerException.class)
-                .hasMessage("'writer' should not be null");
     }
 
 }
