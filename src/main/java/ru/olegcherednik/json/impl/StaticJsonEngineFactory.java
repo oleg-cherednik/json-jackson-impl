@@ -17,27 +17,12 @@ import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.utils.JacksonJsonEngine;
+import ru.olegcherednik.json.jackson.utils.datetime.DateTimeModule;
 import ru.olegcherednik.json.jackson.utils.enumid.EnumIdModule;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonDateSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonInstantSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalDateSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalDateTimeSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalTimeSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonOffsetDateTimeSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonOffsetTimeSerializer;
-import ru.olegcherednik.json.jackson.utils.serializers.JacksonZonedDateTimeSerializer;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Set;
@@ -66,21 +51,19 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     }
 
     @Override
-    public JsonEngine createPrettyPrintJsonEngine(JsonSettings jsonSettings) {
-        ObjectMapper mapper = createMapper(jsonSettings).enable(SerializationFeature.INDENT_OUTPUT);
+    public JsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
+        ObjectMapper mapper = createMapper(settings).enable(SerializationFeature.INDENT_OUTPUT);
         return new JacksonJsonEngine(mapper);
     }
 
     // ---------- supplier ----------
 
-    private static ObjectMapper createMapper(JsonSettings jsonSettings) {
-        Objects.requireNonNull(jsonSettings);
+    private static ObjectMapper createMapper(JsonSettings settings) {
+        Objects.requireNonNull(settings);
 
         ObjectMapper mapper = new ObjectMapper();
         config(mapper);
-        registerModules(mapper);
-        registerJsr310Module(mapper, jsonSettings);
-//        registerModule(mapper, jsonSettings);
+        registerModules(mapper, settings);
         return mapper;
     }
 
@@ -103,101 +86,18 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
     }
 
-    private static ObjectMapper registerModules(ObjectMapper mapper) {
+    private static ObjectMapper registerModules(ObjectMapper mapper, JsonSettings settings) {
         return mapper.registerModule(new ParameterNamesModule())
                      .registerModule(new AfterburnerModule())
-                     .registerModule(new EnumIdModule());
-    }
-
-    private static ObjectMapper registerJsr310Module(ObjectMapper mapper, JsonSettings jsonSettings) {
-        ClassLoader classLoader = StaticJsonEngineFactory.class.getClassLoader();
-
-        try {
-            Class<?> cls = classLoader.loadClass("com.fasterxml.jackson.datatype.jsr310.JavaTimeModule");
-            JavaTimeModule javaTimeModule = (JavaTimeModule) cls.newInstance();
-
-            JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE
-                    .with(jsonSettings.getInstantFormatter(), jsonSettings.getZoneModifier());
-            JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
-                    .with(jsonSettings.getLocalDateFormatter());
-            JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
-                    .with(jsonSettings.getLocalTimeFormatter());
-            JacksonLocalDateTimeSerializer localDateTime = JacksonLocalDateTimeSerializer.INSTANCE
-                    .with(jsonSettings.getLocalDateTimeFormatter());
-            JacksonOffsetTimeSerializer offsetTime = JacksonOffsetTimeSerializer.INSTANCE
-                    .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
-            JacksonOffsetDateTimeSerializer offsetDateTime = JacksonOffsetDateTimeSerializer.INSTANCE
-                    .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
-            JacksonZonedDateTimeSerializer zonedDateTime = JacksonZonedDateTimeSerializer.INSTANCE
-                    .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
-            JacksonDateSerializer date = new JacksonDateSerializer(instant);
-
-            mapper.registerModule(javaTimeModule
-                                          // serializer
-                                          .addSerializer(Instant.class, instant)
-                                          .addSerializer(LocalTime.class, localTime)
-                                          .addSerializer(LocalDate.class, localDate)
-                                          .addSerializer(LocalDateTime.class, localDateTime)
-                                          .addSerializer(OffsetTime.class, offsetTime)
-                                          .addSerializer(OffsetDateTime.class, offsetDateTime)
-                                          .addSerializer(ZonedDateTime.class, zonedDateTime)
-                                          .addSerializer(Date.class, date)
-                                          // key serializer
-                                          .addKeySerializer(Instant.class, instant)
-                                          .addKeySerializer(LocalTime.class, localTime)
-                                          .addKeySerializer(LocalDate.class, localDate)
-                                          .addKeySerializer(LocalDateTime.class, localDateTime)
-                                          .addKeySerializer(OffsetTime.class, offsetTime)
-                                          .addKeySerializer(OffsetDateTime.class, offsetDateTime)
-                                          .addKeySerializer(ZonedDateTime.class, zonedDateTime)
-                                          .addKeySerializer(Date.class, date));
-        } catch (ClassNotFoundException ignore) {
-            // ignore
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-        return mapper;
-    }
-
-    private static ObjectMapper registerModule(ObjectMapper mapper, JsonSettings jsonSettings) {
-        JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE
-                .with(jsonSettings.getInstantFormatter(), jsonSettings.getZoneModifier());
-        JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
-                .with(jsonSettings.getLocalTimeFormatter());
-        JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
-                .with(jsonSettings.getLocalDateFormatter());
-        JacksonLocalDateTimeSerializer localDateTime = JacksonLocalDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getLocalDateTimeFormatter());
-        JacksonOffsetTimeSerializer offsetTime = JacksonOffsetTimeSerializer.INSTANCE
-                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
-        JacksonOffsetDateTimeSerializer offsetDateTime = JacksonOffsetDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getOffsetDateTimeFormatter(), jsonSettings.getZoneModifier());
-        JacksonZonedDateTimeSerializer zonedDateTime = JacksonZonedDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getOffsetDateTimeFormatter(), jsonSettings.getZoneModifier());
-        JacksonDateSerializer date = new JacksonDateSerializer(instant);
-
-        mapper.registerModule(new JavaTimeModule()
-                                      // serializer
-                                      .addSerializer(Instant.class, instant)
-                                      .addSerializer(LocalTime.class, localTime)
-                                      .addSerializer(LocalDate.class, localDate)
-                                      .addSerializer(LocalDateTime.class, localDateTime)
-                                      .addSerializer(OffsetTime.class, offsetTime)
-                                      .addSerializer(OffsetDateTime.class, offsetDateTime)
-                                      .addSerializer(ZonedDateTime.class, zonedDateTime)
-                                      .addSerializer(Date.class, date)
-                                      // key serializer
-                                      .addKeySerializer(Instant.class, instant)
-                                      .addKeySerializer(LocalTime.class, localTime)
-                                      .addKeySerializer(LocalDate.class, localDate)
-                                      .addKeySerializer(LocalDateTime.class, localDateTime)
-                                      .addKeySerializer(OffsetTime.class, offsetTime)
-                                      .addKeySerializer(OffsetDateTime.class, offsetDateTime)
-                                      .addKeySerializer(ZonedDateTime.class, zonedDateTime)
-                                      .addKeySerializer(Date.class, date));
-
-        return mapper;
+                     .registerModule(new EnumIdModule())
+                     .registerModule(new JavaTimeModule())
+                     .registerModule(new DateTimeModule(settings.getInstantFormatter(),
+                                                        settings.getLocalDateFormatter(),
+                                                        settings.getLocalTimeFormatter(),
+                                                        settings.getLocalDateTimeFormatter(),
+                                                        settings.getOffsetTimeFormatter(),
+                                                        settings.getOffsetDateTimeFormatter(),
+                                                        settings.getZoneModifier()));
     }
 
     private static Set<String> findJsonEngineFactoryFiles() {

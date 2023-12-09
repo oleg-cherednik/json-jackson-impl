@@ -1,13 +1,18 @@
 package ru.olegcherednik.json.jackson.utils.datetime;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.api.ZoneModifier;
+import ru.olegcherednik.json.jackson.utils.ResourceData;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,21 +32,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class DateTimeCombinationTest {
 
-    public void shouldSerializeDatesWithDefaultJsonSettings() throws JsonProcessingException {
+    public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
         DataOne data = new DataOne(zonedDateTime);
 
-        System.out.println(Json.prettyPrint().writeValue(data));
+        System.out.println(Json.writer().writeValue(data));
 
-//        String actual = Json.writeValue(data);
-//        assertThat(actual).isEqualTo("{\"instant\":\"2023-12-03T10:39:20.187000+03:00\""
-//                                             + ",\"localDate\":\"2023-12-03\""
-//                                             + ",\"localTime\":\"10:39:20.187\""
-//                                             + ",\"localDateTime\":\"2023-12-03T10:39:20.187\""
-//                                             + ",\"offsetTime\":\"10:39:20.187+03:00\""
-//                                             + ",\"offsetDateTime\":\"2023-12-03T10:39:20.187+03:00\""
-//                                             + ",\"zonedDateTime\":\"2023-12-03T10:39:20.187+03:00\""
-//                                             + ",\"date\":\"2023-12-03T10:39:20.187000+03:00\"}");
+        String actual = Json.writeValue(data);
+        String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json.txt").trim();
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
+        String json = ResourceData.getResourceAsString("/datetime/def_date_one.json.txt").trim();
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
+
+        DataOne actual = Json.readValue(json, DataOne.class);
+        DataOne expected = new DataOne(zonedDateTime);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeDatesWithAnnotationSettingsPreferable() throws JsonProcessingException {
@@ -112,6 +120,7 @@ public class DateTimeCombinationTest {
     }
 
     @Getter
+    @EqualsAndHashCode
     @SuppressWarnings({ "FieldCanBeLocal", "unused" })
     private static final class DataOne {
 
@@ -135,6 +144,24 @@ public class DateTimeCombinationTest {
             date = Date.from(instant);
         }
 
+        @JsonCreator
+        public DataOne(@JsonProperty("instant") Instant instant,
+                       @JsonProperty("localDate") LocalDate localDate,
+                       @JsonProperty("localTime") LocalTime localTime,
+                       @JsonProperty("localDateTime") LocalDateTime localDateTime,
+                       @JsonProperty("offsetTime") OffsetTime offsetTime,
+                       @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
+                       @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
+                       @JsonProperty("date") Date date) {
+            this.instant = instant;
+            this.localDate = localDate;
+            this.localTime = localTime;
+            this.localDateTime = localDateTime;
+            this.offsetTime = offsetTime;
+            this.offsetDateTime = offsetDateTime;
+            this.zonedDateTime = zonedDateTime;
+            this.date = date;
+        }
     }
 
     @Getter
@@ -142,10 +169,10 @@ public class DateTimeCombinationTest {
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSz", timezone = "Asia/Singapore")
         private final Instant instant;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'HH:mm:ss.SSS")
-        private final LocalTime localTime;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd")
         private final LocalDate localDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'HH:mm:ss.SSS")
+        private final LocalTime localTime;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSS")
         private final LocalDateTime localDateTime;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'HH:mm:ss.SSSz", timezone = "Asia/Singapore")

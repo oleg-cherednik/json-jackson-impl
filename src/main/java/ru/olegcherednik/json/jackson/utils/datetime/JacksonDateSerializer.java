@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.utils.serializers;
+package ru.olegcherednik.json.jackson.utils.datetime;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

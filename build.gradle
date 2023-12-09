@@ -11,7 +11,7 @@ plugins {
     id 'pmd'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
-    id 'io.franzbecker.gradle-lombok' version '4.0.0'
+    id 'io.freefair.lombok' version '8.4'
 
     id 'signing'
     id 'maven-publish'
@@ -64,7 +64,7 @@ dependencies {
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     testImplementation('org.testng:testng:7.5.1') {
         exclude group: 'junit', module: 'junit'
@@ -81,7 +81,7 @@ dependencies {
     testImplementation 'commons-io:commons-io:2.15.0'
     testImplementation 'org.mockito:mockito-core:4.11.0'
 
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 jacocoTestReport {
