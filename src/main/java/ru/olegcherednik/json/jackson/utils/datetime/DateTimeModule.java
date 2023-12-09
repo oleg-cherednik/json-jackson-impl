@@ -25,13 +25,13 @@ public class DateTimeModule extends SimpleModule {
 
     private static final long serialVersionUID = -7801651470699380868L;
 
-    private final DateTimeFormatter instantFormatter;
-    private final DateTimeFormatter localDateFormatter;
-    private final DateTimeFormatter localTimeFormatter;
-    private final DateTimeFormatter localDateTimeFormatter;
-    private final DateTimeFormatter offsetTimeFormatter;
-    private final DateTimeFormatter offsetDateTimeFormatter;
-    private final UnaryOperator<ZoneId> zoneModifier;
+    protected final DateTimeFormatter instantFormatter;
+    protected final DateTimeFormatter localDateFormatter;
+    protected final DateTimeFormatter localTimeFormatter;
+    protected final DateTimeFormatter localDateTimeFormatter;
+    protected final DateTimeFormatter offsetTimeFormatter;
+    protected final DateTimeFormatter offsetDateTimeFormatter;
+    protected final UnaryOperator<ZoneId> zoneModifier;
 
     @Override
     public void setupModule(SetupContext context) {
