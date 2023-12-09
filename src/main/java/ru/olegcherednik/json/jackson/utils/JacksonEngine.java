@@ -23,7 +23,7 @@ import java.util.Set;
  * @since 20.11.2023
  */
 @RequiredArgsConstructor
-public class JacksonJsonEngine implements JsonEngine {
+public class JacksonEngine implements JsonEngine {
 
     private final ObjectMapper mapper;
 

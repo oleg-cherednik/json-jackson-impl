@@ -13,10 +13,9 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.jackson.utils.JacksonJsonEngine;
+import ru.olegcherednik.json.jackson.utils.JacksonEngine;
 import ru.olegcherednik.json.jackson.utils.datetime.DateTimeModule;
 import ru.olegcherednik.json.jackson.utils.enumid.EnumIdModule;
 
@@ -35,25 +34,25 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
-    private static final JsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
+    private static final StaticJsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
 
     @SuppressWarnings("unused")
-    public static JsonEngineFactory getInstance() {
+    public static StaticJsonEngineFactory getInstance() {
         return INSTANCE;
     }
 
     // ---------- JsonEngineFactory ----------
 
     @Override
-    public JsonEngine createJsonEngine(JsonSettings jsonSettings) {
+    public JacksonEngine createJsonEngine(JsonSettings jsonSettings) {
         ObjectMapper mapper = createMapper(jsonSettings);
-        return new JacksonJsonEngine(mapper);
+        return new JacksonEngine(mapper);
     }
 
     @Override
-    public JsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
+    public JacksonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
         ObjectMapper mapper = createMapper(settings).enable(SerializationFeature.INDENT_OUTPUT);
-        return new JacksonJsonEngine(mapper);
+        return new JacksonEngine(mapper);
     }
 
     // ---------- supplier ----------
