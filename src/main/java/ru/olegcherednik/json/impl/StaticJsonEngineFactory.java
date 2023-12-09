@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.jacksonutils.JacksonJsonEngine;
-import ru.olegcherednik.json.jacksonutils.enumid.EnumIdModule;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonDateSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonInstantSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalDateTimeSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonLocalTimeSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetDateTimeSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonOffsetTimeSerializer;
-import ru.olegcherednik.json.jacksonutils.serializers.JacksonZonedDateTimeSerializer;
+import ru.olegcherednik.json.jackson.utils.JacksonJsonEngine;
+import ru.olegcherednik.json.jackson.utils.enumid.EnumIdModule;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonDateSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonInstantSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalDateSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalDateTimeSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonLocalTimeSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonOffsetDateTimeSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonOffsetTimeSerializer;
+import ru.olegcherednik.json.jackson.utils.serializers.JacksonZonedDateTimeSerializer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -118,12 +118,12 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
             JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE
                     .with(jsonSettings.getInstantFormatter(), jsonSettings.getZoneModifier());
-            JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
-                    .with(jsonSettings.getLocalTimeFormatter());
             JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
                     .with(jsonSettings.getLocalDateFormatter());
+            JacksonLocalTimeSerializer localTime = JacksonLocalTimeSerializer.INSTANCE
+                    .with(jsonSettings.getLocalTimeFormatter());
             JacksonLocalDateTimeSerializer localDateTime = JacksonLocalDateTimeSerializer.INSTANCE
-                    .with(jsonSettings.getDateTimeFormatter());
+                    .with(jsonSettings.getLocalDateTimeFormatter());
             JacksonOffsetTimeSerializer offsetTime = JacksonOffsetTimeSerializer.INSTANCE
                     .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
             JacksonOffsetDateTimeSerializer offsetDateTime = JacksonOffsetDateTimeSerializer.INSTANCE
@@ -168,13 +168,13 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         JacksonLocalDateSerializer localDate = JacksonLocalDateSerializer.INSTANCE
                 .with(jsonSettings.getLocalDateFormatter());
         JacksonLocalDateTimeSerializer localDateTime = JacksonLocalDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getDateTimeFormatter());
+                .with(jsonSettings.getLocalDateTimeFormatter());
         JacksonOffsetTimeSerializer offsetTime = JacksonOffsetTimeSerializer.INSTANCE
                 .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
         JacksonOffsetDateTimeSerializer offsetDateTime = JacksonOffsetDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+                .with(jsonSettings.getOffsetDateTimeFormatter(), jsonSettings.getZoneModifier());
         JacksonZonedDateTimeSerializer zonedDateTime = JacksonZonedDateTimeSerializer.INSTANCE
-                .with(jsonSettings.getOffsetTimeFormatter(), jsonSettings.getZoneModifier());
+                .with(jsonSettings.getOffsetDateTimeFormatter(), jsonSettings.getZoneModifier());
         JacksonDateSerializer date = new JacksonDateSerializer(instant);
 
         mapper.registerModule(new JavaTimeModule()

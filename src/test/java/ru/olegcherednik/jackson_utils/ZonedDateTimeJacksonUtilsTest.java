@@ -20,8 +20,8 @@
 package ru.olegcherednik.jackson_utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.jacksonutils.LocalZoneId;
-import ru.olegcherednik.json.jacksonutils.MapUtils;
+import ru.olegcherednik.json.jackson.utils.LocalZoneId;
+import ru.olegcherednik.json.jackson.utils.MapUtils;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
