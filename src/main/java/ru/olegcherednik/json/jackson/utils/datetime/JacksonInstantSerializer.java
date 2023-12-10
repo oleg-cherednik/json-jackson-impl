@@ -43,8 +43,8 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
 
     public static final JacksonInstantSerializer INSTANCE = new JacksonInstantSerializer();
 
-    private final UnaryOperator<ZoneId> zoneModifier;
-    private final DateTimeFormatter defaultFormat;
+    protected final UnaryOperator<ZoneId> zoneModifier;
+    protected final DateTimeFormatter defaultFormat;
 
     protected JacksonInstantSerializer() {
         super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond,
@@ -56,20 +56,19 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     protected JacksonInstantSerializer(JacksonInstantSerializer base,
                                        Boolean useTimestamp,
                                        DateTimeFormatter df,
-                                       JsonFormat.Shape shape,
                                        UnaryOperator<ZoneId> zoneModifier) {
-        super(base, useTimestamp, base._useNanoseconds, df, shape);
+        super(base, useTimestamp, base._useNanoseconds, df);
         this.zoneModifier = zoneModifier;
         defaultFormat = base.defaultFormat;
     }
 
     @Override
     protected JacksonInstantSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
-        return new JacksonInstantSerializer(this, useTimestamp, df, shape, zoneModifier);
+        return new JacksonInstantSerializer(this, useTimestamp, df, zoneModifier);
     }
 
     public JacksonInstantSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
-        return new JacksonInstantSerializer(this, _useTimestamp, df, _shape, zoneModifier);
+        return new JacksonInstantSerializer(this, _useTimestamp, df, zoneModifier);
     }
 
     @Override

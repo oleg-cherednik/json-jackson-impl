@@ -25,10 +25,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -41,8 +41,6 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
     private static final long serialVersionUID = 8966284219834243016L;
 
     public static final JacksonLocalTimeSerializer INSTANCE = new JacksonLocalTimeSerializer();
-
-    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
     protected JacksonLocalTimeSerializer(JacksonLocalTimeSerializer base,
                                          Boolean useTimestamp,
@@ -68,6 +66,6 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
         if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
         else
-            generator.writeString(_formatter.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
+            generator.writeString(_formatter.withZone(JsonSettings.SYSTEM_DEFAULT_ZONE_ID).format(value));
     }
 }

@@ -25,10 +25,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -42,24 +42,19 @@ public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
 
     public static final JacksonLocalDateTimeSerializer INSTANCE = new JacksonLocalDateTimeSerializer();
 
-    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
-
-    protected JacksonLocalDateTimeSerializer(JacksonLocalDateTimeSerializer base,
-                                             Boolean useTimestamp,
-                                             Boolean useNanoseconds,
-                                             DateTimeFormatter df) {
-        super(base, useTimestamp, useNanoseconds, df);
+    protected JacksonLocalDateTimeSerializer(DateTimeFormatter df) {
+        super(df);
     }
 
     @Override
     protected JacksonLocalDateTimeSerializer withFormat(Boolean useTimestamp,
                                                         DateTimeFormatter df,
                                                         JsonFormat.Shape shape) {
-        return new JacksonLocalDateTimeSerializer(this, useTimestamp, _useNanoseconds, df);
+        return new JacksonLocalDateTimeSerializer(df);
     }
 
     public JacksonLocalDateTimeSerializer with(DateTimeFormatter df) {
-        return new JacksonLocalDateTimeSerializer(this, _useTimestamp, _useNanoseconds, df);
+        return new JacksonLocalDateTimeSerializer(df);
     }
 
     @Override
@@ -68,7 +63,7 @@ public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
         if (_formatter == null || useTimestamp(provider))
             super.serialize(value, generator, provider);
         else
-            generator.writeString(_formatter.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
+            generator.writeString(_formatter.withZone(JsonSettings.SYSTEM_DEFAULT_ZONE_ID).format(value));
     }
 
 }

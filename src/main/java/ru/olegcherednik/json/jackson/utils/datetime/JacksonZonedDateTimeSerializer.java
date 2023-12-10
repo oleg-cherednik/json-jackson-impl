@@ -41,7 +41,7 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     public static final JacksonZonedDateTimeSerializer INSTANCE = new JacksonZonedDateTimeSerializer();
 
-    private final UnaryOperator<ZoneId> zoneModifier;
+    protected final UnaryOperator<ZoneId> zoneModifier;
 
     protected JacksonZonedDateTimeSerializer() {
         zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;

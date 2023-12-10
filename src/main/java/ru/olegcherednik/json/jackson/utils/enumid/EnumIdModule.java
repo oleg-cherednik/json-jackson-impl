@@ -19,7 +19,6 @@
 
 package ru.olegcherednik.json.jackson.utils.enumid;
 
-import com.fasterxml.jackson.core.util.VersionUtil;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import ru.olegcherednik.json.api.enumid.EnumId;
 
@@ -28,7 +27,6 @@ public final class EnumIdModule extends SimpleModule {
     private static final long serialVersionUID = -946898814418994813L;
 
     public EnumIdModule() {
-        super(VersionUtil.parseVersion("2.13.11", "ru.oleg-cherednik.jackson", "jackson-utils"));
         addSerializer(EnumId.class, EnumIdSerializer.INSTANCE);
         _deserializers = EnumIdDeserializers.INSTANCE;
     }

@@ -43,7 +43,7 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
 
     public static final JacksonOffsetTimeSerializer INSTANCE = new JacksonOffsetTimeSerializer();
 
-    private final UnaryOperator<ZoneId> zoneModifier;
+    protected final UnaryOperator<ZoneId> zoneModifier;
 
     protected JacksonOffsetTimeSerializer() {
         zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
