@@ -116,4 +116,12 @@ public class JacksonEngine implements JsonEngine {
         mapper.writeValue(writer, obj);
     }
 
+    // ---------- convert ----------
+
+    @Override
+    public <V> Map<String, Object> convertToMap(V obj) {
+        MapType mapType = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Object.class);
+        return mapper.convertValue(obj, mapType);
+    }
+
 }

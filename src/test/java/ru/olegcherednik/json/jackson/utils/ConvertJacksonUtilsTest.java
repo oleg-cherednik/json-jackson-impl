@@ -17,9 +17,15 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.jackson.utils.data.Data;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Oleg Cherednik
@@ -29,14 +35,14 @@ import org.testng.annotations.Test;
 public class ConvertJacksonUtilsTest {
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {
-//        assertThat(JacksonUtils.convertToMap(null)).isEmpty();
+        assertThat(Json.convertToMap(null)).isEmpty();
     }
 
     public void shouldRetrieveMapWhenConvertToMap() {
-//        Data data = new Data(555, "victory");
-//        Map<String, Object> actual = JacksonUtils.convertToMap(data);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isEqualTo(MapUtils.of("intVal", 555, "strVal", "victory"));
+        Data data = new Data(555, "victory");
+        Map<String, Object> actual = Json.convertToMap(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo(MapUtils.of("intVal", 555, "strVal", "victory"));
     }
 
 }
