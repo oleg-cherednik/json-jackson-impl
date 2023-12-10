@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 10.04.2022
  */
 @Test
-public class ConvertJacksonUtilsTest {
+public class ConvertTest {
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {
         assertThat(Json.convertToMap(null)).isEmpty();
