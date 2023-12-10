@@ -38,14 +38,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SuppressWarnings("NewClassNamingConvention")
 @Test
-public class ZonedDateTimePrettyPrintJacksonUtilsTest {
+public class ZonedDateTimePrettyPrintTest {
 
     public void shouldRetrievePrettyPrintJsonUtcZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
         JsonSettings settings = JsonSettings.builder()
                                             .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
                                             .build();
 
-        Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
+        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
         String actual = Json.createPrettyPrint(settings).writeValue(map);
         String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_utc.json").trim();
 
@@ -58,7 +58,7 @@ public class ZonedDateTimePrettyPrintJacksonUtilsTest {
                                             .zoneModifier(zone -> LocalZoneId.ASIA_SINGAPORE)
                                             .build();
 
-        Map<String, ZonedDateTime> map = ZonedDateTimeJacksonUtilsTest.createData();
+        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
         String actual = Json.createPrettyPrint(settings).writeValue(map);
         String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_singapore.json").trim();
 

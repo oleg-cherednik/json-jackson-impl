@@ -20,8 +20,8 @@
 package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.data.Book;
-import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.json.jackson.utils.data.Book;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 07.01.2021
  */
 @Test
-public class StringReadJacksonUtilsTest {
+public class StringReadTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((String) null, Object.class)).isNull();

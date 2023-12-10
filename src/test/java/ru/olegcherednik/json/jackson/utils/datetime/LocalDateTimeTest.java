@@ -17,50 +17,54 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils;
+package ru.olegcherednik.json.jackson.utils.datetime;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.jackson.utils.MapUtils;
+import ru.olegcherednik.json.jackson.utils.ResourceData;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Oleg Cherednik
  * @since 01.01.2021
  */
 @Test
-public class LocalDateTimeJacksonUtilsTest {
+public class LocalDateTimeTest {
 
-    public void shouldRetrieveJsonWhenWriteLocalDateTime() throws IOException {
-//        Map<String, LocalDateTime> map = createData();
-//        String actual = JacksonUtils.writeValue(map);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isEqualTo("{\"local\":\"2017-07-23T13:57:14.225\"}");
+    public void shouldRetrieveJsonWhenWriteLocalDateTime() {
+        Map<String, LocalDateTime> map = createData();
+        String actual = Json.writeValue(map);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("{\"local\":\"2017-07-23T13:57:14.225\"}");
     }
 
-    public void shouldRetrievePrettyPrintJsonWhenWriteLocalDateTimeMapWithPrettyPrint() {
-//        Map<String, LocalDateTime> map = createData();
-//        String actual = JacksonUtils.prettyPrint().writeValue(map);
-//        assertThat(actual).isEqualTo('{' + LINE_SEPARATOR
-//                                             + "  \"local\" : \"2017-07-23T13:57:14.225\"" + LINE_SEPARATOR
-//                                             + '}');
+    public void shouldRetrievePrettyPrintJsonWhenWriteLocalDateTimeMapWithPrettyPrint() throws IOException {
+        Map<String, LocalDateTime> map = createData();
+        String actual = Json.prettyPrint().writeValue(map);
+        String expected = ResourceData.getResourceAsString("/datetime/local_date_time.json").trim();
+
+        assertThat(actual).isNotEqualTo(expected);
+        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
     }
 
     public void shouldRetrieveDeserializedLocalDateTimeMapWhenReadJsonAsMap() {
-//        String json = "{\"local\":\"2017-07-23T13:57:14.225\"}";
-//        Map<String, LocalDateTime> expected = createData();
-//        Map<String, LocalDateTime> actual = JacksonUtils.readMap(json, String.class, LocalDateTime.class);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isEqualTo(expected);
+        String json = "{\"local\":\"2017-07-23T13:57:14.225\"}";
+        Map<String, LocalDateTime> expected = createData();
+        Map<String, LocalDateTime> actual = Json.readMap(json, String.class, LocalDateTime.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static Map<String, LocalDateTime> createData() {
         String str = "2017-07-23T13:57:14.225";
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
         return MapUtils.of("local", LocalDateTime.parse(str, df));
     }
 

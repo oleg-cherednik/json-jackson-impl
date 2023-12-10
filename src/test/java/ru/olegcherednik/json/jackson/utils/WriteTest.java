@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WriteJacksonUtilsTest {
+public class WriteTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.writeValue(null)).isNull();

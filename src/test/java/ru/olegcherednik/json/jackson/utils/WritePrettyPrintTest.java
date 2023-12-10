@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WritePrettyPrintJacksonUtilsTest {
+public class WritePrettyPrintTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.prettyPrint().writeValue(null)).isNull();

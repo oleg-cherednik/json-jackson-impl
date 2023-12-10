@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class EnumIdJacksonUtilsTest {
+public class EnumIdTest {
 
     public void shouldRetrieveJsonWhenEnumIdValue() {
         Data data = new Data(Auto.AUDI, Color.RED);

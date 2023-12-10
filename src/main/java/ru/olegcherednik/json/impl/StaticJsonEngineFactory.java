@@ -90,7 +90,8 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .registerModule(new AfterburnerModule())
                      .registerModule(new EnumIdModule())
                      .registerModule(new JavaTimeModule())
-                     .registerModule(new DateTimeModule(settings.getInstantFormatter(),
+                     .registerModule(new DateTimeModule(settings.getDateFormatter(),
+                                                        settings.getInstantFormatter(),
                                                         settings.getLocalDateFormatter(),
                                                         settings.getLocalTimeFormatter(),
                                                         settings.getLocalDateTimeFormatter(),

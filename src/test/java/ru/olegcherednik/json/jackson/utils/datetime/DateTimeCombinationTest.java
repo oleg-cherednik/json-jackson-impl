@@ -51,19 +51,19 @@ public class DateTimeCombinationTest {
     }
 
     public void shouldSerializeDatesWithAnnotationSettingsPreferable() throws JsonProcessingException {
-        JsonSettings jsonSettings = JsonSettings.builder()
-                                                .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
-                                                .instantFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSz"))
-                                                .localTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'HH:mm:ss.SSS"))
-                                                .localDateFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd"))
-                                                .offsetTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'HH:mm:ss.SSSz"))
-                                                .offsetDateTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSz"))
-                                                .build();
+        JsonSettings settings = JsonSettings.builder()
+                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+                                            .instantFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSz"))
+                                            .localTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'HH:mm:ss.SSS"))
+                                            .localDateFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd"))
+                                            .offsetTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'HH:mm:ss.SSSz"))
+                                            .offsetDateTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSz"))
+                                            .build();
 
         ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
         DataTwo data = new DataTwo(zonedDateTime);
 
-        String actual = Json.createWriter(jsonSettings).writeValue(data);
+        String actual = Json.createWriter(settings).writeValue(data);
         assertThat(actual).isEqualTo("{\"instant\":\"[two] 2023-12-03T15:39:20.187SGT\","
                                              + "\"localDate\":\"[two] 2023-12-03\","
                                              + "\"localTime\":\"[two] 10:39:20.187\","
@@ -72,9 +72,6 @@ public class DateTimeCombinationTest {
                                              + "\"offsetDateTime\":\"[two] 2023-12-03T15:39:20.187SGT\""
                                              + ",\"zonedDateTime\":\"[two] 2023-12-03T15:39:20.187SGT\""
                                              + ",\"date\":\"[two] 2023-12-03T15:39:20.187SGT\"}");
-        // 2023-12-03T07:39:20.187 Z
-        // 2023-12-03T10:39:20.187 MSK
-        // 2023-12-03T15:39:20.187 SGT
     }
 
     public void shouldSerializeDatesWithAnnotationSettingsPreferable1() throws JsonProcessingException {
@@ -82,8 +79,8 @@ public class DateTimeCombinationTest {
 //        DateTimeFormatter df2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 //        DateTimeFormatter df3 = df2.withZone(ZoneOffset.UTC);
 
-        JsonSettings jsonSettings = JsonSettings.builder()
-                                                .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+        JsonSettings settings = JsonSettings.builder()
+                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
 //                                           .instantFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
 //                                           .localDateFormatter(DateTimeFormatter.ISO_DATE)
 //                                           .localTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss"))
@@ -91,7 +88,7 @@ public class DateTimeCombinationTest {
 //                                           .offsetTimeFormatter(DateTimeFormatter.ISO_OFFSET_TIME)
 //                                           .offsetDateTimeFormatter(df2.withZone(ZoneId.systemDefault()))
 //                                           .zonedDateTimeFormatter(df2)
-                                                .build();
+                                            .build();
 
         ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
         DataTwo data = new DataTwo(zonedDateTime);
@@ -111,7 +108,7 @@ public class DateTimeCombinationTest {
 //                                             + ",\"date\":\"2023-12-03T10:39:20.187000+03:00\"}");
 
 //        System.out.println(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(data));
-        System.out.println(Json.createPrettyPrintWriter(jsonSettings).writeValue(data));
+        System.out.println(Json.createPrettyPrint(settings).writeValue(data));
         // 2023-12-03T07:39:20.187 Z
         // 2023-12-03T10:39:20.187 MSK
         // 2023-12-03T15:39:20.187 SGT
@@ -158,7 +155,7 @@ public class DateTimeCombinationTest {
             this.offsetTime = offsetTime;
             this.offsetDateTime = offsetDateTime;
             this.zonedDateTime = zonedDateTime;
-            this.date = date;
+            this.date = new Date(date.getTime());
         }
     }
 

@@ -19,18 +19,18 @@
 
 package ru.olegcherednik.json.jackson.utils;
 
-import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.data.Book;
-import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.json.jackson.utils.data.Book;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -43,47 +43,45 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Oleg Cherednik
- * @since 19.02.2022
+ * @since 19.11.2023
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class ByteBufferJacksonUtilsTest {
+public class ReaderTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(Json.readValue((ByteBuffer) null, Object.class)).isNull();
-        assertThat(Json.readListLazy((ByteBuffer) null)).isNull();
-        assertThat(Json.readListLazy((ByteBuffer) null, Object.class)).isNull();
-        assertThat(Json.readListOfMapLazy((ByteBuffer) null)).isNull();
+        assertThat(Json.readValue((Reader) null, Object.class)).isNull();
+        assertThat(Json.readListLazy((Reader) null)).isNull();
+        assertThat(Json.readListLazy((Reader) null, Object.class)).isNull();
+        assertThat(Json.readListOfMapLazy((Reader) null)).isNull();
     }
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {
-        assertThat(Json.readList((ByteBuffer) null)).isEmpty();
-        assertThat(Json.readList((ByteBuffer) null, Object.class)).isEmpty();
-        assertThat(Json.readSet((ByteBuffer) null)).isEmpty();
-        assertThat(Json.readSet((ByteBuffer) null, Object.class)).isEmpty();
-        assertThat(Json.readListOfMap((ByteBuffer) null)).isEmpty();
-        assertThat(Json.readMap((ByteBuffer) null)).isEmpty();
-        assertThat(Json.readMap((ByteBuffer) null, String.class)).isEmpty();
-        assertThat(Json.readMap((ByteBuffer) null, String.class, String.class)).isEmpty();
+        assertThat(Json.readList((Reader) null)).isEmpty();
+        assertThat(Json.readList((Reader) null, Object.class)).isEmpty();
+        assertThat(Json.readSet((Reader) null)).isEmpty();
+        assertThat(Json.readSet((Reader) null, Object.class)).isEmpty();
+        assertThat(Json.readListOfMap((Reader) null)).isEmpty();
+        assertThat(Json.readMap((Reader) null)).isEmpty();
+        assertThat(Json.readMap((Reader) null, String.class)).isEmpty();
+        assertThat(Json.readMap((Reader) null, String.class, String.class)).isEmpty();
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {
-        ByteBuffer buf = getResourceAsByteBuffer("/data.json");
-        Data actual = Json.readValue(buf, Data.class);
+        Data actual = Json.readValue(getResourceAsReader("/data.json"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(new Data(666, "omen"));
     }
 
-    public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyValue() {
-        ByteBuffer buf = convertToByteBuffer("{}");
-        Data actual = Json.readValue(buf, Data.class);
+    public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyValue() throws IOException {
+        Data actual = Json.readValue(convertToReader("{}"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(new Data());
     }
 
-    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() {
-        ByteBuffer buf = convertToByteBuffer("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
-        List<Object> actual = Json.readList(buf);
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() throws IOException {
+        List<Object> actual = Json.readList(
+                convertToReader("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
 
         assertThat(actual).hasSize(5);
         assertThat(actual).containsExactly(1,
@@ -93,17 +91,16 @@ public class ByteBufferJacksonUtilsTest {
                                            new BigInteger("123456789123456789123456789123456789"));
     }
 
-    public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() {
-        ByteBuffer buf = convertToByteBuffer("[\"one\",\"two\",\"three\",\"two\",\"one\"]");
-        Set<String> actual = Json.readSet(buf, String.class);
+    public void shouldRetrieveUniqueValuesWhenReadListNoUniqueValueAsSet() throws IOException {
+        Set<Object> actual = Json.readSet(convertToReader("[\"one\",\"two\",\"three\",\"two\",\"one\"]"));
 
         assertThat(actual).hasSize(3);
         assertThat(actual).containsExactly("one", "two", "three");
     }
 
-    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() {
-        ByteBuffer buf = convertToByteBuffer("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]");
-        Set<Object> actual = Json.readSet(buf);
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericSet() throws IOException {
+        Set<Object> actual = Json.readSet(
+                convertToReader("[1,2.0,3.1,12345678912,123456789123456789123456789123456789]"));
 
         assertThat(actual).hasSize(5);
         assertThat(actual).containsExactly(1,
@@ -114,8 +111,7 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
-        ByteBuffer buf = getResourceAsByteBuffer("/data_list.json");
-        List<Data> actual = Json.readList(buf, Data.class);
+        List<Data> actual = Json.readList(getResourceAsReader("/data_list.json"), Data.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
     }
@@ -130,8 +126,7 @@ public class ByteBufferJacksonUtilsTest {
                                                     "year", 2020,
                                                     "authors", ListUtils.of("Oleg Cherednik"));
 
-        ByteBuffer buf = getResourceAsByteBuffer("/books.json");
-        Iterator<Object> it = Json.readListLazy(buf);
+        Iterator<Object> it = Json.readListLazy(getResourceAsReader("/books.json"));
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -155,8 +150,7 @@ public class ByteBufferJacksonUtilsTest {
                                   2020,
                                   ListUtils.of("Oleg Cherednik"));
 
-        ByteBuffer buf = getResourceAsByteBuffer("/books.json");
-        Iterator<Book> it = Json.readListLazy(buf, Book.class);
+        Iterator<Book> it = Json.readListLazy(getResourceAsReader("/books.json"), Book.class);
         assertThat(it.hasNext()).isTrue();
 
         Book actual1 = it.next();
@@ -171,8 +165,7 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     public void shouldRetrieveListOfMapWhenRead() throws IOException {
-        ByteBuffer buf = getResourceAsByteBuffer("/data_list.json");
-        List<Map<String, Object>> actual = Json.readListOfMap(buf);
+        List<Map<String, Object>> actual = Json.readListOfMap(getResourceAsReader("/data_list.json"));
 
         assertThat(actual).hasSize(2);
         assertThat(actual.get(0)).hasSize(2);
@@ -184,19 +177,16 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     public void shouldRetrieveIteratorOfDeserializedObjectsWhenReadByteBufferAsListOfMapLazy() throws IOException {
-        Map<String, Object> expected1 = MapUtils.of(
-                "title", "Thinking in Java",
-                "date", "2017-07-23T13:57:14.225Z",
-                "year", 1998,
-                "authors", ListUtils.of("Bruce Eckel"));
-        Map<String, Object> expected2 = MapUtils.of(
-                "title", "Ready for a victory",
-                "date", "2020-07-23T13:57:14.225Z",
-                "year", 2020,
-                "authors", ListUtils.of("Oleg Cherednik"));
+        Map<String, Object> expected1 = MapUtils.of("title", "Thinking in Java",
+                                                    "date", "2017-07-23T13:57:14.225Z",
+                                                    "year", 1998,
+                                                    "authors", ListUtils.of("Bruce Eckel"));
+        Map<String, Object> expected2 = MapUtils.of("title", "Ready for a victory",
+                                                    "date", "2020-07-23T13:57:14.225Z",
+                                                    "year", 2020,
+                                                    "authors", ListUtils.of("Oleg Cherednik"));
 
-        ByteBuffer buf = getResourceAsByteBuffer("/books.json");
-        Iterator<Map<String, Object>> it = Json.readListOfMapLazy(buf);
+        Iterator<Map<String, Object>> it = Json.readListOfMapLazy(getResourceAsReader("/books.json"));
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -211,8 +201,7 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     public void shouldRetrieveDataMapWhenReadAsMapWithStringKey() throws IOException {
-        ByteBuffer buf = getResourceAsByteBuffer("/variable_value_map.json");
-        Map<String, Object> actual = Json.readMap(buf);
+        Map<String, Object> actual = Json.readMap(getResourceAsReader("/variable_value_map.json"));
         assertThat(actual).isNotNull();
         assertThat(actual.keySet()).containsExactly("sample", "order");
         assertThat(actual).containsEntry("sample", ListUtils.of("one, two", "three"));
@@ -220,80 +209,72 @@ public class ByteBufferJacksonUtilsTest {
     }
 
     public void shouldRetrieveStringValueMapWhenReadAsMapWithStringKeyAndType() throws IOException {
-        ByteBuffer buf = getResourceAsByteBuffer("/string_value_map_s.json");
-        Map<String, String> actual = Json.readMap(buf, String.class);
+        Map<String, String> actual = Json.readMap(getResourceAsReader("/string_value_map_s.json"), String.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(MapUtils.of("auto", "Audi", "model", "RS3"));
     }
 
     public void shouldRetrieveDeserializedMapWhenReadAsMapListWithStringKeyAndBookType() throws IOException {
-        Map<String, Book> expected = MapUtils.of(
-                "one", new Book(
-                        "Thinking in Java",
-                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                        1998,
-                        ListUtils.of("Bruce Eckel")),
-                "two", new Book(
-                        "Ready for a victory",
-                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                        2020,
-                        ListUtils.of("Oleg Cherednik")));
+        Map<String, Book> expected = MapUtils.of("one", new Book("Thinking in Java",
+                                                                 ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                                                                 1998,
+                                                                 ListUtils.of("Bruce Eckel")),
+                                                 "two", new Book("Ready for a victory",
+                                                                 ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                                                                 2020,
+                                                                 ListUtils.of("Oleg Cherednik")));
 
-        ByteBuffer buf = getResourceAsByteBuffer("/books_dict_string_key.json");
-        Map<String, Book> actual = Json.readMap(buf, Book.class);
+        Map<String, Book> actual = Json.readMap(
+                getResourceAsReader("/books_dict_string_key.json"), Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveIntegerValueMapWhenReadAsMapWithIntKeyAndBookType() throws IOException {
-        Map<Integer, Book> expected = MapUtils.of(
-                1, new Book(
-                        "Thinking in Java",
-                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                        1998,
-                        ListUtils.of("Bruce Eckel")),
-                2, new Book(
-                        "Ready for a victory",
-                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                        2020,
-                        ListUtils.of("Oleg Cherednik")));
+        Map<Integer, Book> expected = MapUtils.of(1, new Book("Thinking in Java",
+                                                              ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                                                              1998,
+                                                              ListUtils.of("Bruce Eckel")),
+                                                  2, new Book("Ready for a victory",
+                                                              ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                                                              2020,
+                                                              ListUtils.of("Oleg Cherednik")));
 
-        ByteBuffer buf = getResourceAsByteBuffer("/books_dict_int_key.json");
-        Map<Integer, Book> actual = Json.readMap(buf, Integer.class, Book.class);
+        Map<Integer, Book> actual = Json.readMap(getResourceAsReader("/books_dict_int_key.json"),
+                                                 Integer.class, Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveEmptyListWhenReadEmptyByteBufferAsList() {
-        assertThat(Json.readList(convertToByteBuffer("[]"))).isEmpty();
-        assertThat(Json.readList(convertToByteBuffer("[]"), Data.class)).isEmpty();
-        assertThat(Json.readSet(convertToByteBuffer("[]"))).isEmpty();
-        assertThat(Json.readSet(convertToByteBuffer("[]"), Data.class)).isEmpty();
-        assertThat(Json.readListOfMap(convertToByteBuffer("[]"))).isEmpty();
-        assertThat(Json.readMap(convertToByteBuffer("{}"))).isEmpty();
-        assertThat(Json.readMap(convertToByteBuffer("{}"), Data.class)).isEmpty();
-        assertThat(Json.readMap(convertToByteBuffer("{}"), String.class, Data.class)).isEmpty();
+        assertThat(Json.readList(convertToReader("[]"))).isEmpty();
+        assertThat(Json.readList(convertToReader("[]"), Data.class)).isEmpty();
+        assertThat(Json.readSet(convertToReader("[]"))).isEmpty();
+        assertThat(Json.readSet(convertToReader("[]"), Data.class)).isEmpty();
+        assertThat(Json.readListOfMap(convertToReader("[]"))).isEmpty();
+        assertThat(Json.readMap(convertToReader("{}"))).isEmpty();
+        assertThat(Json.readMap(convertToReader("{}"), Data.class)).isEmpty();
+        assertThat(Json.readMap(convertToReader("{}"), String.class, Data.class)).isEmpty();
     }
 
     public void shouldThrowJsonExceptionWhenReadIncorrectByteBuffer() {
-        assertThatThrownBy(() -> Json.readValue(convertToByteBuffer("incorrect"), Data.class))
+        assertThatThrownBy(() -> Json.readValue(convertToReader("incorrect"), Data.class))
                 .isExactlyInstanceOf(JsonException.class);
-        assertThatThrownBy(() -> Json.readMap(convertToByteBuffer("incorrect")))
+        assertThatThrownBy(() -> Json.readMap(convertToReader("incorrect")))
                 .isExactlyInstanceOf(JsonException.class);
-        assertThatThrownBy(() -> Json.readMap(convertToByteBuffer("incorrect"), Data.class))
+        assertThatThrownBy(() -> Json.readMap(convertToReader("incorrect"), Data.class))
                 .isExactlyInstanceOf(JsonException.class);
-        assertThatThrownBy(() -> Json.readMap(convertToByteBuffer("incorrect"), String.class, Data.class))
+        assertThatThrownBy(() -> Json.readMap(convertToReader("incorrect"), String.class, Data.class))
                 .isExactlyInstanceOf(JsonException.class);
     }
 
-    private static ByteBuffer getResourceAsByteBuffer(String name) throws IOException {
-        try (InputStream in = Objects.requireNonNull(ByteBufferJacksonUtilsTest.class.getResourceAsStream(name))) {
-            return ByteBuffer.wrap(IOUtils.toByteArray(in));
-        }
+    private static Reader getResourceAsReader(String name) throws IOException {
+        InputStream in = Objects.requireNonNull(ReaderTest.class.getResourceAsStream(name));
+        return new InputStreamReader(in);
     }
 
-    private static ByteBuffer convertToByteBuffer(String str) {
-        return ByteBuffer.wrap(str.getBytes(StandardCharsets.UTF_8));
+    private static Reader convertToReader(String str) {
+        return new StringReader(str);
     }
 
 }

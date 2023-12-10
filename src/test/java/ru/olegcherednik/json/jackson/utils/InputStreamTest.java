@@ -21,8 +21,8 @@ package ru.olegcherednik.json.jackson.utils;
 
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
-import ru.olegcherednik.jackson_utils.data.Book;
-import ru.olegcherednik.jackson_utils.data.Data;
+import ru.olegcherednik.json.jackson.utils.data.Book;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class InputStreamJacksonUtilsTest {
+public class InputStreamTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((InputStream) null, Object.class)).isNull();
@@ -276,7 +276,7 @@ public class InputStreamJacksonUtilsTest {
     }
 
     private static InputStream getResourceAsInputStream(String name) throws IOException {
-        return InputStreamJacksonUtilsTest.class.getResourceAsStream(name);
+        return InputStreamTest.class.getResourceAsStream(name);
     }
 
     private static InputStream convertToInputStream(String str) {

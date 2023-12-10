@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.01.2021
  */
 @Test
-public class ZonedDateTimeJacksonUtilsTest {
+public class ZonedDateTimeTest {
 
     public void shouldRetrieveJsonOriginalZonWhenWriteZonedDateTimeWithUseOriginalZoneModifier() {
         JsonSettings settings = JsonSettings.builder()
@@ -66,8 +66,7 @@ public class ZonedDateTimeJacksonUtilsTest {
                                              + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
-    @SuppressWarnings("AbbreviationAsWordInName")
-    public void shouldRetrieveJsonUTCZoneWhenWriteZonedDateTimeDefaultSettings() {
+    public void shouldRetrieveJsonSystemDefaultZoneWhenWriteZonedDateTimeDefaultSettings() {
         Map<String, ZonedDateTime> map1 = createData();
         Map<String, String> map2 = withDateFormatSystemDefault(map1, JsonSettings.DF_OFFSET_DATE_TIME);
 

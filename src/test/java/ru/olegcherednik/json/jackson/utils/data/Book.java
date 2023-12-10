@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.jackson_utils.data;
+package ru.olegcherednik.json.jackson.utils.data;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
