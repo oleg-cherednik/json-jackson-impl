@@ -245,6 +245,7 @@ public class InputStreamTest {
                 .isExactlyInstanceOf(JsonException.class);
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseInputStreamWhenFinishParse() throws IOException {
         InputStream in = getResourceAsInputStream("/book.json");
         Book actual = Json.readValue(in, Book.class);

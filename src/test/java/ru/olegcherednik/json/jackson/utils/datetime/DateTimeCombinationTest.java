@@ -1,3 +1,22 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package ru.olegcherednik.json.jackson.utils.datetime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,6 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.12.2023
  */
 @Test
+@SuppressWarnings("PMD.AvoidDuplicateLiterals ")
 public class DateTimeCombinationTest {
 
     public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
@@ -79,8 +99,8 @@ public class DateTimeCombinationTest {
 //        DateTimeFormatter df2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 //        DateTimeFormatter df3 = df2.withZone(ZoneOffset.UTC);
 
-        JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+//        JsonSettings settings = JsonSettings.builder()
+//                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
 //                                           .instantFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
 //                                           .localDateFormatter(DateTimeFormatter.ISO_DATE)
 //                                           .localTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss"))
@@ -88,10 +108,10 @@ public class DateTimeCombinationTest {
 //                                           .offsetTimeFormatter(DateTimeFormatter.ISO_OFFSET_TIME)
 //                                           .offsetDateTimeFormatter(df2.withZone(ZoneId.systemDefault()))
 //                                           .zonedDateTimeFormatter(df2)
-                                            .build();
+//                                            .build();
 
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
-        DataTwo data = new DataTwo(zonedDateTime);
+//        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
+//        DataTwo data = new DataTwo(zonedDateTime);
 
 //        String actual = Json.writeValue(data);
 
@@ -108,7 +128,7 @@ public class DateTimeCombinationTest {
 //                                             + ",\"date\":\"2023-12-03T10:39:20.187000+03:00\"}");
 
 //        System.out.println(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(data));
-        System.out.println(Json.createPrettyPrint(settings).writeValue(data));
+//        System.out.println(Json.createPrettyPrint(settings).writeValue(data));
         // 2023-12-03T07:39:20.187 Z
         // 2023-12-03T10:39:20.187 MSK
         // 2023-12-03T15:39:20.187 SGT

@@ -44,7 +44,7 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     public static final JacksonInstantSerializer INSTANCE = new JacksonInstantSerializer();
 
     protected final UnaryOperator<ZoneId> zoneModifier;
-    protected final DateTimeFormatter defaultFormat;
+    protected final transient DateTimeFormatter defaultFormat;
 
     protected JacksonInstantSerializer() {
         super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond,
