@@ -20,8 +20,8 @@
 package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,6 +34,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 /**
@@ -63,15 +66,14 @@ public class WriteTest {
     }
 
     public void shouldRetrieveJsonWhenWriteObject() {
-        Data data = new Data(555, "victory");
-        String actual = Json.writeValue(data);
+        String actual = Json.writeValue(Data.VICTORY);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"intVal\":555,\"strVal\":\"victory\"}");
     }
 
     public void shouldRetrieveJsonWhenWriteMapObject() {
-        Map<String, Data> map = MapUtils.of("victory", new Data(555, "victory"),
-                                            "omen", new Data(666, "omen"));
+        Map<String, Data> map = MapUtils.of("victory", Data.VICTORY,
+                                            "omen", Data.OMEN);
         String actual = Json.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"victory\":{\"intVal\":555,\"strVal\":\"victory\"}"
@@ -79,7 +81,7 @@ public class WriteTest {
     }
 
     public void shouldRetrieveJsonWhenWriteListObject() {
-        List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
+        List<Data> data = ListUtils.of(Data.VICTORY, Data.OMEN);
         String actual = Json.writeValue(data);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
@@ -92,18 +94,30 @@ public class WriteTest {
 
     public void shouldWriteJsonToStreamWhenWriteObjectToWriter() throws IOException {
         try (Writer out = new StringWriter()) {
-            Data data = new Data(666, "omen");
-            Json.writeValue(data, out);
+            Json.writeValue(Data.OMEN, out);
             assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
     }
 
     public void shouldWriteJsonToStreamWhenWriteObjectToOutputStream() throws IOException {
         try (OutputStream out = new ByteArrayOutputStream()) {
-            Data data = new Data(666, "omen");
-            Json.writeValue(data, out);
+            Json.writeValue(Data.OMEN, out);
             assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
         }
+    }
+
+    public void shouldCloseWriterWhenFinishParse() throws IOException {
+        Writer out = spy(new StringWriter());
+        Json.writeValue(Data.OMEN, out);
+        verify(out, times(1)).close();
+        assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
+    }
+
+    public void shouldCloseOutputStreamWhenFinishParse() throws IOException {
+        OutputStream out = spy(new ByteArrayOutputStream());
+        Json.writeValue(Data.OMEN, out);
+        verify(out, times(1)).close();
+        assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
     }
 
 }

@@ -20,14 +20,13 @@
 package ru.olegcherednik.json.jackson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.jackson.utils.data.Book;
-import ru.olegcherednik.json.jackson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.jackson.utils.data.Book;
+import ru.olegcherednik.json.jackson.utils.data.Data;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,13 +60,13 @@ public class StringReadTest {
         String json = ResourceData.getResourceAsString("/data.json");
         Data actual = Json.readValue(json, Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(new Data(666, "omen"));
+        assertThat(actual).isEqualTo(Data.OMEN);
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyValue() {
         Data actual = Json.readValue("{}", Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(new Data());
+        assertThat(actual).isEqualTo(Data.EMPTY);
     }
 
     public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() {
@@ -106,7 +105,7 @@ public class StringReadTest {
         String json = ResourceData.getResourceAsString("/data_list.json");
         List<Data> actual = Json.readList(json, Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
+        assertThat(actual).isEqualTo(ListUtils.of(Data.VICTORY, Data.OMEN));
     }
 
     public void shouldRetrieveListOfMapWhenRead() throws IOException {
@@ -139,15 +138,8 @@ public class StringReadTest {
     }
 
     public void shouldRetrieveDeserializedMapWhenReadAsMapListWithStringKeyAndBookType() throws IOException {
-        Map<String, Book> expected = MapUtils.of("one", new Book("Thinking in Java",
-                                                                 ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                                                                 1998,
-                                                                 ListUtils.of("Bruce Eckel")),
-                                                 "two", new Book("Ready for a victory",
-                                                                 ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                                                                 2020,
-                                                                 ListUtils.of("Oleg Cherednik"))
-        );
+        Map<String, Book> expected = MapUtils.of("one", Book.THINKING_IN_JAVA,
+                                                 "two", Book.READY_FOR_A_VICTORY);
 
         String json = ResourceData.getResourceAsString("/books_dict_string_key.json");
         Map<String, Book> actual = Json.readMap(json, Book.class);
@@ -156,14 +148,8 @@ public class StringReadTest {
     }
 
     public void shouldRetrieveIntegerValueMapWhenReadAsMapWithIntKeyAndBookType() throws IOException {
-        Map<Integer, Book> expected = MapUtils.of(1, new Book("Thinking in Java",
-                                                              ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                                                              1998,
-                                                              ListUtils.of("Bruce Eckel")),
-                                                  2, new Book("Ready for a victory",
-                                                              ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                                                              2020,
-                                                              ListUtils.of("Oleg Cherednik")));
+        Map<Integer, Book> expected = MapUtils.of(1, Book.THINKING_IN_JAVA,
+                                                  2, Book.READY_FOR_A_VICTORY);
 
         String json = ResourceData.getResourceAsString("/books_dict_int_key.json");
         Map<Integer, Book> actual = Json.readMap(json, Integer.class, Book.class);

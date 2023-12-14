@@ -35,6 +35,10 @@ import java.util.Scanner;
 @EqualsAndHashCode
 public class Data {
 
+    public static final Data EMPTY = new Data();
+    public static final Data VICTORY = new Data(555, "victory");
+    public static final Data OMEN = new Data(666, "omen");
+
     @Getter
     @Setter
     private int intVal;
@@ -61,3 +65,4 @@ public class Data {
     }
 
 }
+

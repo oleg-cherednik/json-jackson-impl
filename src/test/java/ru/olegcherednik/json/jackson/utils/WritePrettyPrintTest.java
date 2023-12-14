@@ -47,8 +47,7 @@ public class WritePrettyPrintTest {
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteObjectWithPrettyPrint() throws IOException {
-        Data data = new Data(666, "omen");
-        String actual = Json.prettyPrint().writeValue(data);
+        String actual = Json.prettyPrint().writeValue(Data.OMEN);
         String expected = ResourceData.getResourceAsString("/data.json").trim();
 
         assertThat(actual).isNotEqualTo(expected);
@@ -56,8 +55,8 @@ public class WritePrettyPrintTest {
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteMapObjectWithPrettyPrint() throws IOException {
-        Map<String, Data> data = MapUtils.of("victory", new Data(555, "victory"),
-                                             "omen", new Data(666, "omen"));
+        Map<String, Data> data = MapUtils.of("victory", Data.VICTORY,
+                                             "omen", Data.OMEN);
         String actual = Json.prettyPrint().writeValue(data);
         String expected = ResourceData.getResourceAsString("/data_map.json").trim();
 
@@ -66,7 +65,7 @@ public class WritePrettyPrintTest {
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteListObjectWithPrettyPrint() throws IOException {
-        List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
+        List<Data> data = ListUtils.of(Data.VICTORY, Data.OMEN);
         String actual = Json.prettyPrint().writeValue(data);
         String expected = ResourceData.getResourceAsString("/data_list.json").trim();
 
@@ -76,8 +75,7 @@ public class WritePrettyPrintTest {
 
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToWriter() throws IOException {
         try (Writer out = new StringWriter()) {
-            Data data = new Data(666, "omen");
-            Json.prettyPrint().writeValue(data, out);
+            Json.prettyPrint().writeValue(Data.OMEN, out);
 
             String expected = ResourceData.getResourceAsString("/data.json").trim();
             assertThat(out.toString()).isNotEqualTo(expected);
@@ -87,8 +85,7 @@ public class WritePrettyPrintTest {
 
     public void shouldWritePrettyPrintJsonToStreamWhenWriteObjectWithPrettyPrintToOutputStream() throws IOException {
         try (OutputStream out = new ByteArrayOutputStream()) {
-            Data data = new Data(666, "omen");
-            Json.prettyPrint().writeValue(data, out);
+            Json.prettyPrint().writeValue(Data.OMEN, out);
 
             String expected = ResourceData.getResourceAsString("/data.json").trim();
             assertThat(out.toString()).isNotEqualTo(expected);

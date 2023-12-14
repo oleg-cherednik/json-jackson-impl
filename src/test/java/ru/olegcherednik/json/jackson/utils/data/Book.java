@@ -22,6 +22,7 @@ package ru.olegcherednik.json.jackson.utils.data;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.jackson.utils.ListUtils;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -30,11 +31,20 @@ import java.util.List;
  * @author Oleg Cherednik
  * @since 26.02.2022
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Book {
+
+    public static final Book THINKING_IN_JAVA = new Book("Thinking in Java",
+                                                         ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                                                         1998,
+                                                         ListUtils.of("Bruce Eckel"));
+    public static final Book READY_FOR_A_VICTORY = new Book("Ready for a victory",
+                                                            ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                                                            2020,
+                                                            ListUtils.of("Oleg Cherednik"));
+
 
     private String title;
     private ZonedDateTime date;

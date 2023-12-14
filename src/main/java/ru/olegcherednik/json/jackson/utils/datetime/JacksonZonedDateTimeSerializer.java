@@ -51,28 +51,27 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
                                              Boolean useTimestamp,
                                              Boolean useNanoseconds,
                                              DateTimeFormatter df,
-                                             JsonFormat.Shape shape,
                                              Boolean writeZoneId,
                                              UnaryOperator<ZoneId> zoneModifier) {
-        super(base, useTimestamp, useNanoseconds, df, shape, writeZoneId);
+        super(base, useTimestamp, useNanoseconds, df, writeZoneId);
         this.zoneModifier = zoneModifier;
     }
 
     public JacksonZonedDateTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
         return new JacksonZonedDateTimeSerializer(this, _useTimestamp, _useNanoseconds, df,
-                                                  _shape, _writeZoneId != null && _writeZoneId, zoneModifier);
+                                                  _writeZoneId != null && _writeZoneId, zoneModifier);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
         return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
-                                                  df, shape, _writeZoneId, zoneModifier);
+                                                  df, _writeZoneId, zoneModifier);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
         return new JacksonZonedDateTimeSerializer(this, _useTimestamp, writeNanoseconds,
-                                                  _formatter, _shape, writeZoneId, zoneModifier);
+                                                  _formatter, writeZoneId, zoneModifier);
     }
 
     @Override

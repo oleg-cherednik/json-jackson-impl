@@ -39,8 +39,7 @@ public class ConvertTest {
     }
 
     public void shouldRetrieveMapWhenConvertToMap() {
-        Data data = new Data(555, "victory");
-        Map<String, Object> actual = Json.convertToMap(data);
+        Map<String, Object> actual = Json.convertToMap(Data.VICTORY);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(MapUtils.of("intVal", 555, "strVal", "victory"));
     }

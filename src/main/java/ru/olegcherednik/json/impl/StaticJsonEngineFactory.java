@@ -77,9 +77,9 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
-                     .disable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
-                     .disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
 
+                     .enable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
+                     .enable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
                      .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
                      .enable(JsonParser.Feature.ALLOW_COMMENTS)
                      .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
