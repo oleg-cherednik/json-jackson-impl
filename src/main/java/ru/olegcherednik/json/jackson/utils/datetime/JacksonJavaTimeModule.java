@@ -2,10 +2,8 @@ package ru.olegcherednik.json.jackson.utils.datetime;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import lombok.RequiredArgsConstructor;
 
-import java.text.DateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,19 +13,15 @@ import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
- * @since 09.12.2023
+ * @since 14.12.2023
  */
 @RequiredArgsConstructor
-public class DateTimeModule extends SimpleModule {
+public class JacksonJavaTimeModule extends SimpleModule {
 
-    private static final long serialVersionUID = -7801651470699380868L;
-
-    protected final DateFormat dateFormatter;
     protected final DateTimeFormatter instantFormatter;
     protected final DateTimeFormatter localDateFormatter;
     protected final DateTimeFormatter localTimeFormatter;
@@ -43,7 +37,6 @@ public class DateTimeModule extends SimpleModule {
         JacksonInstantSerializer instant = JacksonInstantSerializer.INSTANCE.with(instantFormatter, zoneModifier);
         SimpleSerializers serializers = new SimpleSerializers();
 
-        serializers.addSerializer(Date.class, new DateSerializer(null, dateFormatter));
         serializers.addSerializer(Instant.class, instant);
         serializers.addSerializer(LocalDate.class, JacksonLocalDateSerializer.INSTANCE.with(localDateFormatter));
         serializers.addSerializer(LocalTime.class, JacksonLocalTimeSerializer.INSTANCE.with(localTimeFormatter));

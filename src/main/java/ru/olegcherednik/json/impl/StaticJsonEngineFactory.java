@@ -6,26 +6,20 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.utils.JacksonEngine;
-import ru.olegcherednik.json.jackson.utils.datetime.DateTimeModule;
+import ru.olegcherednik.json.jackson.utils.datetime.JacksonDateModule;
+import ru.olegcherednik.json.jackson.utils.datetime.JacksonJavaTimeModule;
 import ru.olegcherednik.json.jackson.utils.enumid.EnumIdModule;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ServiceLoader;
 
 /**
  * @author Oleg Cherednik
@@ -86,35 +80,28 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     }
 
     private static ObjectMapper registerModules(ObjectMapper mapper, JsonSettings settings) {
-        return mapper.registerModule(new ParameterNamesModule())
-                     .registerModule(new AfterburnerModule())
-                     .registerModule(new EnumIdModule())
-                     .registerModule(new JavaTimeModule())
-                     .registerModule(new DateTimeModule(settings.getDateFormatter(),
-                                                        settings.getInstantFormatter(),
-                                                        settings.getLocalDateFormatter(),
-                                                        settings.getLocalTimeFormatter(),
-                                                        settings.getLocalDateTimeFormatter(),
-                                                        settings.getOffsetTimeFormatter(),
-                                                        settings.getOffsetDateTimeFormatter(),
-                                                        settings.getZoneModifier()));
-    }
+        mapper.registerModule(new JacksonDateModule(settings.getDateFormatter()))
+              .registerModule(new EnumIdModule());
 
-    private static Set<String> findJsonEngineFactoryFiles() {
-        try {
-            Enumeration<URL> urls =
-                    getJsonEngineFactoryPaths("com/fasterxml/jackson/datatype/jsr310/JavaTimeModule.class");
-            return Collections.list(urls).stream()
-                              .map(URL::getFile)
-                              .collect(Collectors.toSet());
-        } catch (IOException e) {
-            return Collections.emptySet();
-        }
-    }
+        ServiceLoader.load(Module.class).forEach(module -> {
+            if (module instanceof JacksonDateModule
+                    || module instanceof JacksonJavaTimeModule
+                    || module instanceof EnumIdModule)
+                return;
 
-    private static Enumeration<URL> getJsonEngineFactoryPaths(String name) throws IOException {
-        ClassLoader classLoader = StaticJsonEngineFactory.class.getClassLoader();
-        return classLoader == null ? ClassLoader.getSystemResources(name) : classLoader.getResources(name);
+            mapper.registerModule(module);
+
+            if ("jackson-datatype-jsr310".equals(module.getModuleName()))
+                mapper.registerModule(new JacksonJavaTimeModule(settings.getInstantFormatter(),
+                                                                settings.getLocalDateFormatter(),
+                                                                settings.getLocalTimeFormatter(),
+                                                                settings.getLocalDateTimeFormatter(),
+                                                                settings.getOffsetTimeFormatter(),
+                                                                settings.getOffsetDateTimeFormatter(),
+                                                                settings.getZoneModifier()));
+        });
+
+        return mapper;
     }
 
 }

@@ -246,7 +246,7 @@ public class InputStreamTest {
     }
 
     public void shouldCloseInputStreamWhenFinishParse() throws IOException {
-        InputStream in = getResourceAsInputStream("/books_stream.in");
+        InputStream in = getResourceAsInputStream("/book.json");
         Book actual = Json.readValue(in, Book.class);
         assertThat(actual).isEqualTo(Book.THINKING_IN_JAVA);
         assertThatThrownBy(in::read).isExactlyInstanceOf(IOException.class).hasMessage("Stream closed");
