@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-group 'ru.oleg-cherednik.jackson'
+group 'ru.oleg-cherednik.json'
 version '666'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -56,7 +56,7 @@ pmd {
 }
 
 dependencies {
-    api 'ru.oleg-cherednik.json-api:json-api:666'
+    api 'ru.oleg-cherednik.json:json-api:666'
 
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"

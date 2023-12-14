@@ -32,10 +32,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.jackson.utils.JacksonEngine;
-import ru.olegcherednik.json.jackson.utils.datetime.JacksonDateModule;
-import ru.olegcherednik.json.jackson.utils.datetime.JacksonJavaTimeModule;
-import ru.olegcherednik.json.jackson.utils.enumid.EnumIdModule;
+import ru.olegcherednik.json.jackson.JacksonEngine;
+import ru.olegcherednik.json.jackson.datetime.JacksonDateModule;
+import ru.olegcherednik.json.jackson.datetime.JacksonJavaTimeModule;
+import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Objects;
 import java.util.ServiceLoader;
