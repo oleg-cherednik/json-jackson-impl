@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime;
+package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -45,6 +45,14 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
 
     protected final UnaryOperator<ZoneId> zoneModifier;
 
+    public static JacksonOffsetTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+        return new JacksonOffsetTimeSerializer(INSTANCE,
+                                               INSTANCE._useTimestamp,
+                                               INSTANCE._useNanoseconds,
+                                               df,
+                                               zoneModifier);
+    }
+
     protected JacksonOffsetTimeSerializer() {
         zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
     }
@@ -66,10 +74,6 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
     @Override
     protected JacksonOffsetTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
         return new JacksonOffsetTimeSerializer(this, _useTimestamp, writeNanoseconds, _formatter, zoneModifier);
-    }
-
-    public JacksonOffsetTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
-        return new JacksonOffsetTimeSerializer(this, _useTimestamp, _useNanoseconds, df, zoneModifier);
     }
 
     @Override

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime;
+package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -42,6 +42,10 @@ public class JacksonLocalDateSerializer extends LocalDateSerializer {
 
     public static final JacksonLocalDateSerializer INSTANCE = new JacksonLocalDateSerializer();
 
+    public static JacksonLocalDateSerializer with(DateTimeFormatter df) {
+        return new JacksonLocalDateSerializer(INSTANCE, INSTANCE._useTimestamp, df, INSTANCE._shape);
+    }
+
     protected JacksonLocalDateSerializer(JacksonLocalDateSerializer base,
                                          Boolean useTimestamp,
                                          DateTimeFormatter df,
@@ -54,10 +58,6 @@ public class JacksonLocalDateSerializer extends LocalDateSerializer {
                                                     DateTimeFormatter df,
                                                     JsonFormat.Shape shape) {
         return new JacksonLocalDateSerializer(this, useTimestamp, df, shape);
-    }
-
-    public JacksonLocalDateSerializer with(DateTimeFormatter df) {
-        return new JacksonLocalDateSerializer(this, _useTimestamp, df, _shape);
     }
 
     @Override

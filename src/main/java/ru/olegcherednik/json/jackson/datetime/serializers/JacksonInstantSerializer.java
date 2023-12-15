@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime;
+package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -46,6 +46,12 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     protected final UnaryOperator<ZoneId> zoneModifier;
     protected final transient DateTimeFormatter defaultFormat;
 
+    public JacksonInstantSerializer(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+        super(INSTANCE, INSTANCE._useTimestamp, INSTANCE._useNanoseconds, df);
+        this.zoneModifier = zoneModifier;
+        defaultFormat = INSTANCE.defaultFormat;
+    }
+
     protected JacksonInstantSerializer() {
         super(Instant.class, Instant::toEpochMilli, Instant::getEpochSecond,
               Instant::getNano, JsonSettings.DF_INSTANT);
@@ -65,10 +71,6 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
     @Override
     protected JacksonInstantSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
         return new JacksonInstantSerializer(this, useTimestamp, df, zoneModifier);
-    }
-
-    public JacksonInstantSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
-        return new JacksonInstantSerializer(this, _useTimestamp, df, zoneModifier);
     }
 
     @Override

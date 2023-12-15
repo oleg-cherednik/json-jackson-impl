@@ -33,8 +33,8 @@ import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.JacksonEngine;
-import ru.olegcherednik.json.jackson.datetime.JacksonDateModule;
-import ru.olegcherednik.json.jackson.datetime.JacksonJavaTimeModule;
+import ru.olegcherednik.json.jackson.datetime.modules.JacksonDateModule;
+import ru.olegcherednik.json.jackson.datetime.modules.JacksonJavaTimeModule;
 import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Objects;
@@ -91,9 +91,10 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
 
+                     .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+                     .enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION)
                      .enable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
                      .enable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
-                     .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
                      .enable(JsonParser.Feature.ALLOW_COMMENTS)
                      .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
     }
@@ -117,6 +118,7 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                                                                 settings.getLocalDateTimeFormatter(),
                                                                 settings.getOffsetTimeFormatter(),
                                                                 settings.getOffsetDateTimeFormatter(),
+                                                                settings.getZonedDateTimeFormatter(),
                                                                 settings.getZoneModifier()));
         });
 

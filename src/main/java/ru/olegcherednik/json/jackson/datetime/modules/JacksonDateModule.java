@@ -17,12 +17,16 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime;
+package ru.olegcherednik.json.jackson.datetime.modules;
 
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import com.fasterxml.jackson.databind.module.SimpleDeserializers;
+import com.fasterxml.jackson.databind.module.SimpleKeyDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.jackson.datetime.deserializers.JacksonDateDeserializer;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -36,17 +40,34 @@ public class JacksonDateModule extends SimpleModule {
 
     private static final long serialVersionUID = -7801651470699380868L;
 
-    protected final DateFormat dateFormatter;
+    protected final DateFormat df;
 
     @Override
     public void setupModule(SetupContext context) {
         super.setupModule(context);
+        addSerializers(context);
+        addKeyDeserializers(context);
+        addDeserializers(context);
+    }
 
-        SimpleSerializers serializers = new SimpleSerializers();
-        serializers.addSerializer(Date.class, new DateSerializer(null, dateFormatter));
+    private void addSerializers(SetupContext context) {
+        SimpleSerializers ser = new SimpleSerializers();
+        ser.addSerializer(Date.class, new DateSerializer(null, df));
 
-        context.addSerializers(serializers);
-        context.addKeySerializers(serializers);
+        context.addSerializers(ser);
+        context.addKeySerializers(ser);
+    }
+
+    private void addKeyDeserializers(SetupContext context) {
+        SimpleKeyDeserializers des = new SimpleKeyDeserializers();
+//        des.addDeserializer(Date.class, DateKeyDeserJacksonJsr310KeyDeserializer.instant(instant));
+        context.addKeyDeserializers(des);
+    }
+
+    private void addDeserializers(SetupContext context) {
+        SimpleDeserializers des = new SimpleDeserializers();
+        des.addDeserializer(Date.class, JacksonDateDeserializer.with(df));
+        context.addDeserializers(des);
     }
 
 }
