@@ -48,6 +48,7 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
                                                   INSTANCE._useTimestamp,
                                                   INSTANCE._useNanoseconds,
                                                   df,
+                                                  INSTANCE._shape,
                                                   INSTANCE._writeZoneId != null && INSTANCE._writeZoneId,
                                                   zoneModifier);
     }
@@ -60,22 +61,23 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
                                              Boolean useTimestamp,
                                              Boolean useNanoseconds,
                                              DateTimeFormatter df,
+                                             JsonFormat.Shape shape,
                                              Boolean writeZoneId,
                                              UnaryOperator<ZoneId> zoneModifier) {
-        super(base, useTimestamp, useNanoseconds, df, writeZoneId);
+        super(base, useTimestamp, useNanoseconds, df, shape, writeZoneId);
         this.zoneModifier = zoneModifier;
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
         return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
-                                                  df, _writeZoneId, zoneModifier);
+                                                  df, shape, _writeZoneId, zoneModifier);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
         return new JacksonZonedDateTimeSerializer(this, _useTimestamp, writeNanoseconds,
-                                                  _formatter, writeZoneId, zoneModifier);
+                                                  _formatter, _shape, writeZoneId, zoneModifier);
     }
 
     @Override

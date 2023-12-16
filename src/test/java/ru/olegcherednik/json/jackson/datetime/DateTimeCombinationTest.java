@@ -22,7 +22,6 @@ package ru.olegcherednik.json.jackson.datetime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
@@ -40,6 +39,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -81,7 +81,7 @@ public class DateTimeCombinationTest {
     public void shouldWriteDatesWithAnnotationSettingsPreferable() throws IOException {
         DataTwo data = new DataTwo(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
         String actual = Json.createWriter(getSettings()).writeValue(data);
-        String expected = ResourceData.getResourceAsString("/datetime/custom_date_one.json").trim();
+        String expected = ResourceData.getResourceAsString("/datetime/custom_date_two.json").trim();
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -89,7 +89,7 @@ public class DateTimeCombinationTest {
         ZonedDateTime zdtLocal = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
         ZonedDateTime zdtSingapore = zdtLocal.withZoneSameInstant(LocalZoneId.ASIA_SINGAPORE);
 
-        String json = ResourceData.getResourceAsString("/datetime/custom_date_one.json").trim();
+        String json = ResourceData.getResourceAsString("/datetime/custom_date_two.json").trim();
 
         DataTwo actual = Json.createReader(getSettings()).readValue(json, DataTwo.class);
         DataTwo expected = new DataTwo(zdtLocal.toInstant(),
@@ -117,44 +117,29 @@ public class DateTimeCombinationTest {
                            .build();
     }
 
-    public void shouldSerializeDatesWithAnnotationSettingsPreferable1() throws JsonProcessingException {
-//        DateTimeFormatter df1 = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-//        DateTimeFormatter df2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-//        DateTimeFormatter df3 = df2.withZone(ZoneOffset.UTC);
+    public void shouldWriteDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
+        DataThree data = new DataThree(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
+        String actual = Json.writeValue(data);
+        String expected = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
+        assertThat(actual).isEqualTo(expected);
+    }
 
-//        JsonSettings settings = JsonSettings.builder()
-//                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
-//                                           .instantFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
-//                                           .localDateFormatter(DateTimeFormatter.ISO_DATE)
-//                                           .localTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss"))
-//                                           .dateTimeFormatter(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"))
-//                                           .offsetTimeFormatter(DateTimeFormatter.ISO_OFFSET_TIME)
-//                                           .offsetDateTimeFormatter(df2.withZone(ZoneId.systemDefault()))
-//                                           .zonedDateTimeFormatter(df2)
-//                                            .build();
+    public void shouldReadDatesAsNumber() throws IOException {
+        ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
 
-//        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
-//        DataTwo data = new DataTwo(zonedDateTime);
+        String json = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
 
-//        String actual = Json.writeValue(data);
+        DataThree actual = Json.readValue(json, DataThree.class);
+        DataThree expected = new DataThree(zdt.toInstant(),
+                                           zdt.toLocalDate(),
+                                           zdt.toLocalTime(),
+                                           zdt.toLocalDateTime(),
+                                           zdt.toOffsetDateTime().toOffsetTime(),
+                                           zdt.toOffsetDateTime(),
+                                           zdt.withZoneSameInstant(ZoneOffset.UTC),
+                                           Date.from(zdt.toInstant()));
 
-//        DataTwo data = new DataTwo(ZonedDateTime.parse("2023-12-03T07:39:20.187Z"));
-
-//        String actual = Json.writeValue(data);
-//        assertThat(actual).isEqualTo("{\"instant\":\"2023-12-03T10:39:20.187000+03:00\","
-//                                             + "\"localTime\":\"07:39:20.187\","
-//                                             + "\"localDate\":\"2023-12-03\","
-//                                             + "\"localDateTime\":\"2023-12-03T07:39:20.187\","
-//                                             + "\"offsetTime\":\"07:39:20.187Z\""
-//                                             + ",\"offsetDateTime\":\"2023-12-03T07:39:20.187Z\""
-//                                             + ",\"zonedDateTime\":\"2023-12-03T07:39:20.187Z\""
-//                                             + ",\"date\":\"2023-12-03T10:39:20.187000+03:00\"}");
-
-//        System.out.println(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(data));
-//        System.out.println(Json.createPrettyPrint(settings).writeValue(data));
-        // 2023-12-03T07:39:20.187 Z
-        // 2023-12-03T10:39:20.187 MSK
-        // 2023-12-03T15:39:20.187 SGT
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Getter
@@ -242,6 +227,59 @@ public class DateTimeCombinationTest {
                        @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
                        @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
                        @JsonProperty("date") Date date) {
+            this.instant = instant;
+            this.localDate = localDate;
+            this.localTime = localTime;
+            this.localDateTime = localDateTime;
+            this.offsetTime = offsetTime;
+            this.offsetDateTime = offsetDateTime;
+            this.zonedDateTime = zonedDateTime;
+            this.date = new Date(date.getTime());
+        }
+
+    }
+
+    @Getter
+    @EqualsAndHashCode
+    private static final class DataThree {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final Instant instant;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final LocalDate localDate;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final LocalTime localTime;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final LocalDateTime localDateTime;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final OffsetTime offsetTime;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final OffsetDateTime offsetDateTime;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final ZonedDateTime zonedDateTime;
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final Date date;
+
+        public DataThree(ZonedDateTime zonedDateTime) {
+            this(zonedDateTime.toInstant(),
+                 zonedDateTime.toLocalDate(),
+                 zonedDateTime.toLocalTime(),
+                 zonedDateTime.toLocalDateTime(),
+                 zonedDateTime.toOffsetDateTime().toOffsetTime(),
+                 zonedDateTime.toOffsetDateTime(),
+                 zonedDateTime,
+                 Date.from(zonedDateTime.toInstant()));
+        }
+
+        @JsonCreator
+        public DataThree(@JsonProperty("instant") Instant instant,
+                         @JsonProperty("localDate") LocalDate localDate,
+                         @JsonProperty("localTime") LocalTime localTime,
+                         @JsonProperty("localDateTime") LocalDateTime localDateTime,
+                         @JsonProperty("offsetTime") OffsetTime offsetTime,
+                         @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
+                         @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
+                         @JsonProperty("date") Date date) {
             this.instant = instant;
             this.localDate = localDate;
             this.localTime = localTime;

@@ -43,18 +43,21 @@ public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
     public static final JacksonLocalDateTimeSerializer INSTANCE = new JacksonLocalDateTimeSerializer();
 
     public static JacksonLocalDateTimeSerializer with(DateTimeFormatter df) {
-        return new JacksonLocalDateTimeSerializer(df);
+        return new JacksonLocalDateTimeSerializer(INSTANCE, INSTANCE._useTimestamp, INSTANCE._useNanoseconds, df);
     }
 
-    protected JacksonLocalDateTimeSerializer(DateTimeFormatter df) {
-        super(df);
+    protected JacksonLocalDateTimeSerializer(JacksonLocalDateTimeSerializer base,
+                                             Boolean useTimestamp,
+                                             Boolean useNanoseconds,
+                                             DateTimeFormatter df) {
+        super(base, useTimestamp, useNanoseconds, df);
     }
 
     @Override
     protected JacksonLocalDateTimeSerializer withFormat(Boolean useTimestamp,
                                                         DateTimeFormatter df,
                                                         JsonFormat.Shape shape) {
-        return new JacksonLocalDateTimeSerializer(df);
+        return new JacksonLocalDateTimeSerializer(this, useTimestamp, _useNanoseconds, df);
     }
 
     @Override

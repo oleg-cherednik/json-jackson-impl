@@ -90,6 +90,7 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
+                     .disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
 
                      .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
                      .enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION)
