@@ -21,10 +21,15 @@ package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.jackson.LocalZoneId;
 
 import java.time.Instant;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +45,62 @@ public class JacksonInstantSerializerTest {
         module.addSerializer(Instant.class, JacksonInstantSerializer.INSTANCE);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
-        String json = mapper.writeValueAsString(Instant.parse("2023-12-23T19:22:40.758927Z"));
-        assertThat(json).isEqualTo("1703359360.758927000");
+        String json = mapper.writeValueAsString(Instant.parse("2023-12-10T19:22:40.758927Z"));
+        assertThat(json).isEqualTo("1702236160.758927000");
+    }
+
+    public void shouldUseObjectMapperGlobalZoneWhenSerializeWithGlobalZoneSetAndFormatNull()
+            throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, new JacksonInstantSerializer(null, zoneId -> LocalZoneId.AUSTRALIA_SYDNEY));
+
+        ObjectMapper mapper = new ObjectMapper()
+                .setTimeZone(TimeZone.getTimeZone(LocalZoneId.ASIA_SINGAPORE))
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .registerModule(module);
+
+        Instant instant = Instant.parse("2023-12-23T19:22:40.758927Z");
+        String json = mapper.writeValueAsString(new Data(instant));
+        assertThat(json).isEqualTo("{\"one\":\"2023-12-24T03:22:40.758927+08:00\"}");
+    }
+
+    public void shouldIgnoreObjectMapperGlobalZoneWhenFeatureDisabled()
+            throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, new JacksonInstantSerializer(null, zoneId -> LocalZoneId.AUSTRALIA_SYDNEY));
+
+        ObjectMapper mapper = new ObjectMapper()
+                .setTimeZone(TimeZone.getTimeZone(LocalZoneId.ASIA_SINGAPORE))
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
+                .registerModule(module);
+
+        Instant instant = Instant.parse("2023-12-23T19:22:40.758927Z");
+        String json = mapper.writeValueAsString(new Data(instant));
+        assertThat(json).isEqualTo("{\"one\":\"2023-12-24T06:22:40.758927+11:00\"}");
+    }
+
+    public void shouldIgnoreFeatureContextTimeZoneWhenTimeZoneNotSet()
+            throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, new JacksonInstantSerializer(null, zoneId -> LocalZoneId.AUSTRALIA_SYDNEY));
+
+        ObjectMapper mapper = new ObjectMapper()
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
+                .registerModule(module);
+
+        Instant instant = Instant.parse("2023-12-23T19:22:40.758927Z");
+        String json = mapper.writeValueAsString(new Data(instant));
+        assertThat(json).isEqualTo("{\"one\":\"2023-12-24T06:22:40.758927+11:00\"}");
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    private static class Data {
+
+        private final Instant one;
+
     }
 
 }

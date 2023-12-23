@@ -88,14 +88,12 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
 
     @Override
     protected String formatValue(Instant value, SerializerProvider provider) {
-        assert _formatter == null;
-        assert defaultFormat != null;
-        assert defaultFormat.getZone() != null;
-
-        ZoneId zoneId = zoneModifier.apply(defaultFormat.getZone());
+        ZoneId zoneId = JsonSettings.SYSTEM_DEFAULT_ZONE_ID;
 
         if (provider.getConfig().hasExplicitTimeZone() && provider.isEnabled(WRITE_DATES_WITH_CONTEXT_TIME_ZONE))
             zoneId = provider.getTimeZone().toZoneId();
+        else
+            zoneId = zoneModifier.apply(zoneId);
 
         return defaultFormat.withZone(zoneId).format(value);
     }

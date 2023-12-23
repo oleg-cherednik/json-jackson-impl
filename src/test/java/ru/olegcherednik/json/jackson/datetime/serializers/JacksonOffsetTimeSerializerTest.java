@@ -19,9 +19,13 @@
 
 package ru.olegcherednik.json.jackson.datetime.serializers;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
 
 import java.time.OffsetTime;
@@ -42,6 +46,29 @@ public class JacksonOffsetTimeSerializerTest {
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
         String json = mapper.writeValueAsString(OffsetTime.parse("22:16:19.989648300+03:00"));
         assertThat(json).isEqualTo("[22,16,19,989648300,\"+03:00\"]");
+    }
+
+    public void shouldUseFeatureWhenSerializeWithFeature() throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.INSTANCE);
+
+        ObjectMapper mapper = new ObjectMapper()
+                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+                .registerModule(module);
+
+        OffsetTime offsetDateTime = OffsetTime.parse("22:16:19.989648300+03:00");
+        String json = mapper.writeValueAsString(new Data(offsetDateTime, offsetDateTime));
+        assertThat(json).isEqualTo("{\"one\":[22,16,19,989648300,\"+03:00\"],\"two\":[22,16,19,989,\"+03:00\"]}");
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    private static class Data {
+
+        @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+        private final OffsetTime one;
+        private final OffsetTime two;
+
     }
 
 }
