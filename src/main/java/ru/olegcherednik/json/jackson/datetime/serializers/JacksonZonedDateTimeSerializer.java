@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -49,7 +50,7 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
                                                   INSTANCE._useNanoseconds,
                                                   df,
                                                   INSTANCE._shape,
-                                                  INSTANCE._writeZoneId != null && INSTANCE._writeZoneId,
+                                                  Optional.ofNullable(INSTANCE._writeZoneId).orElse(false),
                                                   zoneModifier);
     }
 
