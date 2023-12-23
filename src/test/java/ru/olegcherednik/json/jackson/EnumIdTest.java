@@ -33,8 +33,6 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.api.enumid.EnumId;
 import ru.olegcherednik.json.api.enumid.EnumIdJsonCreator;
 
-import java.util.Objects;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -173,7 +171,7 @@ public class EnumIdTest {
         assertThat(EnumId.getId(null, Auto.BMW)).isSameAs(Auto.BMW.getId());
     }
 
-    @SuppressWarnings({ "FieldCanBeLocal", "EqualsHashCode" })
+    @EqualsAndHashCode
     private static final class Data {
 
         private final Auto notNullAuto;
@@ -188,40 +186,17 @@ public class EnumIdTest {
             this.notNullColor = notNullColor;
         }
 
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (!(obj instanceof Data))
-                return false;
-            Data data = (Data) obj;
-            return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
-                    && nullAuto == data.nullAuto && nullColor == data.nullColor;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(notNullAuto, notNullColor);
-        }
     }
 
-    public enum Auto implements EnumId {
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    private enum Auto implements EnumId {
 
         AUDI("audi"),
         BMW("bmw"),
         MERCEDES("mercedes");
 
         private final String id;
-
-        Auto(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
 
         @EnumIdJsonCreator
         @SuppressWarnings("unused")
@@ -230,7 +205,9 @@ public class EnumIdTest {
         }
     }
 
-    public enum Color implements EnumId {
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    private enum Color implements EnumId {
 
         RED("Red"),
         GREEN("Green"),
@@ -239,39 +216,24 @@ public class EnumIdTest {
 
         private final String id;
 
-        Color(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
-
         @SuppressWarnings("unused")
         public static Color parseId(String id) {
             return EnumId.parseId(Color.class, id);
         }
     }
 
-    public enum City implements EnumId {
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    private enum City implements EnumId {
 
         SAINT_PETERSBURG("Saint-Petersburg");
 
         private final String id;
 
-        City(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
     }
 
     @SuppressWarnings("unused")
-    public enum Shape implements EnumId {
+    private enum Shape implements EnumId {
 
         SQUARE;
 
@@ -286,20 +248,13 @@ public class EnumIdTest {
     }
 
     @SuppressWarnings("unused")
-    public enum Vodka implements EnumId {
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    private enum Vodka implements EnumId {
 
         SMIRNOFF("smirnoff");
 
         private final String id;
-
-        Vodka(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
 
         @EnumIdJsonCreator
         public static Vodka one(String id) {
@@ -313,20 +268,13 @@ public class EnumIdTest {
 
     }
 
-    public enum People implements EnumId {
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    private enum People implements EnumId {
 
         OLEG_CHEREDNIK("oleg-cherednik");
 
         private final String id;
-
-        People(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
 
         @EnumIdJsonCreator
         public static People one(String id) {
@@ -337,7 +285,7 @@ public class EnumIdTest {
     @SuppressWarnings("unused")
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-    public enum Country implements EnumId {
+    private enum Country implements EnumId {
 
         RUSSIAN_FEDERATION("russian-federation");
 
