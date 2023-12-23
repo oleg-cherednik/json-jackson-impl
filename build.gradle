@@ -26,8 +26,10 @@ repositories {
 group 'ru.oleg-cherednik.json'
 version '666'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
