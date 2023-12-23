@@ -51,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 01.12.2023
  */
 @Test
-@SuppressWarnings("PMD.AvoidDuplicateLiterals ")
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class DateTimeCombinationTest {
 
     public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {

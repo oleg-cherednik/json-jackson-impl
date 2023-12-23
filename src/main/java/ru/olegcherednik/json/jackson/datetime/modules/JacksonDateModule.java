@@ -19,7 +19,6 @@
 
 package ru.olegcherednik.json.jackson.datetime.modules;
 
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleKeyDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -58,9 +57,8 @@ public class JacksonDateModule extends SimpleModule {
         context.addKeySerializers(ser);
     }
 
-    private void addKeyDeserializers(SetupContext context) {
+    private static void addKeyDeserializers(SetupContext context) {
         SimpleKeyDeserializers des = new SimpleKeyDeserializers();
-//        des.addDeserializer(Date.class, DateKeyDeserJacksonJsr310KeyDeserializer.instant(instant));
         context.addKeyDeserializers(des);
     }
 
