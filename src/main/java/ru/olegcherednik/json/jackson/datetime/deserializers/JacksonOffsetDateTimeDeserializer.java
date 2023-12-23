@@ -45,7 +45,9 @@ public class JacksonOffsetDateTimeDeserializer extends InstantDeserializer<Offse
         super(base, df);
     }
 
-    protected JacksonOffsetDateTimeDeserializer(JacksonOffsetDateTimeDeserializer base, DateTimeFormatter df, Boolean leniency) {
+    protected JacksonOffsetDateTimeDeserializer(JacksonOffsetDateTimeDeserializer base,
+                                                DateTimeFormatter df,
+                                                Boolean leniency) {
         super(base, df, leniency);
     }
 

@@ -20,8 +20,8 @@
 package ru.olegcherednik.json.jackson;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.jackson.data.Data;
 import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.jackson.data.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

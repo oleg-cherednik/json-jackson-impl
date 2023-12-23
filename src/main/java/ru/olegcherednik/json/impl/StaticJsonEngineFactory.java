@@ -57,8 +57,8 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     // ---------- JsonEngineFactory ----------
 
     @Override
-    public JacksonEngine createJsonEngine(JsonSettings jsonSettings) {
-        ObjectMapper mapper = createMapper(jsonSettings);
+    public JacksonEngine createJsonEngine(JsonSettings settings) {
+        ObjectMapper mapper = createMapper(settings);
         return new JacksonEngine(mapper);
     }
 
@@ -74,17 +74,17 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         Objects.requireNonNull(settings);
 
         ObjectMapper mapper = new ObjectMapper();
-        config(mapper);
+        config(mapper, settings);
         registerModules(mapper, settings);
         return mapper;
     }
 
-    private static ObjectMapper config(ObjectMapper mapper) {
+    private static ObjectMapper config(ObjectMapper mapper, JsonSettings settings) {
         return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
 
-                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                     .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+                     .setSerializationInclusion(settings.isSerializeNull() ? JsonInclude.Include.ALWAYS
+                                                                           : JsonInclude.Include.NON_NULL)
 
                      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                      .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)

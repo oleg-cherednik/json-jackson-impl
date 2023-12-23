@@ -38,6 +38,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalQuery;
 
 /**
+ * @param <T> type of the instance
  * @author Oleg Cherednik
  * @since 15.12.2023
  */

@@ -106,6 +106,7 @@ public class WriteTest {
         }
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseWriterWhenFinishParse() throws IOException {
         Writer out = spy(new StringWriter());
         Json.writeValue(Data.OMEN, out);
@@ -113,6 +114,7 @@ public class WriteTest {
         assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseOutputStreamWhenFinishParse() throws IOException {
         OutputStream out = spy(new ByteArrayOutputStream());
         Json.writeValue(Data.OMEN, out);

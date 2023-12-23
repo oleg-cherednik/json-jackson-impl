@@ -69,7 +69,9 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     }
 
     @Override
-    protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
+    protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp,
+                                                        DateTimeFormatter df,
+                                                        JsonFormat.Shape shape) {
         return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
                                                   df, shape, _writeZoneId, zoneModifier);
     }

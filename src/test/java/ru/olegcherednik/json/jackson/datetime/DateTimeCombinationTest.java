@@ -155,7 +155,7 @@ public class DateTimeCombinationTest {
         private final ZonedDateTime zonedDateTime;
         private final Date date;
 
-        public DataOne(ZonedDateTime zonedDateTime) {
+        private DataOne(ZonedDateTime zonedDateTime) {
             this(zonedDateTime.toInstant(),
                  zonedDateTime.toLocalDate(),
                  zonedDateTime.toLocalTime(),
@@ -167,14 +167,14 @@ public class DateTimeCombinationTest {
         }
 
         @JsonCreator
-        public DataOne(@JsonProperty("instant") Instant instant,
-                       @JsonProperty("localDate") LocalDate localDate,
-                       @JsonProperty("localTime") LocalTime localTime,
-                       @JsonProperty("localDateTime") LocalDateTime localDateTime,
-                       @JsonProperty("offsetTime") OffsetTime offsetTime,
-                       @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
-                       @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
-                       @JsonProperty("date") Date date) {
+        private DataOne(@JsonProperty("instant") Instant instant,
+                        @JsonProperty("localDate") LocalDate localDate,
+                        @JsonProperty("localTime") LocalTime localTime,
+                        @JsonProperty("localDateTime") LocalDateTime localDateTime,
+                        @JsonProperty("offsetTime") OffsetTime offsetTime,
+                        @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
+                        @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
+                        @JsonProperty("date") Date date) {
             this.instant = instant;
             this.localDate = localDate;
             this.localTime = localTime;
@@ -190,7 +190,8 @@ public class DateTimeCombinationTest {
     @EqualsAndHashCode
     private static final class DataTwo {
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Asia/Singapore")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                timezone = "Asia/Singapore")
         private final Instant instant;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd")
         private final LocalDate localDate;
@@ -200,14 +201,17 @@ public class DateTimeCombinationTest {
         private final LocalDateTime localDateTime;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'HH:mm:ss.SSSXXX", timezone = "Asia/Singapore")
         private final OffsetTime offsetTime;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Asia/Singapore")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                timezone = "Asia/Singapore")
         private final OffsetDateTime offsetDateTime;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Asia/Singapore")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                timezone = "Asia/Singapore")
         private final ZonedDateTime zonedDateTime;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Asia/Singapore")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "'[two] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                timezone = "Asia/Singapore")
         private final Date date;
 
-        public DataTwo(ZonedDateTime zonedDateTime) {
+        private DataTwo(ZonedDateTime zonedDateTime) {
             this(zonedDateTime.toInstant(),
                  zonedDateTime.toLocalDate(),
                  zonedDateTime.toLocalTime(),
@@ -219,14 +223,14 @@ public class DateTimeCombinationTest {
         }
 
         @JsonCreator
-        public DataTwo(@JsonProperty("instant") Instant instant,
-                       @JsonProperty("localDate") LocalDate localDate,
-                       @JsonProperty("localTime") LocalTime localTime,
-                       @JsonProperty("localDateTime") LocalDateTime localDateTime,
-                       @JsonProperty("offsetTime") OffsetTime offsetTime,
-                       @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
-                       @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
-                       @JsonProperty("date") Date date) {
+        private DataTwo(@JsonProperty("instant") Instant instant,
+                        @JsonProperty("localDate") LocalDate localDate,
+                        @JsonProperty("localTime") LocalTime localTime,
+                        @JsonProperty("localDateTime") LocalDateTime localDateTime,
+                        @JsonProperty("offsetTime") OffsetTime offsetTime,
+                        @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
+                        @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
+                        @JsonProperty("date") Date date) {
             this.instant = instant;
             this.localDate = localDate;
             this.localTime = localTime;
@@ -260,7 +264,7 @@ public class DateTimeCombinationTest {
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
         private final Date date;
 
-        public DataThree(ZonedDateTime zonedDateTime) {
+        private DataThree(ZonedDateTime zonedDateTime) {
             this(zonedDateTime.toInstant(),
                  zonedDateTime.toLocalDate(),
                  zonedDateTime.toLocalTime(),
@@ -272,14 +276,14 @@ public class DateTimeCombinationTest {
         }
 
         @JsonCreator
-        public DataThree(@JsonProperty("instant") Instant instant,
-                         @JsonProperty("localDate") LocalDate localDate,
-                         @JsonProperty("localTime") LocalTime localTime,
-                         @JsonProperty("localDateTime") LocalDateTime localDateTime,
-                         @JsonProperty("offsetTime") OffsetTime offsetTime,
-                         @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
-                         @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
-                         @JsonProperty("date") Date date) {
+        private DataThree(@JsonProperty("instant") Instant instant,
+                          @JsonProperty("localDate") LocalDate localDate,
+                          @JsonProperty("localTime") LocalTime localTime,
+                          @JsonProperty("localDateTime") LocalDateTime localDateTime,
+                          @JsonProperty("offsetTime") OffsetTime offsetTime,
+                          @JsonProperty("offsetDateTime") OffsetDateTime offsetDateTime,
+                          @JsonProperty("zonedDateTime") ZonedDateTime zonedDateTime,
+                          @JsonProperty("date") Date date) {
             this.instant = instant;
             this.localDate = localDate;
             this.localTime = localTime;

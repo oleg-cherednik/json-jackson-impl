@@ -40,7 +40,9 @@ public class JacksonZonedDateTimeDeserializer extends InstantDeserializer<ZonedD
         super(base, df);
     }
 
-    protected JacksonZonedDateTimeDeserializer(JacksonZonedDateTimeDeserializer base, DateTimeFormatter df, Boolean leniency) {
+    protected JacksonZonedDateTimeDeserializer(JacksonZonedDateTimeDeserializer base,
+                                               DateTimeFormatter df,
+                                               Boolean leniency) {
         super(base, df, leniency);
     }
 

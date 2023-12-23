@@ -67,7 +67,9 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
     }
 
     @Override
-    protected JacksonOffsetTimeSerializer withFormat(Boolean useTimestamp, DateTimeFormatter df, JsonFormat.Shape shape) {
+    protected JacksonOffsetTimeSerializer withFormat(Boolean useTimestamp,
+                                                     DateTimeFormatter df,
+                                                     JsonFormat.Shape shape) {
         return new JacksonOffsetTimeSerializer(this, useTimestamp, _useNanoseconds, df, zoneModifier);
     }
 

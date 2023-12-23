@@ -36,7 +36,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
-@SuppressWarnings("NewClassNamingConvention")
 @Test
 public class ZonedDateTimePrettyPrintTest {
 
@@ -53,7 +52,8 @@ public class ZonedDateTimePrettyPrintTest {
         assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
     }
 
-    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
+    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint()
+            throws IOException {
         JsonSettings settings = JsonSettings.builder()
                                             .zoneModifier(zone -> LocalZoneId.ASIA_SINGAPORE)
                                             .build();
