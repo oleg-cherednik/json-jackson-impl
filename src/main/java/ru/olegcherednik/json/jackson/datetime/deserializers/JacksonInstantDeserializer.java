@@ -20,9 +20,11 @@
 package ru.olegcherednik.json.jackson.datetime.deserializers;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * @author Oleg Cherednik
@@ -33,7 +35,7 @@ public class JacksonInstantDeserializer extends InstantDeserializer<Instant> {
     private static final long serialVersionUID = 6304027484218980135L;
 
     public JacksonInstantDeserializer(DateTimeFormatter df) {
-        super(InstantDeserializer.INSTANT, df);
+        super(InstantDeserializer.INSTANT, withNotNull(df));
     }
 
     protected JacksonInstantDeserializer(JacksonInstantDeserializer base, DateTimeFormatter df) {
@@ -47,12 +49,16 @@ public class JacksonInstantDeserializer extends InstantDeserializer<Instant> {
     @Override
     @SuppressWarnings("PMD.CompareObjectsWithEquals")
     protected JacksonInstantDeserializer withDateFormat(DateTimeFormatter df) {
-        return df == _formatter ? this : new JacksonInstantDeserializer(this, df);
+        return df == _formatter ? this : new JacksonInstantDeserializer(this, withNotNull(df));
     }
 
     @Override
     protected JacksonInstantDeserializer withLeniency(Boolean leniency) {
         return new JacksonInstantDeserializer(this, _formatter, leniency);
+    }
+
+    protected static DateTimeFormatter withNotNull(DateTimeFormatter df) {
+        return Optional.ofNullable(df).orElse(JsonSettings.DF_INSTANT);
     }
 
 }

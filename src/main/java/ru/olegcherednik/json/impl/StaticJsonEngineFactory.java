@@ -105,6 +105,8 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
               .registerModule(new EnumIdModule());
 
         ServiceLoader.load(Module.class).forEach(module -> {
+            mapper.registerModule(module);
+
             if ("jackson-datatype-jsr310".equals(module.getModuleName()))
                 mapper.registerModule(new JacksonJavaTimeModule(settings.getInstantFormatter(),
                                                                 settings.getLocalDateFormatter(),
@@ -114,8 +116,6 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                                                                 settings.getOffsetDateTimeFormatter(),
                                                                 settings.getZonedDateTimeFormatter(),
                                                                 settings.getZoneModifier()));
-            else
-                mapper.registerModule(module);
         });
 
         return mapper;

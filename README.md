@@ -19,10 +19,12 @@
 </p>
 </details>
 
-# jackson-utils
+# json-jackson-impl
 
-> [Jackson Project](https://github.com/FasterXML/jackson) usability utilities.
-> It's designed to add additional features like easy and centralized configuration,
+> This is an implementation of [json-api](https://github.com/oleg-cherednik/json-api) base on
+> [Jackson Project](https://github.com/FasterXML/jackson).
+>
+> For more details naIt's designed to add additional features like easy and centralized configuration,
 > builder or static method set. Artifact does not include direct `Jackson Project`.
 > It is up to you to add them into your project.
 
@@ -61,42 +63,46 @@ implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
 _e.g. Jackson of version __2.15.3__:_
 
 ```xml
-<dependency>
-    <groupId>ru.oleg-cherednik.jackson</groupId>
-    <artifactId>jackson-utils</artifactId>
-    <version>2.7</version>
-</dependency>
-<dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.15.3</version>
-</dependency>
+
+<dependencies>
+    <dependency>
+        <groupId>ru.oleg-cherednik.jackson</groupId>
+        <artifactId>jackson-utils</artifactId>
+        <version>2.7</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.3</version>
+    </dependency>
+</dependencies>
 ```
 
 _Optional dependencies:_
 
 ```xml
+
 <dependencies>
-   <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-afterburner</artifactId>
-      <version>2.15.3</version>
-   </dependency>
-   <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-parameter-names</artifactId>
-      <version>2.15.3</version>
-   </dependency>
-   <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jdk8</artifactId>
-      <version>2.15.3</version>
-   </dependency>
-   <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>2.15.3</version>
-   </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-afterburner</artifactId>
+        <version>2.15.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-parameter-names</artifactId>
+        <version>2.15.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
+        <version>2.15.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>2.15.3</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -126,13 +132,13 @@ class Data {
 ```
 
 ```java
-String json = """
+String json="""
               {
                   "intVal" : 666,
                   "strVal" : "omen"
               }
               """;
-Data data = JacksonUtils.readValue(json, Data.class);
+        Data data=JacksonUtils.readValue(json,Data.class);
 ```
 
 ##### `String` to a list of custom object type
@@ -147,7 +153,7 @@ class Data {
 ```
 
 ```java
-String json = """
+String json="""
               [
                   {
                       "intVal" : 555,
@@ -159,7 +165,7 @@ String json = """
                   }
               ]
               """;
-List<Data> res = JacksonUtils.readList(json, Data.class);
+        List<Data> res=JacksonUtils.readList(json,Data.class);
 ```
 
 ##### `String` to a map of custom object type
@@ -167,7 +173,7 @@ List<Data> res = JacksonUtils.readList(json, Data.class);
 ###### Map with `String` keys and `Map` or primitive types as values
 
 ```java
-String json = """
+String json="""
               {
                   "victory" : {
                       "intVal" : 555,
@@ -179,8 +185,9 @@ String json = """
                   }
               }
               """;
-Map<String, Object> map = JacksonUtils.readMap(json);
+        Map<String, Object> map=JacksonUtils.readMap(json);
 ```
+
 __Note:__ `map` values have either primitive type or `Map` or `List`.
 
 ###### `String` to a map with `String` keys and given type as value
@@ -195,7 +202,7 @@ class Data {
 ```
 
 ```java
-String json = """
+String json="""
               {
                   "victory" : {
                       "intVal" : 555,
@@ -207,7 +214,7 @@ String json = """
                   }
               }
               """;
-Map<String, Data> map = JacksonUtils.readMap(json, Data.class);
+        Map<String, Data> map=JacksonUtils.readMap(json,Data.class);
 ```
 
 ###### `String` to a map with `Integer` keys and given type as value
@@ -222,7 +229,7 @@ class Data {
 ```
 
 ```java
-String json = """
+String json="""
               {
                   "1" : {
                       "intVal" : 555,
@@ -234,7 +241,7 @@ String json = """
                   }
               }
               """;
-Map<Integer, Data> map = JacksonUtils.readMap(json, Integer.class, Data.class);
+        Map<Integer, Data> map=JacksonUtils.readMap(json,Integer.class,Data.class);
 ```
 
 #### Read json from `InputStream`
@@ -252,15 +259,15 @@ class Data {
 
 ```json
 {
-  "intVal": 666,
-  "strVal": "omen"
+    "intVal": 666,
+    "strVal": "omen"
 }
 ```
 
 ```java
-try(InputStream in = ...) {
-    Data data = JacksonUtils.readValue(in, Data.class);
-}
+try(InputStream in=...){
+        Data data=JacksonUtils.readValue(in,Data.class);
+        }
 ```
 
 ##### `InputStream` to a list of custom object type
@@ -278,21 +285,21 @@ class Data {
 
 ```json
 [
-  {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 ]
 ```
 
 ```java
-try (InputStream in = ...) {
-    List<Data> res = JacksonUtils.readList(in, Data.class);
-}
+try(InputStream in=...){
+        List<Data> res=JacksonUtils.readList(in,Data.class);
+        }
 ```
 
 ##### Read lazy
@@ -308,25 +315,25 @@ class Data {
 
 ```json
 [
-  {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 ]
 ```
 
 ```java
-try(InputStream in = ...) {
-    Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
+try(InputStream in=...){
+        Iterator<Data> it=JacksonUtils.readListLazy(in,Data.class);
 
-    while (it.hasNext()) {
-        Data data = it.next();
-    }
-}
+        while(it.hasNext()){
+        Data data=it.next();
+        }
+        }
 ```
 
 ##### `InputStream` to a map of custom object type
@@ -335,21 +342,21 @@ try(InputStream in = ...) {
 
 ```json
 {
-  "victory": {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  "omen": {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    "victory": {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    "omen": {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 }
 ```
 
 ```java
-try (InputStream in = ...) {
-    Map<String, Object> map = JacksonUtils.readMap(in);
-}
+try(InputStream in=...){
+        Map<String, Object> map=JacksonUtils.readMap(in);
+        }
 ```
 
 __Note:__ `map` values have either primitive type or `Map` or `List`.
@@ -367,21 +374,21 @@ class Data {
 
 ```json
 {
-  "victory": {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  "omen": {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    "victory": {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    "omen": {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 }
 ```
 
 ```java
-try (InputStream in = ...) {
-    Map<String, Object> map = JacksonUtils.readMap(in, Data.class);
-}
+try(InputStream in=...){
+        Map<String, Object> map=JacksonUtils.readMap(in,Data.class);
+        }
 ```
 
 ###### Map with `Integer` keys and given type as value
@@ -397,21 +404,21 @@ class Data {
 
 ```json
 {
-  "1": {
-    "intVal": 555,
-    "strVal": "victory"
-  },
-  "2": {
-    "intVal": 666,
-    "strVal": "omen"
-  }
+    "1": {
+        "intVal": 555,
+        "strVal": "victory"
+    },
+    "2": {
+        "intVal": 666,
+        "strVal": "omen"
+    }
 }
 ```
 
 ```java
-try (InputStream in = ...) {
-    Map<Integer, Data> map = JacksonUtils.readMap(in, Integer.class, Data.class);
-}
+try(InputStream in=...){
+        Map<Integer, Data> map=JacksonUtils.readMap(in,Integer.class,Data.class);
+        }
 ```
 
 ##### Links
