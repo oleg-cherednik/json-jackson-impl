@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * @author Oleg Cherednik
@@ -38,7 +39,7 @@ public class JacksonOffsetDateTimeDeserializer extends InstantDeserializer<Offse
     private static final long serialVersionUID = -4594405514078469683L;
 
     public JacksonOffsetDateTimeDeserializer(DateTimeFormatter df) {
-        super(InstantDeserializer.OFFSET_DATE_TIME, df);
+        super(InstantDeserializer.OFFSET_DATE_TIME, withNotNull(df));
     }
 
     protected JacksonOffsetDateTimeDeserializer(JacksonOffsetDateTimeDeserializer base, DateTimeFormatter df) {
@@ -54,7 +55,7 @@ public class JacksonOffsetDateTimeDeserializer extends InstantDeserializer<Offse
     @Override
     @SuppressWarnings("PMD.CompareObjectsWithEquals")
     protected JacksonOffsetDateTimeDeserializer withDateFormat(DateTimeFormatter df) {
-        return df == _formatter ? this : new JacksonOffsetDateTimeDeserializer(this, df);
+        return df == _formatter ? this : new JacksonOffsetDateTimeDeserializer(this, withNotNull(df));
     }
 
     @Override
@@ -72,5 +73,9 @@ public class JacksonOffsetDateTimeDeserializer extends InstantDeserializer<Offse
     protected OffsetDateTime _fromDecimal(DeserializationContext context, BigDecimal value) {
         ZoneOffset zoneOffset = JsonSettings.SYSTEM_DEFAULT_ZONE_ID.getRules().getOffset(Instant.now());
         return super._fromDecimal(context, value).withOffsetSameInstant(zoneOffset);
+    }
+
+    protected static DateTimeFormatter withNotNull(DateTimeFormatter df) {
+        return Optional.ofNullable(df).orElse(JsonSettings.DF_OFFSET_DATE_TIME);
     }
 }

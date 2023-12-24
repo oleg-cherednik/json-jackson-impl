@@ -20,9 +20,11 @@
 package ru.olegcherednik.json.jackson.datetime.deserializers;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * @author Oleg Cherednik
@@ -33,7 +35,7 @@ public class JacksonZonedDateTimeDeserializer extends InstantDeserializer<ZonedD
     private static final long serialVersionUID = -5671981244499036058L;
 
     public JacksonZonedDateTimeDeserializer(DateTimeFormatter df) {
-        super(InstantDeserializer.ZONED_DATE_TIME, df);
+        super(InstantDeserializer.ZONED_DATE_TIME, withNotNull(df));
     }
 
     protected JacksonZonedDateTimeDeserializer(JacksonZonedDateTimeDeserializer base, DateTimeFormatter df) {
@@ -49,12 +51,16 @@ public class JacksonZonedDateTimeDeserializer extends InstantDeserializer<ZonedD
     @Override
     @SuppressWarnings("PMD.CompareObjectsWithEquals")
     protected JacksonZonedDateTimeDeserializer withDateFormat(DateTimeFormatter df) {
-        return df == _formatter ? this : new JacksonZonedDateTimeDeserializer(this, df);
+        return df == _formatter ? this : new JacksonZonedDateTimeDeserializer(this, withNotNull(df));
     }
 
     @Override
     protected JacksonZonedDateTimeDeserializer withLeniency(Boolean leniency) {
         return new JacksonZonedDateTimeDeserializer(this, _formatter, leniency);
+    }
+
+    protected static DateTimeFormatter withNotNull(DateTimeFormatter df) {
+        return Optional.ofNullable(df).orElse(JsonSettings.DF_ZONED_DATE_TIME);
     }
 
 }

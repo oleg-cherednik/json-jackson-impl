@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,22 +40,35 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 24.12.2023
  */
 @Test
-public class JacksonInstantDeserializerTest {
+@SuppressWarnings("NewClassNamingConvention")
+public class JacksonOffsetDateTimeDeserializerTest {
 
     public void shouldApplyLenientWhenDeserializeWithContextFormatter() throws JsonProcessingException {
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(Instant.class, new JacksonInstantDeserializer(DateTimeFormatter.ISO_INSTANT));
+        module.addDeserializer(OffsetDateTime.class,
+                               new JacksonOffsetDateTimeDeserializer(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 
-        String json = "{\"one\":\"2023-12-24T07:55:56.314124100Z\"}";
+        String json = "{\"one\":\"2023-12-24T08:12:13.330250600Z\"}";
         Data actual = new ObjectMapper().registerModule(module).readValue(json, Data.class);
-        Data expected = new Data(Instant.parse("2023-12-24T07:55:56.314124100Z"));
+        Data expected = new Data(OffsetDateTime.parse("2023-12-24T08:12:13.330250600Z"));
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public void shouldDeserializeFromLongWhenLongValueExists() throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(OffsetDateTime.class,
+                               new JacksonOffsetDateTimeDeserializer(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        String json = "{\"one\":\"1703405533330\"}";
+        Data actual = new ObjectMapper().registerModule(module).readValue(json, Data.class);
+        Data expected = new Data(OffsetDateTime.parse("+55948-10-09T22:42:10+03:00"));
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldNotCreateNewInstanceWhenUseSameDataTimeFormat() {
         LocalDeserializer deser = new LocalDeserializer(DateTimeFormatter.ISO_INSTANT);
-        JacksonInstantDeserializer deser1 = deser.withDateFormat(DateTimeFormatter.ISO_INSTANT);
-        JacksonInstantDeserializer deser2 = deser.withDateFormat(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        JacksonOffsetDateTimeDeserializer deser1 = deser.withDateFormat(DateTimeFormatter.ISO_INSTANT);
+        JacksonOffsetDateTimeDeserializer deser2 = deser.withDateFormat(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         assertThat(deser1).isSameAs(deser);
         assertThat(deser2).isNotSameAs(deser);
@@ -65,20 +78,20 @@ public class JacksonInstantDeserializerTest {
     @EqualsAndHashCode
     private static final class Data {
 
-        private final Instant one;
+        private final OffsetDateTime one;
 
         @JsonCreator
         private Data(@JsonProperty("one")
                      @JsonFormat(lenient = OptBoolean.TRUE)
-                     Instant one) {
+                     OffsetDateTime one) {
             this.one = one;
         }
 
     }
 
-    private static final class LocalDeserializer extends JacksonInstantDeserializer {
+    private static final class LocalDeserializer extends JacksonOffsetDateTimeDeserializer {
 
-        private static final long serialVersionUID = 1561269843027654505L;
+        private static final long serialVersionUID = 3316630704361784717L;
 
         private LocalDeserializer(DateTimeFormatter df) {
             super(df);
