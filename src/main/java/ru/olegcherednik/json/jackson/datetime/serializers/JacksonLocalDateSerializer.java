@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
@@ -61,12 +62,18 @@ public class JacksonLocalDateSerializer extends LocalDateSerializer {
     }
 
     @Override
-    public void serialize(LocalDate value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
+    public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        if (useTimestamp(provider)) {
+            if (_shape == JsonFormat.Shape.ARRAY) {
+                gen.writeStartArray();
+                _serializeAsArrayContents(value, gen, provider);
+                gen.writeEndArray();
+            } else
+                gen.writeNumber(value.toEpochDay());
+        } else if (_formatter == null)
+            gen.writeString(value.toString());
         else
-            generator.writeString(_formatter.withZone(JsonSettings.SYSTEM_DEFAULT_ZONE_ID).format(value));
+            gen.writeString(_formatter.format(value));
     }
 
 }

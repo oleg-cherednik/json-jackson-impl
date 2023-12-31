@@ -17,10 +17,9 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime.serializers;
+package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -40,10 +38,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Oleg Cherednik
- * @since 23.12.2023
+ * @since 31.12.2023
  */
 @Test
-public class JacksonLocalDateSerializerTest {
+public class JacksonLocalDateKeySerializerTest {
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
@@ -53,7 +51,7 @@ public class JacksonLocalDateSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"2023-12-10\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10\":\"localDate\"}}");
     }
 
     public void shouldUseEpochDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -64,7 +62,7 @@ public class JacksonLocalDateSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"localDate\":19701}}");
+        assertThat(json).isEqualTo("{\"map\":{\"19701\":\"localDate\"}}");
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
@@ -74,54 +72,12 @@ public class JacksonLocalDateSerializerTest {
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"10-12-2023\"}}");
-    }
-
-    public void shouldSerializeTimestampWhenShapeNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-            private final LocalDate localDate;
-
-        }
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        SimpleModule module = createModule(df);
-
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
-
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"localDate\":19701}");
-    }
-
-    public void shouldSerializeArrayWhenShapeNotNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-            private final LocalDate localDate;
-
-        }
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        SimpleModule module = createModule(df);
-
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
-
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"localDate\":[2023,12,10]}");
+        assertThat(json).isEqualTo("{\"map\":{\"10-12-2023\":\"localDate\"}}");
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
         SimpleModule module = new SimpleModule();
-        module.addSerializer(LocalDate.class, JacksonLocalDateSerializer.with(df));
+        module.addKeySerializer(LocalDate.class, new JacksonLocalDateKeySerializer(df));
         return module;
     }
 
@@ -130,15 +86,15 @@ public class JacksonLocalDateSerializerTest {
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     private static final class Data {
 
-        private final Map<String, LocalDate> map;
+        private final Map<LocalDate, String> map;
 
         @JsonCreator
-        private Data(@JsonProperty("map") Map<String, LocalDate> map) {
+        private Data(@JsonProperty("map") Map<LocalDate, String> map) {
             this.map = map;
         }
 
-        private Data(LocalDate value) {
-            this(Collections.singletonMap("localDate", value));
+        private Data(LocalDate key) {
+            this(Collections.singletonMap(key, "localDate"));
         }
 
     }

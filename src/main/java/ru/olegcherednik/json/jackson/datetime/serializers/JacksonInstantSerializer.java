@@ -70,13 +70,4 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
         return new JacksonInstantSerializer(this, _useTimestamp, writeNanoseconds, _formatter);
     }
 
-    @Override
-    protected String formatValue(Instant value, SerializerProvider provider) {
-        return super.formatValue(value, provider);
-    }
-
-    @Override
-    public void serialize(Instant value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        super.serialize(value, gen, provider);
-    }
 }
