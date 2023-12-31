@@ -108,7 +108,7 @@ public abstract class JacksonKeySerializer<T extends Temporal> extends StdSerial
     }
 
     protected boolean useTimestamp(SerializerProvider provider) {
-        return df == null && isEnabled(provider, SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return df == null && isEnabled(provider, SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
     }
 
     protected boolean useNanoseconds(SerializerProvider provider) {

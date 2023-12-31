@@ -25,42 +25,48 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author Oleg Cherednik
  * @since 31.12.2023
  */
-public class JacksonLocalDateKeySerializer extends StdSerializer<LocalDate> {
+public class JacksonLocalTimeKeySerializer extends StdSerializer<LocalTime> {
 
-    private static final long serialVersionUID = 9115904762296059864L;
+    private static final long serialVersionUID = 290039851312525680L;
 
     protected final DateTimeFormatter df;
 
-    public JacksonLocalDateKeySerializer(DateTimeFormatter df) {
-        super(LocalDate.class);
+    public JacksonLocalTimeKeySerializer(DateTimeFormatter df) {
+        super(LocalTime.class);
         this.df = df;
     }
 
     @Override
-    public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         String fieldName = useTimestamp(provider) ? getTimestampFieldName(value, gen, provider)
                                                   : getStringFieldName(value, gen, provider);
 
         gen.writeFieldName(fieldName);
     }
 
-    protected String getStringFieldName(LocalDate value, JsonGenerator gen, SerializerProvider provider) {
+    protected String getStringFieldName(LocalTime value, JsonGenerator gen, SerializerProvider provider) {
         return df == null ? value.toString() : df.format(value);
     }
 
-    protected String getTimestampFieldName(LocalDate value, JsonGenerator gen, SerializerProvider provider) {
-        return String.valueOf(value.toEpochDay());
+    protected String getTimestampFieldName(LocalTime value, JsonGenerator gen, SerializerProvider provider) {
+        if (useNanoseconds(provider))
+            return String.valueOf(value.toNanoOfDay());
+        return String.valueOf(value.toSecondOfDay());
     }
 
     protected boolean useTimestamp(SerializerProvider provider) {
         return df == null && isEnabled(provider, SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
+    }
+
+    protected boolean useNanoseconds(SerializerProvider provider) {
+        return isEnabled(provider, SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
     }
 
     protected static boolean isEnabled(SerializerProvider provider, SerializationFeature feature) {

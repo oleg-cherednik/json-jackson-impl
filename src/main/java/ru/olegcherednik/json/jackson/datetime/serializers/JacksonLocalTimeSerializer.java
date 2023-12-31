@@ -21,6 +21,7 @@ package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.AccessLevel;
@@ -35,7 +36,6 @@ import java.time.format.DateTimeFormatter;
  * @author Oleg Cherednik
  * @since 01.12.2023
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
 
     private static final long serialVersionUID = 8966284219834243016L;
@@ -43,29 +43,54 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
     public static final JacksonLocalTimeSerializer INSTANCE = new JacksonLocalTimeSerializer();
 
     public static JacksonLocalTimeSerializer with(DateTimeFormatter df) {
-        return new JacksonLocalTimeSerializer(INSTANCE, INSTANCE._useTimestamp, INSTANCE._useNanoseconds, df);
+        return new JacksonLocalTimeSerializer(INSTANCE, INSTANCE._useTimestamp, INSTANCE._useNanoseconds, df, null);
+    }
+
+    protected final JsonFormat.Shape shape;
+
+    protected JacksonLocalTimeSerializer() {
+        shape = null;
     }
 
     protected JacksonLocalTimeSerializer(JacksonLocalTimeSerializer base,
                                          Boolean useTimestamp,
                                          Boolean useNanoseconds,
-                                         DateTimeFormatter df) {
+                                         DateTimeFormatter df,
+                                         JsonFormat.Shape shape) {
         super(base, useTimestamp, useNanoseconds, df);
+        this.shape = shape;
     }
 
     @Override
     protected JacksonLocalTimeSerializer withFormat(Boolean useTimestamp,
                                                     DateTimeFormatter df,
                                                     JsonFormat.Shape shape) {
-        return new JacksonLocalTimeSerializer(this, useTimestamp, _useNanoseconds, df);
+        return new JacksonLocalTimeSerializer(this, useTimestamp, _useNanoseconds, df, shape);
     }
 
     @Override
-    public void serialize(LocalTime value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
+    public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        if (useTimestamp(provider)) {
+            if (useNanoseconds(provider))
+                gen.writeNumber(value.toNanoOfDay());
+            else if (shape == JsonFormat.Shape.ARRAY)
+                super.serialize(value, gen, provider);
+            else
+                gen.writeNumber(value.toSecondOfDay());
+        } else if (_formatter == null)
+            gen.writeString(value.toString());
         else
-            generator.writeString(_formatter.withZone(JsonSettings.SYSTEM_DEFAULT_ZONE_ID).format(value));
+            gen.writeString(_formatter.format(value));
     }
+
+    @Override
+    protected boolean useNanoseconds(SerializerProvider provider) {
+        if (shape == JsonFormat.Shape.NUMBER_INT)
+            return false;
+        if (shape == JsonFormat.Shape.NUMBER_FLOAT)
+            return true;
+
+        return super.useNanoseconds(provider);
+    }
+
 }

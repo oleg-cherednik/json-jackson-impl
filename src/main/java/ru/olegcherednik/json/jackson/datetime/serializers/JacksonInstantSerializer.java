@@ -70,4 +70,8 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
         return new JacksonInstantSerializer(this, _useTimestamp, writeNanoseconds, _formatter);
     }
 
+    @Override
+    public void serialize(Instant value, JsonGenerator generator, SerializerProvider provider) throws IOException {
+        super.serialize(value, generator, provider);
+    }
 }

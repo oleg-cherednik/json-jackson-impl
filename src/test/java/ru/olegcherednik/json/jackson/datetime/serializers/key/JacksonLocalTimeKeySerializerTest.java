@@ -30,6 +30,7 @@ import lombok.Getter;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Map;
@@ -41,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 31.12.2023
  */
 @Test
-public class JacksonLocalDateKeySerializerTest {
+public class JacksonLocalTimeKeySerializerTest {
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
@@ -50,34 +51,47 @@ public class JacksonLocalDateKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10\":\"localDate\"}}");
+        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        assertThat(json).isEqualTo("{\"map\":{\"19:22:40.758927\":\"localTime\"}}");
     }
 
-    public void shouldUseEpochDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
+    public void shouldUseNanoOfDayWhenWriteDateAsTimestampsNano() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
                 .enable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
+                .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"19701\":\"localDate\"}}");
+        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        assertThat(json).isEqualTo("{\"map\":{\"69760758927000\":\"localTime\"}}");
+    }
+
+    public void shouldUseSecondOfDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
+        SimpleModule module = createModule(null);
+
+        ObjectMapper mapper = new ObjectMapper()
+                .enable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+                .registerModule(module);
+
+        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        assertThat(json).isEqualTo("{\"map\":{\"69760\":\"localTime\"}}");
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("SSS.ss:mm:HH");
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
-        assertThat(json).isEqualTo("{\"map\":{\"10-12-2023\":\"localDate\"}}");
+        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        assertThat(json).isEqualTo("{\"map\":{\"758.40:22:19\":\"localTime\"}}");
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
         SimpleModule module = new SimpleModule();
-        module.addKeySerializer(LocalDate.class, new JacksonLocalDateKeySerializer(df));
+        module.addKeySerializer(LocalTime.class, new JacksonLocalTimeKeySerializer(df));
         return module;
     }
 
@@ -86,15 +100,15 @@ public class JacksonLocalDateKeySerializerTest {
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     private static final class Data {
 
-        private final Map<LocalDate, String> map;
+        private final Map<LocalTime, String> map;
 
         @JsonCreator
-        private Data(@JsonProperty("map") Map<LocalDate, String> map) {
+        private Data(@JsonProperty("map") Map<LocalTime, String> map) {
             this.map = map;
         }
 
-        private Data(LocalDate key) {
-            this(Collections.singletonMap(key, "localDate"));
+        private Data(LocalTime key) {
+            this(Collections.singletonMap(key, "localTime"));
         }
 
     }

@@ -49,7 +49,7 @@ public class JacksonInstantKeySerializerTest {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
@@ -61,7 +61,7 @@ public class JacksonInstantKeySerializerTest {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
-                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .enable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
@@ -73,7 +73,7 @@ public class JacksonInstantKeySerializerTest {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
-                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .enable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 

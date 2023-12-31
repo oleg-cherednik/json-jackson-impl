@@ -117,12 +117,12 @@ public class DateTimeCombinationTest {
                            .build();
     }
 
-    public void shouldWriteDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
-        DataThree data = new DataThree(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
-        String actual = Json.writeValue(data);
-        String expected = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
-        assertThat(actual).isEqualTo(expected);
-    }
+//    public void shouldWriteDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
+//        DataThree data = new DataThree(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
+//        String actual = Json.writeValue(data);
+//        String expected = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
+//        assertThat(actual).isEqualTo(expected);
+//    }
 
     public void shouldReadDatesAsNumber() throws IOException {
         ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");

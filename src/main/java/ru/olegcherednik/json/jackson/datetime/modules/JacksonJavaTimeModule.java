@@ -41,6 +41,7 @@ import ru.olegcherednik.json.jackson.datetime.serializers.JacksonOffsetTimeSeria
 import ru.olegcherednik.json.jackson.datetime.serializers.JacksonZonedDateTimeSerializer;
 import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonInstantKeySerializer;
 import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonLocalDateKeySerializer;
+import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonLocalTimeKeySerializer;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -84,6 +85,7 @@ public class JacksonJavaTimeModule extends SimpleModule {
         SimpleSerializers ser = new SimpleSerializers();
         ser.addSerializer(Instant.class, new JacksonInstantKeySerializer(instant));
         ser.addSerializer(LocalDate.class, new JacksonLocalDateKeySerializer(localDate));
+        ser.addSerializer(LocalTime.class, new JacksonLocalTimeKeySerializer(localTime));
         context.addKeySerializers(ser);
     }
 
