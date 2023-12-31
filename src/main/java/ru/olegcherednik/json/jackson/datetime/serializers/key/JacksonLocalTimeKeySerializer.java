@@ -51,14 +51,14 @@ public class JacksonLocalTimeKeySerializer extends StdSerializer<LocalTime> {
         gen.writeFieldName(fieldName);
     }
 
-    protected String getStringFieldName(LocalTime value, JsonGenerator gen, SerializerProvider provider) {
-        return df == null ? value.toString() : df.format(value);
-    }
-
     protected String getTimestampFieldName(LocalTime value, JsonGenerator gen, SerializerProvider provider) {
         if (useNanoseconds(provider))
             return String.valueOf(value.toNanoOfDay());
         return String.valueOf(value.toSecondOfDay());
+    }
+
+    protected String getStringFieldName(LocalTime value, JsonGenerator gen, SerializerProvider provider) {
+        return df == null ? value.toString() : df.format(value);
     }
 
     protected boolean useTimestamp(SerializerProvider provider) {

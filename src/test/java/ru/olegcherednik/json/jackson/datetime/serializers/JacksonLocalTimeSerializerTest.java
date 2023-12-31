@@ -177,14 +177,4 @@ public class JacksonLocalTimeSerializerTest {
 
     }
 
-
-//    public void shouldUserSuperClassLogicWhenDateFormatIsNull() throws JsonProcessingException {
-//        SimpleModule module = new SimpleModule();
-//        module.addSerializer(LocalTime.class, JacksonLocalTimeSerializer.INSTANCE);
-//
-//        ObjectMapper mapper = new ObjectMapper().registerModule(module);
-//        String json = mapper.writeValueAsString(LocalTime.parse("13:57:14.225"));
-//        assertThat(json).isEqualTo("[13,57,14,225000000]");
-//    }
-
 }

@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -61,12 +60,13 @@ public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
     }
 
     @Override
-    public void serialize(LocalDateTime value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
+    public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        if (useTimestamp(provider))
+            super.serialize(value, gen, provider);
+        else if (_formatter == null)
+            gen.writeString(value.toString());
         else
-            generator.writeString(_formatter.withZone(JsonSettings.SYSTEM_DEFAULT_ZONE_ID).format(value));
+            gen.writeString(_formatter.format(value));
     }
 
 }

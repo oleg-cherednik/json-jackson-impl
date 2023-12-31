@@ -25,46 +25,32 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author Oleg Cherednik
  * @since 31.12.2023
  */
-public class JacksonLocalDateKeySerializer extends StdSerializer<LocalDate> {
+public class JacksonLocalDateTimeKeySerializer extends StdSerializer<LocalDateTime> {
 
-    private static final long serialVersionUID = 9115904762296059864L;
+    private static final long serialVersionUID = 8090551111500462382L;
 
     protected final DateTimeFormatter df;
 
-    public JacksonLocalDateKeySerializer(DateTimeFormatter df) {
-        super(LocalDate.class);
+    public JacksonLocalDateTimeKeySerializer(DateTimeFormatter df) {
+        super(LocalDateTime.class);
         this.df = df;
     }
 
     @Override
-    public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        String fieldName = useTimestamp(provider) ? getTimestampFieldName(value, gen, provider)
-                                                  : getStringFieldName(value, gen, provider);
-
+    public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        String fieldName = getStringFieldName(value, gen, provider);
         gen.writeFieldName(fieldName);
     }
 
-    protected String getTimestampFieldName(LocalDate value, JsonGenerator gen, SerializerProvider provider) {
-        return String.valueOf(value.toEpochDay());
-    }
-
-    protected String getStringFieldName(LocalDate value, JsonGenerator gen, SerializerProvider provider) {
+    protected String getStringFieldName(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) {
         return df == null ? value.toString() : df.format(value);
-    }
-
-    protected boolean useTimestamp(SerializerProvider provider) {
-        return df == null && isEnabled(provider, SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
-    }
-
-    protected static boolean isEnabled(SerializerProvider provider, SerializationFeature feature) {
-        return provider.isEnabled(feature);
     }
 
 }
