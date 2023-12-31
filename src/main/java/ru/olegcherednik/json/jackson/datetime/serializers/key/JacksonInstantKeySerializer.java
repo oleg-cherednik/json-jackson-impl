@@ -17,23 +17,26 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.jackson;
+package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.ZoneModifier;
 
+import java.time.Instant;
 import java.time.ZoneId;
-import java.util.TimeZone;
+import java.time.format.DateTimeFormatter;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
- * @since 04.05.2022
+ * @since 25.12.2023
  */
-@SuppressWarnings("PMD.ClassNamingConventions")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class LocalZoneId {
+public class JacksonInstantKeySerializer extends JacksonKeySerializer<Instant> {
 
-    public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
-    public static final ZoneId AUSTRALIA_SYDNEY = ZoneId.of("Australia/Sydney");
+    private static final long serialVersionUID = 154759679223502525L;
+
+    public JacksonInstantKeySerializer(DateTimeFormatter df) {
+        super(Instant.class, df, ZoneModifier.USE_ORIGINAL,
+              Instant::toEpochMilli, Instant::getEpochSecond, Instant::getNano);
+    }
 
 }

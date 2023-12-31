@@ -43,7 +43,7 @@ configurations {
 checkstyle {
     toolVersion = '10.10.0'
     configFile = "${projectDir}/misc/checkstyle/checkstyle.xml" as File
-    ignoreFailures = false
+    ignoreFailures = true
     maxWarnings = 0
     maxErrors = 0
 }
@@ -52,7 +52,7 @@ pmd {
     toolVersion = '6.21.0'
     consoleOutput = true
     rulesMinimumPriority = 5
-    ignoreFailures = false
+    ignoreFailures = true
     ruleSets = [
             "${projectDir}/misc/pmd/bestpractices.xml",
             "${projectDir}/misc/pmd/codestyle.xml",

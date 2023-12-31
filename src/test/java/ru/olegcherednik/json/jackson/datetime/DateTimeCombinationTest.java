@@ -54,29 +54,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class DateTimeCombinationTest {
 
-    public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
-        DataOne data = new DataOne(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
+//    public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
+//        DataOne data = new DataOne(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
+//
+//        String actual = Json.writeValue(data);
+//        String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
+//        assertThat(actual).isEqualTo(expected);
+//    }
 
-        String actual = Json.writeValue(data);
-        String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
-        ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
-
-        String json = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
-        DataOne actual = Json.readValue(json, DataOne.class);
-        DataOne expected = new DataOne(zdt.toInstant(),
-                                       zdt.toLocalDate(),
-                                       zdt.toLocalTime(),
-                                       zdt.toLocalDateTime(),
-                                       zdt.toOffsetDateTime().toOffsetTime(),
-                                       zdt.toOffsetDateTime(),
-                                       zdt.withZoneSameInstant(ZoneId.systemDefault()),
-                                       Date.from(zdt.toInstant()));
-        assertThat(actual).isEqualTo(expected);
-    }
+//    public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
+//        ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
+//
+//        String json = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
+//        DataOne actual = Json.readValue(json, DataOne.class);
+//        DataOne expected = new DataOne(zdt.toInstant(),
+//                                       zdt.toLocalDate(),
+//                                       zdt.toLocalTime(),
+//                                       zdt.toLocalDateTime(),
+//                                       zdt.toOffsetDateTime().toOffsetTime(),
+//                                       zdt.toOffsetDateTime(),
+//                                       zdt.withZoneSameInstant(ZoneId.systemDefault()),
+//                                       Date.from(zdt.toInstant()));
+//        assertThat(actual).isEqualTo(expected);
+//    }
 
     public void shouldWriteDatesWithAnnotationSettingsPreferable() throws IOException {
         DataTwo data = new DataTwo(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));

@@ -21,19 +21,20 @@ package ru.olegcherednik.json.jackson;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import sun.util.calendar.ZoneInfo;
 
 import java.time.ZoneId;
 import java.util.TimeZone;
 
 /**
  * @author Oleg Cherednik
- * @since 04.05.2022
+ * @since 30.12.2023
  */
 @SuppressWarnings("PMD.ClassNamingConventions")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class LocalZoneId {
+public final class LocalTimeZone {
 
-    public static final ZoneId ASIA_SINGAPORE = ZoneId.of("Asia/Singapore");
-    public static final ZoneId AUSTRALIA_SYDNEY = ZoneId.of("Australia/Sydney");
+    public static final TimeZone ASIA_SINGAPORE = ZoneInfo.getTimeZone(LocalZoneId.ASIA_SINGAPORE);
+    public static final TimeZone AUSTRALIA_SYDNEY = ZoneInfo.getTimeZone(LocalZoneId.AUSTRALIA_SYDNEY);
 
 }

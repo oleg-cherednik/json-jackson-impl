@@ -39,6 +39,7 @@ import ru.olegcherednik.json.jackson.datetime.serializers.JacksonLocalTimeSerial
 import ru.olegcherednik.json.jackson.datetime.serializers.JacksonOffsetDateTimeSerializer;
 import ru.olegcherednik.json.jackson.datetime.serializers.JacksonOffsetTimeSerializer;
 import ru.olegcherednik.json.jackson.datetime.serializers.JacksonZonedDateTimeSerializer;
+import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonInstantKeySerializer;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -72,25 +73,29 @@ public class JacksonJavaTimeModule extends SimpleModule {
     @Override
     public void setupModule(SetupContext context) {
         super.setupModule(context);
+        addKeySerializers(context);
         addSerializers(context);
         addKeyDeserializers(context);
         addDeserializers(context);
     }
 
+    private void addKeySerializers(SetupContext context) {
+        SimpleSerializers ser = new SimpleSerializers();
+        ser.addSerializer(Instant.class, new JacksonInstantKeySerializer(instant));
+        context.addKeySerializers(ser);
+    }
+
     private void addSerializers(SetupContext context) {
         SimpleSerializers ser = new SimpleSerializers();
 
-        ser.addSerializer(Instant.class, new JacksonInstantSerializer(instant, zoneModifier));
+        ser.addSerializer(Instant.class, new JacksonInstantSerializer(instant));
         ser.addSerializer(LocalDate.class, JacksonLocalDateSerializer.with(localDate));
         ser.addSerializer(LocalTime.class, JacksonLocalTimeSerializer.with(localTime));
         ser.addSerializer(LocalDateTime.class, JacksonLocalDateTimeSerializer.with(localDateTime));
         ser.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.with(offsetTime, zoneModifier));
-        ser.addSerializer(OffsetDateTime.class, JacksonOffsetDateTimeSerializer.with(offsetDateTime,
-                                                                                     zoneModifier));
-        ser.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(zonedDateTime,
-                                                                                   zoneModifier));
+        ser.addSerializer(OffsetDateTime.class, JacksonOffsetDateTimeSerializer.with(offsetDateTime, zoneModifier));
+        ser.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(zonedDateTime, zoneModifier));
 
-        context.addKeySerializers(ser);
         context.addSerializers(ser);
     }
 
