@@ -45,6 +45,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonLocalTimeSerializerTest {
 
+    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758927");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -52,7 +54,7 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"19:22:40.758927\"}}");
     }
 
@@ -64,7 +66,7 @@ public class JacksonLocalTimeSerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":69760758927000}}");
     }
 
@@ -76,7 +78,7 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":69760}}");
     }
 
@@ -86,7 +88,7 @@ public class JacksonLocalTimeSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"758.40:22:19\"}}");
     }
 
@@ -107,7 +109,7 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"localTime\":69760}");
     }
 
@@ -128,7 +130,7 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"localTime\":69760758927000}");
     }
 
@@ -149,7 +151,7 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
     }
 

@@ -33,7 +33,6 @@ import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 
-import java.time.Instant;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -48,6 +47,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonOffsetTimeSerializerTest {
 
+    private static final OffsetTime OFFSET_TIME = OffsetTime.parse("22:16:19.989648300+03:00");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -55,9 +56,8 @@ public class JacksonOffsetTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        OffsetTime offsetTime = OffsetTime.parse("22:16:19.989648300+03:00");
-        String json = mapper.writeValueAsString(new Data(offsetTime));
-        assertThat(json).isEqualTo("{\"map\":{\"offsetTime\":\"" + offsetTime + "\"}}");
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
+        assertThat(json).isEqualTo("{\"map\":{\"offsetTime\":\"" + OFFSET_TIME + "\"}}");
     }
 
     public void shouldUseArrayWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -67,7 +67,7 @@ public class JacksonOffsetTimeSerializerTest {
                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"offsetTime\":[22,16,19,989648300,\"+03:00\"]}}");
     }
 
@@ -77,7 +77,7 @@ public class JacksonOffsetTimeSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"offsetTime\":\"[one]10:16:19+03:00\"}}");
     }
 
@@ -88,7 +88,7 @@ public class JacksonOffsetTimeSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"offsetTime\":\"[one]03:16:19.989+08:00\"}}");
     }
 
@@ -109,7 +109,7 @@ public class JacksonOffsetTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"offsetTime\":[22,16,19,989,\"+03:00\"]}");
     }
 
@@ -130,7 +130,7 @@ public class JacksonOffsetTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"offsetTime\":[22,16,19,989,\"+03:00\"]}");
     }
 
@@ -154,7 +154,7 @@ public class JacksonOffsetTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"offsetTime\":\"22:16:19.989648300+03:00\"}");
     }
 

@@ -47,6 +47,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonInstantSerializerTest {
 
+    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758927Z");
+    private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -54,7 +57,7 @@ public class JacksonInstantSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758927Z\"}}");
     }
 
@@ -67,7 +70,7 @@ public class JacksonInstantSerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":1702236160.758927000}}");
     }
 
@@ -79,31 +82,29 @@ public class JacksonInstantSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":1702236160758}}");
     }
 
     public void shouldUseDateFormatZoneWhenDateFormatHasZone() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-                                                .withZone(LocalZoneId.ASIA_SINGAPORE);
+        DateTimeFormatter df = DF.withZone(LocalZoneId.ASIA_SINGAPORE);
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-11T03:22:40.758+08:00\"}}");
     }
 
     public void shouldUseContextZoneWhenContextZoneExists() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        SimpleModule module = createModule(df);
+        SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-11T03:22:40.758+08:00\"}}");
     }
 
@@ -116,7 +117,7 @@ public class JacksonInstantSerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758927Z\"}}");
     }
 
@@ -130,14 +131,13 @@ public class JacksonInstantSerializerTest {
 
         }
 
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        SimpleModule module = createModule(df);
+        SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"instant\":1702236160758}");
     }
 
@@ -151,8 +151,7 @@ public class JacksonInstantSerializerTest {
 
         }
 
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        SimpleModule module = createModule(df);
+        SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)

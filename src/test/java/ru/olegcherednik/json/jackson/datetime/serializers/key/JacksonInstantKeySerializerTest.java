@@ -45,6 +45,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonInstantKeySerializerTest {
 
+    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758927Z");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -52,7 +54,7 @@ public class JacksonInstantKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
     }
 
@@ -65,7 +67,7 @@ public class JacksonInstantKeySerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"1702236160.758927000\":\"instant\"}}");
     }
 
@@ -77,7 +79,7 @@ public class JacksonInstantKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"1702236160758\":\"instant\"}}");
     }
 
@@ -88,7 +90,7 @@ public class JacksonInstantKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-11T03:22:40.758+08:00\":\"instant\"}}");
     }
 
@@ -101,7 +103,7 @@ public class JacksonInstantKeySerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-11T03:22:40.758+08:00\":\"instant\"}}");
     }
 
@@ -114,7 +116,7 @@ public class JacksonInstantKeySerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
     }
 
@@ -126,7 +128,7 @@ public class JacksonInstantKeySerializerTest {
                 .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
+        String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
     }
 

@@ -21,12 +21,8 @@ package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalTime;

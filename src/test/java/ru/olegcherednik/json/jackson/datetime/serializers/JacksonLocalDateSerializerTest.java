@@ -45,6 +45,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonLocalDateSerializerTest {
 
+    private static final LocalDate LOCAL_DATE = LocalDate.parse("2023-12-10");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -52,7 +54,7 @@ public class JacksonLocalDateSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
         assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"2023-12-10\"}}");
     }
 
@@ -63,7 +65,7 @@ public class JacksonLocalDateSerializerTest {
                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
         assertThat(json).isEqualTo("{\"map\":{\"localDate\":19701}}");
     }
 
@@ -73,7 +75,7 @@ public class JacksonLocalDateSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
         assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"10-12-2023\"}}");
     }
 
@@ -94,7 +96,7 @@ public class JacksonLocalDateSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
         assertThat(json).isEqualTo("{\"localDate\":19701}");
     }
 
@@ -115,7 +117,7 @@ public class JacksonLocalDateSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDate.parse("2023-12-10")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
         assertThat(json).isEqualTo("{\"localDate\":[2023,12,10]}");
     }
 

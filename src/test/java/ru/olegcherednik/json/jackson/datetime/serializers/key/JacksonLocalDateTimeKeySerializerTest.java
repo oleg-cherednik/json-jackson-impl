@@ -43,11 +43,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NewClassNamingConvention")
 public class JacksonLocalDateTimeKeySerializerTest {
 
+    private static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.parse("2023-12-10T19:22:40.758927");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDateTime.parse("2023-12-10T19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927\":\"localDateTime\"}}");
     }
 
@@ -57,7 +59,7 @@ public class JacksonLocalDateTimeKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalDateTime.parse("2023-12-10T19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_DATE_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"10-12-2023T40:22:19\":\"localDateTime\"}}");
     }
 

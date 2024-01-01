@@ -43,13 +43,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonOffsetTimeKeySerializerTest {
 
+    private static final OffsetTime OFFSET_TIME = OffsetTime.parse("22:16:19.989648300+03:00");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        OffsetTime offsetTime = OffsetTime.parse("22:16:19.989648300+03:00");
-        String json = mapper.writeValueAsString(new Data(offsetTime));
-        assertThat(json).isEqualTo("{\"map\":{\"" + offsetTime + "\":\"offsetTime\"}}");
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
+        assertThat(json).isEqualTo("{\"map\":{\"" + OFFSET_TIME + "\":\"offsetTime\"}}");
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
@@ -58,7 +59,7 @@ public class JacksonOffsetTimeKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"[one]10:16:19+03:00\":\"offsetTime\"}}");
     }
 
@@ -69,7 +70,7 @@ public class JacksonOffsetTimeKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OffsetTime.parse("22:16:19.989648300+03:00")));
+        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"[one]03:16:19.989+08:00\":\"offsetTime\"}}");
     }
 

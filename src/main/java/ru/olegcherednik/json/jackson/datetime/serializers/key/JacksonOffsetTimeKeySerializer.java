@@ -20,16 +20,12 @@
 package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 

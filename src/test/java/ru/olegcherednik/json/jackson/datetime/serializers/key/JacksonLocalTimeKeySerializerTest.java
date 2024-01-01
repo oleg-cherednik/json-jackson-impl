@@ -43,6 +43,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonLocalTimeKeySerializerTest {
 
+    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758927");
+
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
@@ -50,7 +52,7 @@ public class JacksonLocalTimeKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"19:22:40.758927\":\"localTime\"}}");
     }
 
@@ -62,7 +64,7 @@ public class JacksonLocalTimeKeySerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"69760758927000\":\"localTime\"}}");
     }
 
@@ -74,7 +76,7 @@ public class JacksonLocalTimeKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"69760\":\"localTime\"}}");
     }
 
@@ -84,7 +86,7 @@ public class JacksonLocalTimeKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LocalTime.parse("19:22:40.758927")));
+        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"758.40:22:19\":\"localTime\"}}");
     }
 

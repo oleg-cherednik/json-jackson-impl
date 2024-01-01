@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.Json;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalDate;
