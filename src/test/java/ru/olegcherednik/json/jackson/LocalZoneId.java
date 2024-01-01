@@ -23,13 +23,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.ZoneId;
-import java.util.TimeZone;
 
 /**
  * @author Oleg Cherednik
  * @since 04.05.2022
  */
-@SuppressWarnings("PMD.ClassNamingConventions")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LocalZoneId {
 

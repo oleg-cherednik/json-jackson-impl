@@ -20,20 +20,14 @@
 package ru.olegcherednik.json.jackson.datetime.deserializers;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.testng.annotations.Test;
-import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalZoneId;
-import ru.olegcherednik.json.jackson.datetime.DateTimeCombinationTest;
 import ru.olegcherednik.json.jackson.datetime.modules.JacksonJavaTimeModule;
 
 import java.time.Instant;
@@ -44,7 +38,6 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

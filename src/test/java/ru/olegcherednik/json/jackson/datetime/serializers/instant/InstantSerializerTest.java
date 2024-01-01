@@ -32,8 +32,6 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.datetime.serializers.JacksonInstantSerializer;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Map;
 
@@ -57,17 +55,6 @@ public class InstantSerializerTest {
         String json = Json.createWriter(settings).writeValue(data);
         assertThat(json).isEqualTo("{\"map\":{\"2017-07-23T13:57:14.225Z\":\"2017-07-23T13:57:14.225Z\"}}");
     }
-
-//    public void shouldUserFormatterWhenSerializeWithNotNullFormatter() {
-//        JsonSettings settings = JsonSettings.builder()
-//                                            .instantFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
-//                                            .build();
-//
-//        Data data = new Data(Instant.parse("2017-07-23T13:57:14.225Z"));
-//        String json = Json.createWriter(settings).writeValue(data);
-//        System.out.println(json);
-////        assertThat(json).isEqualTo("{\"map\":{\"2017-07-23T13:57:14.225Z\":\"2017-07-23T13:57:14.225Z\"}}");
-//    }
 
     public void shouldUserSuperClassLogicWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = new SimpleModule();

@@ -29,7 +29,6 @@ import java.util.TimeZone;
  * @author Oleg Cherednik
  * @since 30.12.2023
  */
-@SuppressWarnings("PMD.ClassNamingConventions")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LocalTimeZone {
 

@@ -21,6 +21,9 @@ package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetTimeSerializer;
 import ru.olegcherednik.json.api.JsonSettings;
@@ -44,51 +47,59 @@ public class JacksonOffsetTimeSerializer extends OffsetTimeSerializer {
     public static final JacksonOffsetTimeSerializer INSTANCE = new JacksonOffsetTimeSerializer();
 
     protected final UnaryOperator<ZoneId> zoneModifier;
+    protected final JsonFormat.Shape shape;
 
     public static JacksonOffsetTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
         return new JacksonOffsetTimeSerializer(INSTANCE,
                                                INSTANCE._useTimestamp,
                                                INSTANCE._useNanoseconds,
                                                df,
-                                               zoneModifier);
+                                               zoneModifier,
+                                               INSTANCE.shape);
     }
 
     protected JacksonOffsetTimeSerializer() {
         zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
+        shape = null;
     }
 
     protected JacksonOffsetTimeSerializer(JacksonOffsetTimeSerializer base,
                                           Boolean useTimestamp,
                                           Boolean useNanoseconds,
                                           DateTimeFormatter df,
-                                          UnaryOperator<ZoneId> zoneModifier) {
+                                          UnaryOperator<ZoneId> zoneModifier,
+                                          JsonFormat.Shape shape) {
         super(base, useTimestamp, useNanoseconds, df);
         this.zoneModifier = zoneModifier;
+        this.shape = shape;
     }
 
     @Override
     protected JacksonOffsetTimeSerializer withFormat(Boolean useTimestamp,
                                                      DateTimeFormatter df,
                                                      JsonFormat.Shape shape) {
-        return new JacksonOffsetTimeSerializer(this, useTimestamp, _useNanoseconds, df, zoneModifier);
+        return new JacksonOffsetTimeSerializer(this, useTimestamp, _useNanoseconds, df, zoneModifier, shape);
     }
 
     @Override
     protected JacksonOffsetTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
-        return new JacksonOffsetTimeSerializer(this, _useTimestamp, writeNanoseconds, _formatter, zoneModifier);
+        return new JacksonOffsetTimeSerializer(this, _useTimestamp, writeNanoseconds, _formatter, zoneModifier, shape);
     }
 
     @Override
     @SuppressWarnings("PMD.AvoidReassigningParameters")
-    public void serialize(OffsetTime value, JsonGenerator generator, SerializerProvider provider) throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
+    public void serialize(OffsetTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        if (useTimestamp(provider))
+            super.serialize(value, gen, provider);
+        else if (_formatter == null)
+            gen.writeString(value.toString());
         else {
-            ZoneId zoneId = _formatter.getZone() == null ? zoneModifier.apply(value.getOffset())
-                                                         : _formatter.getZone();
-            ZoneOffset offset = zoneId.getRules().getOffset(Instant.now());
-            value = value.withOffsetSameInstant(offset);
-            generator.writeString(_formatter.withZone(zoneId).format(value));
+            if (_formatter.getZone() != null) {
+                ZoneOffset offset = _formatter.getZone().getRules().getOffset(Instant.now());
+                value = value.withOffsetSameInstant(offset);
+            }
+
+            gen.writeString(_formatter.format(value));
         }
     }
 
