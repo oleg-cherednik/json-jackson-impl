@@ -20,11 +20,8 @@
 package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializerBase;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
@@ -70,8 +67,4 @@ public class JacksonInstantSerializer extends InstantSerializerBase<Instant> {
         return new JacksonInstantSerializer(this, _useTimestamp, writeNanoseconds, _formatter);
     }
 
-    @Override
-    public void serialize(Instant value, JsonGenerator generator, SerializerProvider provider) throws IOException {
-        super.serialize(value, generator, provider);
-    }
 }

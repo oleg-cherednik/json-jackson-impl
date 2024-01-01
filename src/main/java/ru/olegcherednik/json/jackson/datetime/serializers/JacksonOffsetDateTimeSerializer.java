@@ -20,13 +20,9 @@
 package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import ru.olegcherednik.json.api.JsonSettings;
 
-import java.io.IOException;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
@@ -74,19 +70,6 @@ public class JacksonOffsetDateTimeSerializer extends OffsetDateTimeSerializer {
     @Override
     protected JacksonOffsetDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean useNanoseconds) {
         return new JacksonOffsetDateTimeSerializer(this, _useTimestamp, useNanoseconds, _formatter, zoneModifier);
-    }
-
-    @Override
-    public void serialize(OffsetDateTime value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
-        else {
-            ZoneId zoneId = _formatter.getZone() == null ? zoneModifier.apply(value.getOffset())
-                                                         : _formatter.getZone();
-
-            generator.writeString(_formatter.format(value.atZoneSameInstant(zoneId)));
-        }
     }
 
 }
