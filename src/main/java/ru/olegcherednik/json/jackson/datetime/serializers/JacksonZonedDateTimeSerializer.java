@@ -86,13 +86,14 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
     @Override
     public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider provider)
             throws IOException {
-        if (_formatter == null || useTimestamp(provider))
-            super.serialize(value, generator, provider);
-        else if (_formatter.getZone() == null) {
-            ZoneId zoneId = zoneModifier.apply(DateTimeFormatter.ISO_OFFSET_DATE_TIME.getZone());
-            generator.writeString(_formatter.withZone(zoneId).format(value));
-        } else
-            generator.writeString(_formatter.format(value));
+        super.serialize(value, generator, provider);
+//        if (_formatter == null || useTimestamp(provider))
+//            super.serialize(value, generator, provider);
+//        else if (_formatter.getZone() == null) {
+//            ZoneId zoneId = zoneModifier.apply(DateTimeFormatter.ISO_OFFSET_DATE_TIME.getZone());
+//            generator.writeString(_formatter.withZone(zoneId).format(value));
+//        } else
+//            generator.writeString(_formatter.format(value));
     }
 
 }
