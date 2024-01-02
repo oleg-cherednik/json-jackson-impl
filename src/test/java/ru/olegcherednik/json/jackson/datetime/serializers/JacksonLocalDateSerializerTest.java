@@ -157,6 +157,7 @@ public class JacksonLocalDateSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataInt {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
@@ -165,6 +166,7 @@ public class JacksonLocalDateSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataFloat {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
@@ -173,6 +175,7 @@ public class JacksonLocalDateSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataArray {
 
         @JsonFormat(shape = JsonFormat.Shape.ARRAY)

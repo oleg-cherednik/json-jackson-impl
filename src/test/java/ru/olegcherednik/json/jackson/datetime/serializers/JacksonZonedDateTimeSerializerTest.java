@@ -115,7 +115,8 @@ public class JacksonZonedDateTimeSerializerTest {
 
         Data actual = Json.readValue(json, Data.class);
         Data expected = new Data(ZONED_DATE_TIME.toOffsetDateTime()
-                                                .withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE).toZonedDateTime());
+                                                .withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE)
+                                                .toZonedDateTime());
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -132,7 +133,8 @@ public class JacksonZonedDateTimeSerializerTest {
 
         Data actual = Json.readValue(json, Data.class);
         Data expected = new Data(ZONED_DATE_TIME.toOffsetDateTime()
-                                                .withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE).toZonedDateTime());
+                                                .withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE)
+                                                .toZonedDateTime());
         assertThat(actual).isEqualTo(expected);
     }
 

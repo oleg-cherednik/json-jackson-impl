@@ -20,13 +20,11 @@
 package ru.olegcherednik.json.jackson.datetime.deserializers;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.key.Jsr310NullKeySerializer;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -80,31 +78,7 @@ public class JacksonJsr310KeyDeserializer<T> extends KeyDeserializer {
     @Override
     @SuppressWarnings("deprecation")
     public final Object deserializeKey(String key, DeserializationContext ctxt) throws IOException {
-        if (Jsr310NullKeySerializer.NULL_KEY.equals(key))
-            return null;
-
-        try {
-            return df.parse(key, query);
-        } catch (DateTimeException e) {
-            return handleDateTimeException(ctxt, e, key);
-        }
-    }
-
-    protected Object handleDateTimeException(DeserializationContext ctxt,
-                                             DateTimeException e0,
-                                             String key) throws IOException {
-        try {
-            return ctxt.handleWeirdKey(type, key, "Failed to deserialize %s: (%s) %s",
-                                       type.getName(), e0.getClass().getName(), e0.getMessage());
-
-        } catch (JsonMappingException e) {
-            e.initCause(e0);
-            throw e;
-        } catch (IOException e) {
-            if (null == e.getCause())
-                e.initCause(e0);
-            throw JsonMappingException.fromUnexpectedIOE(e);
-        }
+        return Jsr310NullKeySerializer.NULL_KEY.equals(key) ? null : df.parse(key, query);
     }
 }
 

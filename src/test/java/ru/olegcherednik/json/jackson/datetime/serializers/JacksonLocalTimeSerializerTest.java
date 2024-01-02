@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
@@ -107,7 +106,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     public void shouldSerializeArrayWithIntWhenShapeNumberIntDisableNanosecond() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[two]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper()
@@ -123,7 +122,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     public void shouldSerializeArrayWhenShapeNumberFloat() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[three]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
@@ -137,7 +136,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     public void shouldSerializeArrayWhenShapeNotNumberInt() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[four]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
@@ -175,6 +174,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataInt {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
@@ -183,6 +183,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataFloat {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
@@ -191,6 +192,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataArray {
 
         @JsonFormat(shape = JsonFormat.Shape.ARRAY)

@@ -35,6 +35,7 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.JacksonEngine;
 import ru.olegcherednik.json.jackson.datetime.modules.JacksonDateModule;
 import ru.olegcherednik.json.jackson.datetime.modules.JacksonJavaTimeModule;
+import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonNullKeySerializer;
 import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Objects;
@@ -83,6 +84,8 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     private static ObjectMapper config(ObjectMapper mapper, JsonSettings settings) {
         if (settings.getZoneId() != null)
             mapper.setTimeZone(TimeZone.getTimeZone(settings.getZoneId()));
+
+        mapper.getSerializerProvider().setNullKeySerializer(JacksonNullKeySerializer.INSTANCE);
 
         return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)

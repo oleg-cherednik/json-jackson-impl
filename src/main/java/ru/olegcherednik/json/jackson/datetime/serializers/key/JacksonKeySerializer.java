@@ -34,6 +34,7 @@ import java.util.function.ToLongFunction;
 import java.util.function.UnaryOperator;
 
 /**
+ * @param <T> A type of the key value
  * @author Oleg Cherednik
  * @since 25.12.2023
  */

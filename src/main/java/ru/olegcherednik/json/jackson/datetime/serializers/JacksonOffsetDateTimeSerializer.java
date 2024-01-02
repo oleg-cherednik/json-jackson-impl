@@ -23,11 +23,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.JsonSettings;
 
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik

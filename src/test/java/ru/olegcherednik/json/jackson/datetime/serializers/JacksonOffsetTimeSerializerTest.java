@@ -185,6 +185,7 @@ public class JacksonOffsetTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataInt {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
@@ -193,6 +194,7 @@ public class JacksonOffsetTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataFloat {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
@@ -201,6 +203,7 @@ public class JacksonOffsetTimeSerializerTest {
     }
 
     @EqualsAndHashCode
+    @SuppressWarnings("PMD.UnusedPrivateField")
     private static final class DataNano {
 
         @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
