@@ -28,8 +28,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,19 +55,27 @@ public class JacksonLocalDateSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        Data expected = new Data(LOCAL_DATE);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"2023-12-10\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
-    public void shouldUseEpochDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
+    public void shouldSerializeArrayWhenWriteDateAsTimestamps() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
-        assertThat(json).isEqualTo("{\"map\":{\"localDate\":19701}}");
+        Data expected = new Data(LOCAL_DATE);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"localDate\":[2023,12,10]}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
@@ -75,50 +84,52 @@ public class JacksonLocalDateSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        Data expected = new Data(LOCAL_DATE);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"localDate\":\"10-12-2023\"}}");
+
+        JsonSettings settings = JsonSettings.builder().localDateFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
-    public void shouldSerializeTimestampWhenShapeNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-            private final LocalDate localDate;
-
-        }
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        SimpleModule module = createModule(df);
+    public void shouldSerializeEpochDayWhenWriteDateAsTimestampsAndShapeNumberInt() throws JsonProcessingException {
+        SimpleModule module = createModule(DateTimeFormatter.ISO_LOCAL_DATE);
 
         ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        DataInt expected = new DataInt();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"localDate\":19701}");
+
+        DataInt actual = Json.readValue(json, DataInt.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
-    public void shouldSerializeArrayWhenShapeNotNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
+    public void shouldSerializeArrayWhenWriteDateAsTimestampsAndShapeNumberFloat() throws JsonProcessingException {
+        SimpleModule module = createModule(DateTimeFormatter.ISO_LOCAL_DATE);
+        ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-            @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-            private final LocalDate localDate;
-
-        }
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        SimpleModule module = createModule(df);
-
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
-
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        DataFloat expected = new DataFloat();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"localDate\":[2023,12,10]}");
+
+        DataFloat actual = Json.readValue(json, DataFloat.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public void shouldSerializeArrayWhenShapeNumberArray() throws JsonProcessingException {
+        SimpleModule module = createModule(DateTimeFormatter.ISO_LOCAL_DATE);
+        ObjectMapper mapper = new ObjectMapper().registerModule(module);
+
+        DataArray expected = new DataArray();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"localDate\":[2023,12,10]}");
+
+        DataArray actual = Json.readValue(json, DataArray.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
@@ -142,6 +153,30 @@ public class JacksonLocalDateSerializerTest {
         private Data(LocalDate value) {
             this(Collections.singletonMap("localDate", value));
         }
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataInt {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final LocalDate localDate = LOCAL_DATE;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataFloat {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+        private final LocalDate localDate = LOCAL_DATE;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataArray {
+
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private final LocalDate localDate = LOCAL_DATE;
 
     }
 

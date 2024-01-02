@@ -28,8 +28,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -45,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonLocalTimeSerializerTest {
 
-    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758927");
+    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
@@ -54,8 +56,12 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"19:22:40.758927\"}}");
+        Data expected = new Data(LOCAL_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"19:22:40.758\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeArrayWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -65,30 +71,42 @@ public class JacksonLocalTimeSerializerTest {
                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"localTime\":[19,22,40,758927000]}}");
+        Data expected = new Data(LOCAL_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"localTime\":[19,22,40,758000000]}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("SSS.ss:mm:HH");
         SimpleModule module = createModule(df);
-
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
+        Data expected = new Data(LOCAL_TIME);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"758.40:22:19\"}}");
+
+        JsonSettings settings = JsonSettings.builder().localTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeArrayWhenShapeNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
+        SimpleModule module = createModule(df);
+        ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-            private final LocalTime localTime;
+        DataInt expected = new DataInt();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758000000]}");
 
-        }
+        DataInt actual = Json.readValue(json, DataInt.class);
+        assertThat(actual).isEqualTo(expected);
+    }
 
+    public void shouldSerializeArrayWithIntWhenShapeNumberIntDisableNanosecond() throws JsonProcessingException {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
@@ -96,50 +114,40 @@ public class JacksonLocalTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
+        DataInt expected = new DataInt();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
+
+        DataInt actual = Json.readValue(json, DataInt.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeArrayWhenShapeNumberFloat() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
-            private final LocalTime localTime;
-
-        }
-
         DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
+        ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
+        DataFloat expected = new DataFloat();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758000000]}");
+
+        DataFloat actual = Json.readValue(json, DataFloat.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeArrayWhenShapeNotNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-            private final LocalTime localTime;
-
-        }
-
         DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]' HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
-        ObjectMapper mapper = new ObjectMapper()
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
+        ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
+        DataArray expected = new DataArray();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758000000]}");
+
+        DataArray actual = Json.readValue(json, DataArray.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
@@ -149,6 +157,7 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     @Getter
+    @ToString
     @EqualsAndHashCode
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     private static final class Data {
@@ -163,6 +172,30 @@ public class JacksonLocalTimeSerializerTest {
         private Data(LocalTime value) {
             this(Collections.singletonMap("localTime", value));
         }
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataInt {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final LocalTime localTime = LOCAL_TIME;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataFloat {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+        private final LocalTime localTime = LOCAL_TIME;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataArray {
+
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private final LocalTime localTime = LOCAL_TIME;
 
     }
 

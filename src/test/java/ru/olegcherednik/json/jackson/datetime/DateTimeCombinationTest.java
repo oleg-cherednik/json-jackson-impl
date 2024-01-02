@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
@@ -38,7 +39,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -59,7 +59,6 @@ public class DateTimeCombinationTest {
 
     public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
         DataOne data = new DataOne(ZONED_DATE_TIME);
-
         String actual = Json.writeValue(data);
         String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
         assertThat(actual).isEqualTo(expected);
@@ -68,39 +67,31 @@ public class DateTimeCombinationTest {
     public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
         String json = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
         DataOne actual = Json.readValue(json, DataOne.class);
-        DataOne expected = new DataOne(ZONED_DATE_TIME.toInstant(),
-                                       ZONED_DATE_TIME.toLocalDate(),
-                                       ZONED_DATE_TIME.toLocalTime(),
-                                       ZONED_DATE_TIME.toLocalDateTime(),
-                                       ZONED_DATE_TIME.toOffsetDateTime().toOffsetTime(),
-                                       ZONED_DATE_TIME.toOffsetDateTime(),
-                                       ZONED_DATE_TIME.withZoneSameInstant(ZoneId.systemDefault()),
-                                       Date.from(ZONED_DATE_TIME.toInstant()));
+        DataOne expected = new DataOne(ZONED_DATE_TIME);
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldWriteDatesWithAnnotationSettingsPreferable() throws IOException {
-        DataTwo data = new DataTwo(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
+        DataTwo data = new DataTwo(ZONED_DATE_TIME);
         String actual = Json.createWriter(getSettings()).writeValue(data);
         String expected = ResourceData.getResourceAsString("/datetime/custom_date_two.json").trim();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldReadDatesWithAnnotationSettingsPreferable() throws IOException {
-        ZonedDateTime zdtLocal = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
-        ZonedDateTime zdtSingapore = zdtLocal.withZoneSameInstant(LocalZoneId.ASIA_SINGAPORE);
+        ZonedDateTime zdtSingapore = ZONED_DATE_TIME.withZoneSameInstant(LocalZoneId.ASIA_SINGAPORE);
 
         String json = ResourceData.getResourceAsString("/datetime/custom_date_two.json").trim();
 
         DataTwo actual = Json.createReader(getSettings()).readValue(json, DataTwo.class);
-        DataTwo expected = new DataTwo(zdtLocal.toInstant(),
-                                       zdtLocal.toLocalDate(),
-                                       zdtLocal.toLocalTime(),
-                                       zdtLocal.toLocalDateTime(),
+        DataTwo expected = new DataTwo(ZONED_DATE_TIME.toInstant(),
+                                       ZONED_DATE_TIME.toLocalDate(),
+                                       ZONED_DATE_TIME.toLocalTime(),
+                                       ZONED_DATE_TIME.toLocalDateTime(),
                                        zdtSingapore.toOffsetDateTime().toOffsetTime(),
                                        zdtSingapore.toOffsetDateTime(),
                                        zdtSingapore,
-                                       Date.from(zdtLocal.toInstant()));
+                                       Date.from(ZONED_DATE_TIME.toInstant()));
 
 
         assertThat(actual).isEqualTo(expected);
@@ -125,41 +116,18 @@ public class DateTimeCombinationTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    @EqualsAndHashCode
-    static class Data1 {
-
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private Instant instant = ZONED_DATE_TIME.toInstant();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private LocalDate localDate = ZONED_DATE_TIME.toLocalDate();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private LocalTime localTime = ZONED_DATE_TIME.toLocalTime();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private LocalDateTime localDateTime = ZONED_DATE_TIME.toLocalDateTime();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private OffsetTime offsetTime = ZONED_DATE_TIME.toOffsetDateTime().toOffsetTime();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private OffsetDateTime offsetDateTime = ZONED_DATE_TIME.toOffsetDateTime();
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private ZonedDateTime zonedDateTime = ZONED_DATE_TIME.withZoneSameInstant(ZoneOffset.UTC);
-        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
-        private Date date = Date.from(ZONED_DATE_TIME.toInstant());
-
-    }
-
-    public void shouldReadDatesAsNumber() throws IOException {
-        Data1 expected = new Data1();
-        String json = Json.writeValue(expected);
-        Data1 actual = Json.readValue(json, Data1.class);
-
-//        String json = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
-
-//        DataThree actual = Json.readValue(json, DataThree.class);
-//        DataThree expected = new DataThree();
-
-//        assertThat(actual).isEqualTo(expected);
-        int a = 0;
-        a++;
+    public void shouldReadDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
+        String json = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
+        DataThree actual = Json.readValue(json, DataThree.class);
+        DataThree expected = new DataThree(ZONED_DATE_TIME.toInstant(),
+                                           ZONED_DATE_TIME.toLocalDate(),
+                                           ZONED_DATE_TIME.toLocalTime(),
+                                           ZONED_DATE_TIME.toLocalDateTime(),
+                                           ZONED_DATE_TIME.toOffsetDateTime().toOffsetTime(),
+                                           ZONED_DATE_TIME.toOffsetDateTime(),
+                                           ZONED_DATE_TIME.withZoneSameInstant(ZoneOffset.UTC),
+                                           Date.from(ZONED_DATE_TIME.toInstant()));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Getter
@@ -265,6 +233,7 @@ public class DateTimeCombinationTest {
 
     @Getter
     @EqualsAndHashCode
+    @ToString
     private static final class DataThree {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)

@@ -61,17 +61,10 @@ public class JacksonLocalDateSerializer extends LocalDateSerializer {
 
     @Override
     public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        if (useTimestamp(provider)) {
-            if (_shape == JsonFormat.Shape.ARRAY) {
-                gen.writeStartArray();
-                _serializeAsArrayContents(value, gen, provider);
-                gen.writeEndArray();
-            } else
-                gen.writeNumber(value.toEpochDay());
-        } else if (_formatter == null)
-            gen.writeString(value.toString());
+        if (useTimestamp(provider) || _formatter != null)
+            super.serialize(value, gen, provider);
         else
-            gen.writeString(_formatter.format(value));
+            gen.writeString(value.toString());
     }
 
 }
