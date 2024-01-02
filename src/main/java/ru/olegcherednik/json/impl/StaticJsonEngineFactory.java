@@ -46,6 +46,7 @@ import java.util.TimeZone;
  * @author Oleg Cherednik
  * @since 19.11.2023
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
