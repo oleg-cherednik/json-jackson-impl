@@ -21,7 +21,6 @@ package ru.olegcherednik.json.jackson;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import sun.util.calendar.ZoneInfo;
 
 import java.util.TimeZone;
 
@@ -32,7 +31,7 @@ import java.util.TimeZone;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LocalTimeZone {
 
-    public static final TimeZone ASIA_SINGAPORE = ZoneInfo.getTimeZone(LocalZoneId.ASIA_SINGAPORE);
-    public static final TimeZone AUSTRALIA_SYDNEY = ZoneInfo.getTimeZone(LocalZoneId.AUSTRALIA_SYDNEY);
+    public static final TimeZone ASIA_SINGAPORE = TimeZone.getTimeZone(LocalZoneId.ASIA_SINGAPORE);
+    public static final TimeZone AUSTRALIA_SYDNEY = TimeZone.getTimeZone(LocalZoneId.AUSTRALIA_SYDNEY);
 
 }
