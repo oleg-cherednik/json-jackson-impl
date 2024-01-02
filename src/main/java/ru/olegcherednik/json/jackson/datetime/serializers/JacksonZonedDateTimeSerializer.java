@@ -27,10 +27,13 @@ import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
+
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE;
 
 /**
  * @author Oleg Cherednik
@@ -94,6 +97,23 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 //            generator.writeString(_formatter.withZone(zoneId).format(value));
 //        } else
 //            generator.writeString(_formatter.format(value));
+    }
+
+    @Override
+    protected String formatValue(ZonedDateTime value, SerializerProvider provider) {
+        if (_formatter == null)
+            return value.toString();
+
+        DateTimeFormatter df = _formatter;
+
+        if (_formatter.getZone() == null
+                && provider.getConfig().hasExplicitTimeZone()
+                && provider.isEnabled(WRITE_DATES_WITH_CONTEXT_TIME_ZONE)) {
+            ZoneId zoneId = provider.getTimeZone().toZoneId();
+            df = df.withZone("UTC".equals(zoneId.getId()) ? ZoneOffset.UTC : zoneId);
+        }
+
+        return df.format(value);
     }
 
 }

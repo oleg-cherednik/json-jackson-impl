@@ -66,27 +66,10 @@ public class JacksonLocalTimeSerializer extends LocalTimeSerializer {
 
     @Override
     public void serialize(LocalTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        if (useTimestamp(provider)) {
-            if (useNanoseconds(provider))
-                gen.writeNumber(value.toNanoOfDay());
-            else if (shape == JsonFormat.Shape.ARRAY)
-                super.serialize(value, gen, provider);
-            else
-                gen.writeNumber(value.toSecondOfDay());
-        } else if (_formatter == null)
-            gen.writeString(value.toString());
+        if (useTimestamp(provider) || _formatter != null)
+            super.serialize(value, gen, provider);
         else
-            gen.writeString(_formatter.format(value));
-    }
-
-    @Override
-    protected boolean useNanoseconds(SerializerProvider provider) {
-        if (shape == JsonFormat.Shape.NUMBER_INT)
-            return false;
-        if (shape == JsonFormat.Shape.NUMBER_FLOAT)
-            return true;
-
-        return super.useNanoseconds(provider);
+            gen.writeString(value.toString());
     }
 
 }

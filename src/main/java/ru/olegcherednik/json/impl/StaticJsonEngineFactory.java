@@ -39,6 +39,7 @@ import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.TimeZone;
 
 /**
  * @author Oleg Cherednik
@@ -80,6 +81,9 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     }
 
     private static ObjectMapper config(ObjectMapper mapper, JsonSettings settings) {
+        if (settings.getZoneId() != null)
+            mapper.setTimeZone(TimeZone.getTimeZone(settings.getZoneId()));
+
         return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
 
@@ -91,8 +95,8 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
                      .disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
+                     .disable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)    // let df choose it
 
-                     .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
                      .enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION)
                      .enable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
                      .enable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)

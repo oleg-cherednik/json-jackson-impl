@@ -60,7 +60,7 @@ public class JacksonZonedDateTimeSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(ZONED_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"zonedDateTime\":\"2023-12-23T22:20:36.855992+03:00\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"zonedDateTime\":\"2023-12-23T22:20:36.855992+03:00[Europe/Moscow]\"}}");
     }
 
     public void shouldUseNanosecondWhenWriteDateAsTimestampsAndWriteDateTimestampsAsNanoseconds()

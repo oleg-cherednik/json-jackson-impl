@@ -58,28 +58,15 @@ public class JacksonLocalTimeSerializerTest {
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"19:22:40.758927\"}}");
     }
 
-    public void shouldUseNanoOfDayWhenWriteDateAsTimestampsNano() throws JsonProcessingException {
+    public void shouldSerializeArrayWhenWriteDateAsTimestamps() throws JsonProcessingException {
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"localTime\":69760758927000}}");
-    }
-
-    public void shouldUseSecondOfDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
-        SimpleModule module = createModule(null);
-
-        ObjectMapper mapper = new ObjectMapper()
-                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .registerModule(module);
-
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"localTime\":69760}}");
+        assertThat(json).isEqualTo("{\"map\":{\"localTime\":[19,22,40,758927000]}}");
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
@@ -92,7 +79,7 @@ public class JacksonLocalTimeSerializerTest {
         assertThat(json).isEqualTo("{\"map\":{\"localTime\":\"758.40:22:19\"}}");
     }
 
-    public void shouldSerializeTimestampWhenShapeNumberInt() throws JsonProcessingException {
+    public void shouldSerializeArrayWhenShapeNumberInt() throws JsonProcessingException {
         @Getter
         @RequiredArgsConstructor
         class Data {
@@ -110,10 +97,10 @@ public class JacksonLocalTimeSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"localTime\":69760}");
+        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
     }
 
-    public void shouldSerializeNanoWhenShapeNotNumberInt() throws JsonProcessingException {
+    public void shouldSerializeArrayWhenShapeNumberFloat() throws JsonProcessingException {
         @Getter
         @RequiredArgsConstructor
         class Data {
@@ -131,7 +118,7 @@ public class JacksonLocalTimeSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"localTime\":69760758927000}");
+        assertThat(json).isEqualTo("{\"localTime\":[19,22,40,758]}");
     }
 
     public void shouldSerializeArrayWhenShapeNotNumberInt() throws JsonProcessingException {

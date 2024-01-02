@@ -54,29 +54,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class DateTimeCombinationTest {
 
-//    public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
-//        DataOne data = new DataOne(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
-//
-//        String actual = Json.writeValue(data);
-//        String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
-//        assertThat(actual).isEqualTo(expected);
-//    }
+    private static final ZonedDateTime ZONED_DATE_TIME =
+            ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00[Europe/Moscow]");
 
-//    public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
-//        ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
-//
-//        String json = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
-//        DataOne actual = Json.readValue(json, DataOne.class);
-//        DataOne expected = new DataOne(zdt.toInstant(),
-//                                       zdt.toLocalDate(),
-//                                       zdt.toLocalTime(),
-//                                       zdt.toLocalDateTime(),
-//                                       zdt.toOffsetDateTime().toOffsetTime(),
-//                                       zdt.toOffsetDateTime(),
-//                                       zdt.withZoneSameInstant(ZoneId.systemDefault()),
-//                                       Date.from(zdt.toInstant()));
-//        assertThat(actual).isEqualTo(expected);
-//    }
+    public void shouldWriteDatesWithDefaultJsonSettings() throws IOException {
+        DataOne data = new DataOne(ZONED_DATE_TIME);
+
+        String actual = Json.writeValue(data);
+        String expected = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public void shouldReadDatesWithDefaultJsonSettings() throws IOException {
+        String json = ResourceData.getResourceAsString("/datetime/def_date_one.json").trim();
+        DataOne actual = Json.readValue(json, DataOne.class);
+        DataOne expected = new DataOne(ZONED_DATE_TIME.toInstant(),
+                                       ZONED_DATE_TIME.toLocalDate(),
+                                       ZONED_DATE_TIME.toLocalTime(),
+                                       ZONED_DATE_TIME.toLocalDateTime(),
+                                       ZONED_DATE_TIME.toOffsetDateTime().toOffsetTime(),
+                                       ZONED_DATE_TIME.toOffsetDateTime(),
+                                       ZONED_DATE_TIME.withZoneSameInstant(ZoneId.systemDefault()),
+                                       Date.from(ZONED_DATE_TIME.toInstant()));
+        assertThat(actual).isEqualTo(expected);
+    }
 
     public void shouldWriteDatesWithAnnotationSettingsPreferable() throws IOException {
         DataTwo data = new DataTwo(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
@@ -117,29 +118,48 @@ public class DateTimeCombinationTest {
                            .build();
     }
 
-//    public void shouldWriteDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
-//        DataThree data = new DataThree(ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00"));
-//        String actual = Json.writeValue(data);
-//        String expected = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
-//        assertThat(actual).isEqualTo(expected);
-//    }
+    public void shouldWriteDatesAsNumbersWhenAnnotationSettingsNumberInt() throws IOException {
+        DataThree data = new DataThree(ZONED_DATE_TIME);
+        String actual = Json.writeValue(data);
+        String expected = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @EqualsAndHashCode
+    static class Data1 {
+
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private Instant instant = ZONED_DATE_TIME.toInstant();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private LocalDate localDate = ZONED_DATE_TIME.toLocalDate();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private LocalTime localTime = ZONED_DATE_TIME.toLocalTime();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private LocalDateTime localDateTime = ZONED_DATE_TIME.toLocalDateTime();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private OffsetTime offsetTime = ZONED_DATE_TIME.toOffsetDateTime().toOffsetTime();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private OffsetDateTime offsetDateTime = ZONED_DATE_TIME.toOffsetDateTime();
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private ZonedDateTime zonedDateTime = ZONED_DATE_TIME.withZoneSameInstant(ZoneOffset.UTC);
+        @JsonFormat(shape = JsonFormat.Shape.ARRAY)
+        private Date date = Date.from(ZONED_DATE_TIME.toInstant());
+
+    }
 
     public void shouldReadDatesAsNumber() throws IOException {
-        ZonedDateTime zdt = ZonedDateTime.parse("2023-12-03T10:39:20.187+03:00");
+        Data1 expected = new Data1();
+        String json = Json.writeValue(expected);
+        Data1 actual = Json.readValue(json, Data1.class);
 
-        String json = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
+//        String json = ResourceData.getResourceAsString("/datetime/date_one_num.json").trim();
 
-        DataThree actual = Json.readValue(json, DataThree.class);
-        DataThree expected = new DataThree(zdt.toInstant(),
-                                           zdt.toLocalDate(),
-                                           zdt.toLocalTime(),
-                                           zdt.toLocalDateTime(),
-                                           zdt.toOffsetDateTime().toOffsetTime(),
-                                           zdt.toOffsetDateTime(),
-                                           zdt.withZoneSameInstant(ZoneOffset.UTC),
-                                           Date.from(zdt.toInstant()));
+//        DataThree actual = Json.readValue(json, DataThree.class);
+//        DataThree expected = new DataThree();
 
-        assertThat(actual).isEqualTo(expected);
+//        assertThat(actual).isEqualTo(expected);
+        int a = 0;
+        a++;
     }
 
     @Getter

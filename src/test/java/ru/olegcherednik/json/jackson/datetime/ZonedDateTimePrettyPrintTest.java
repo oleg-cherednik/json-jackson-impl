@@ -22,11 +22,11 @@ package ru.olegcherednik.json.jackson.datetime;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 import ru.olegcherednik.json.jackson.ResourceData;
 
 import java.io.IOException;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -39,31 +39,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class ZonedDateTimePrettyPrintTest {
 
-//    public void shouldRetrievePrettyPrintJsonUtcZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
-//        JsonSettings settings = JsonSettings.builder()
-//                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
-//                                            .build();
-//
-//        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
-//        String actual = Json.createPrettyPrint(settings).writeValue(map);
-//        String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_utc.json").trim();
-//
-//        assertThat(actual).isNotEqualTo(expected);
-//        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
-//    }
+    public void shouldRetrievePrettyPrintJsonUtcZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
+        JsonSettings settings = JsonSettings.builder()
+                                            .zoneId(ZoneOffset.UTC)
+                                            .build();
 
-//    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint()
-//            throws IOException {
-//        JsonSettings settings = JsonSettings.builder()
-//                                            .zoneModifier(zone -> LocalZoneId.ASIA_SINGAPORE)
-//                                            .build();
-//
-//        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
-//        String actual = Json.createPrettyPrint(settings).writeValue(map);
-//        String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_singapore.json").trim();
-//
-//        assertThat(actual).isNotEqualTo(expected);
-//        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
-//    }
+        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
+        String actual = Json.createPrettyPrint(settings).writeValue(map);
+        String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_utc.json").trim();
+
+        assertThat(actual).isNotEqualTo(expected);
+        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
+    }
+
+    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint()
+            throws IOException {
+        JsonSettings settings = JsonSettings.builder()
+                                            .zoneId(LocalZoneId.ASIA_SINGAPORE)
+                                            .build();
+
+        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
+        String actual = Json.createPrettyPrint(settings).writeValue(map);
+        String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_singapore.json").trim();
+
+        assertThat(actual).isNotEqualTo(expected);
+        assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
+    }
 
 }
