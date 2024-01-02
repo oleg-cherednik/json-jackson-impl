@@ -78,14 +78,14 @@ public class JacksonLocalDateTimeSerializerTest {
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSS");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'yyyy-MM-dd'T'HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
         Data expected = new Data(LOCAL_DATE_TIME);
         String json = mapper.writeValueAsString(expected);
-        assertThat(json).isEqualTo("{\"map\":{\"localDateTime\":\"[one] 2023-12-10T19:22:40.758\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"localDateTime\":\"[one]2023-12-10T19:22:40.758\"}}");
 
         JsonSettings settings = JsonSettings.builder().localDateTimeFormatter(df).build();
         Data actual = Json.createReader(settings).readValue(json, Data.class);

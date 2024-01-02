@@ -28,10 +28,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalTimeZone;
 import ru.olegcherednik.json.jackson.LocalZoneId;
+import ru.olegcherednik.json.jackson.LocalZoneOffset;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,7 +50,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NewClassNamingConvention")
 public class JacksonOffsetDateTimeSerializerTest {
 
-    private static final OffsetDateTime OFFSET_DATE_TIME = OffsetDateTime.parse("2023-12-10T16:22:40.758927+03:00");
+    private static final OffsetDateTime OFFSET_DATE_TIME = OffsetDateTime.parse("2023-12-10T16:22:40.758+03:00");
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
@@ -58,8 +60,12 @@ public class JacksonOffsetDateTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T16:22:40.758927+03:00\"}}");
+        Data expected = new Data(OFFSET_DATE_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T16:22:40.758+03:00\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseNanosecondWhenWriteDateAsTimestampsAndWriteDateTimestampsAsNanoseconds()
@@ -71,8 +77,12 @@ public class JacksonOffsetDateTimeSerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":1702214560.758927000}}");
+        Data expected = new Data(OFFSET_DATE_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":1702214560.758000000}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -83,8 +93,12 @@ public class JacksonOffsetDateTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
+        Data expected = new Data(OFFSET_DATE_TIME);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":1702214560758}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatZoneWhenDateFormatHasZone() throws JsonProcessingException {
@@ -95,6 +109,11 @@ public class JacksonOffsetDateTimeSerializerTest {
 
         String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T21:22:40.758+08:00\"}}");
+
+        JsonSettings settings = JsonSettings.builder().offsetDateTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        Data expected = new Data(OFFSET_DATE_TIME.withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE));
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseContextZoneWhenContextZoneExists() throws JsonProcessingException {
@@ -107,6 +126,10 @@ public class JacksonOffsetDateTimeSerializerTest {
 
         String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T21:22:40.758+08:00\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        Data expected = new Data(OFFSET_DATE_TIME.withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE));
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldIgnoreContextZoneWhenDisableWriteDateWithContextTimeZone() throws JsonProcessingException {
@@ -119,59 +142,44 @@ public class JacksonOffsetDateTimeSerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T13:22:40.758927Z\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"offsetDateTime\":\"2023-12-10T13:22:40.758Z\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        Data expected = new Data(OFFSET_DATE_TIME.withOffsetSameInstant(LocalZoneOffset.UTC));
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenShapeNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-            private final OffsetDateTime offsetDateTime;
-
-        }
-
         SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
+        DataInt expected = new DataInt();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"offsetDateTime\":1702214560758}");
+
+        DataInt actual = Json.readValue(json, DataInt.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeNanosecondsWhenShapeNumberFloat() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
-            private final OffsetDateTime offsetDateTime;
-
-        }
-
         SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
+        DataFloat expected = new DataFloat();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"offsetDateTime\":1702214560758}");
+
+        DataFloat actual = Json.readValue(json, DataFloat.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenFeatureIsOn() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-            private final OffsetDateTime offsetDateTime;
-
-        }
-
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
@@ -179,8 +187,12 @@ public class JacksonOffsetDateTimeSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_DATE_TIME));
-        assertThat(json).isEqualTo("{\"offsetDateTime\":1702214560.758927000}");
+        DataNano expected = new DataNano();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"offsetDateTime\":1702214560.758000000}");
+
+        DataNano actual = Json.readValue(json, DataNano.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
@@ -204,6 +216,30 @@ public class JacksonOffsetDateTimeSerializerTest {
         private Data(OffsetDateTime value) {
             this(Collections.singletonMap("offsetDateTime", value));
         }
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataInt {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final OffsetDateTime offsetDateTime = OFFSET_DATE_TIME;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataFloat {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+        private final OffsetDateTime offsetDateTime = OFFSET_DATE_TIME;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataNano {
+
+        @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+        private final OffsetDateTime offsetDateTime = OFFSET_DATE_TIME;
 
     }
 
