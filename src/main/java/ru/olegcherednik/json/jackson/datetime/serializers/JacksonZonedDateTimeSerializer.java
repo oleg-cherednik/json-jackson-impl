@@ -20,18 +20,16 @@
 package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
-import ru.olegcherednik.json.api.JsonSettings;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE;
 
@@ -39,26 +37,20 @@ import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_WI
  * @author Oleg Cherednik
  * @since 01.12.2023
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
 
     private static final long serialVersionUID = -6441103051278765460L;
 
     public static final JacksonZonedDateTimeSerializer INSTANCE = new JacksonZonedDateTimeSerializer();
 
-    protected final UnaryOperator<ZoneId> zoneModifier;
-
-    public static JacksonZonedDateTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+    public static JacksonZonedDateTimeSerializer with(DateTimeFormatter df) {
         return new JacksonZonedDateTimeSerializer(INSTANCE,
                                                   INSTANCE._useTimestamp,
                                                   INSTANCE._useNanoseconds,
                                                   df,
                                                   INSTANCE._shape,
-                                                  Optional.ofNullable(INSTANCE._writeZoneId).orElse(false),
-                                                  zoneModifier);
-    }
-
-    protected JacksonZonedDateTimeSerializer() {
-        zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
+                                                  Optional.ofNullable(INSTANCE._writeZoneId).orElse(false));
     }
 
     protected JacksonZonedDateTimeSerializer(JacksonZonedDateTimeSerializer base,
@@ -66,37 +58,21 @@ public class JacksonZonedDateTimeSerializer extends ZonedDateTimeSerializer {
                                              Boolean useNanoseconds,
                                              DateTimeFormatter df,
                                              JsonFormat.Shape shape,
-                                             Boolean writeZoneId,
-                                             UnaryOperator<ZoneId> zoneModifier) {
+                                             Boolean writeZoneId) {
         super(base, useTimestamp, useNanoseconds, df, shape, writeZoneId);
-        this.zoneModifier = zoneModifier;
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFormat(Boolean useTimestamp,
                                                         DateTimeFormatter df,
                                                         JsonFormat.Shape shape) {
-        return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds,
-                                                  df, shape, _writeZoneId, zoneModifier);
+        return new JacksonZonedDateTimeSerializer(this, useTimestamp, _useNanoseconds, df, shape, _writeZoneId);
     }
 
     @Override
     protected JacksonZonedDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean writeNanoseconds) {
         return new JacksonZonedDateTimeSerializer(this, _useTimestamp, writeNanoseconds,
-                                                  _formatter, _shape, writeZoneId, zoneModifier);
-    }
-
-    @Override
-    public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider provider)
-            throws IOException {
-        super.serialize(value, generator, provider);
-//        if (_formatter == null || useTimestamp(provider))
-//            super.serialize(value, generator, provider);
-//        else if (_formatter.getZone() == null) {
-//            ZoneId zoneId = zoneModifier.apply(DateTimeFormatter.ISO_OFFSET_DATE_TIME.getZone());
-//            generator.writeString(_formatter.withZone(zoneId).format(value));
-//        } else
-//            generator.writeString(_formatter.format(value));
+                                                  _formatter, _shape, writeZoneId);
     }
 
     @Override

@@ -30,7 +30,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 
 import java.time.OffsetTime;
@@ -160,7 +159,7 @@ public class JacksonOffsetTimeSerializerTest {
 
     private static SimpleModule createModule(DateTimeFormatter df) {
         SimpleModule module = new SimpleModule();
-        module.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.with(df, ZoneModifier.USE_ORIGINAL));
+        module.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.with(df));
         return module;
     }
 

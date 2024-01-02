@@ -157,7 +157,6 @@ public class JacksonLocalTimeSerializerTest {
     }
 
     @Getter
-    @ToString
     @EqualsAndHashCode
     @SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
     private static final class Data {

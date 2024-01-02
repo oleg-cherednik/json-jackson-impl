@@ -118,8 +118,7 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                                                                 settings.getLocalDateTimeFormatter(),
                                                                 settings.getOffsetTimeFormatter(),
                                                                 settings.getOffsetDateTimeFormatter(),
-                                                                settings.getZonedDateTimeFormatter(),
-                                                                settings.getZoneModifier()));
+                                                                settings.getZonedDateTimeFormatter()));
         });
 
         return mapper;

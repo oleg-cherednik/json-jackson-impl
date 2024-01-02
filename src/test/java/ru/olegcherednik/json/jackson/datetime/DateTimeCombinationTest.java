@@ -233,7 +233,6 @@ public class DateTimeCombinationTest {
 
     @Getter
     @EqualsAndHashCode
-    @ToString
     private static final class DataThree {
 
         @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)

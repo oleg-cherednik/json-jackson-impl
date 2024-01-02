@@ -30,7 +30,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.jackson.LocalTimeZone;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 
@@ -186,7 +185,7 @@ public class JacksonZonedDateTimeSerializerTest {
 
     private static SimpleModule createModule(DateTimeFormatter df) {
         SimpleModule module = new SimpleModule();
-        module.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(df, ZoneModifier.USE_ORIGINAL));
+        module.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(df));
         return module;
     }
 

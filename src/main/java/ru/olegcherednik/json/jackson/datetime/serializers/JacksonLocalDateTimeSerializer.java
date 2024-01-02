@@ -61,12 +61,10 @@ public class JacksonLocalDateTimeSerializer extends LocalDateTimeSerializer {
 
     @Override
     public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        if (useTimestamp(provider))
+        if (useTimestamp(provider) || _formatter != null)
             super.serialize(value, gen, provider);
-        else if (_formatter == null)
-            gen.writeString(value.toString());
         else
-            gen.writeString(_formatter.format(value));
+            gen.writeString(value.toString());
     }
 
 }

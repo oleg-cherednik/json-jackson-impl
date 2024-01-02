@@ -21,6 +21,8 @@ package ru.olegcherednik.json.jackson.datetime.serializers;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.ZoneId;
@@ -31,45 +33,37 @@ import java.util.function.UnaryOperator;
  * @author Oleg Cherednik
  * @since 01.12.2023
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonOffsetDateTimeSerializer extends OffsetDateTimeSerializer {
 
     private static final long serialVersionUID = -954133191249891146L;
 
     public static final JacksonOffsetDateTimeSerializer INSTANCE = new JacksonOffsetDateTimeSerializer();
 
-    protected final UnaryOperator<ZoneId> zoneModifier;
-
-    public static JacksonOffsetDateTimeSerializer with(DateTimeFormatter df, UnaryOperator<ZoneId> zoneModifier) {
+    public static JacksonOffsetDateTimeSerializer with(DateTimeFormatter df) {
         return new JacksonOffsetDateTimeSerializer(INSTANCE,
                                                    INSTANCE._useTimestamp,
                                                    INSTANCE._useNanoseconds,
-                                                   df,
-                                                   zoneModifier);
-    }
-
-    protected JacksonOffsetDateTimeSerializer() {
-        zoneModifier = JsonSettings.DEFAULT_ZONE_MODIFIER;
+                                                   df);
     }
 
     protected JacksonOffsetDateTimeSerializer(JacksonOffsetDateTimeSerializer base,
                                               Boolean useTimestamp,
                                               Boolean useNanoseconds,
-                                              DateTimeFormatter df,
-                                              UnaryOperator<ZoneId> zoneModifier) {
+                                              DateTimeFormatter df) {
         super(base, useTimestamp, useNanoseconds, df);
-        this.zoneModifier = zoneModifier;
     }
 
     @Override
     protected JacksonOffsetDateTimeSerializer withFormat(Boolean useTimestamp,
                                                          DateTimeFormatter df,
                                                          JsonFormat.Shape shape) {
-        return new JacksonOffsetDateTimeSerializer(this, useTimestamp, _useNanoseconds, df, zoneModifier);
+        return new JacksonOffsetDateTimeSerializer(this, useTimestamp, _useNanoseconds, df);
     }
 
     @Override
     protected JacksonOffsetDateTimeSerializer withFeatures(Boolean writeZoneId, Boolean useNanoseconds) {
-        return new JacksonOffsetDateTimeSerializer(this, _useTimestamp, useNanoseconds, _formatter, zoneModifier);
+        return new JacksonOffsetDateTimeSerializer(this, _useTimestamp, useNanoseconds, _formatter);
     }
 
 }

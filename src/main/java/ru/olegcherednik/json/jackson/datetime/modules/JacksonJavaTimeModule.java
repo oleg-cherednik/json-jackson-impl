@@ -53,10 +53,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -74,7 +72,6 @@ public class JacksonJavaTimeModule extends SimpleModule {
     protected final transient DateTimeFormatter offsetTime;
     protected final transient DateTimeFormatter offsetDateTime;
     protected final transient DateTimeFormatter zonedDateTime;
-    protected final UnaryOperator<ZoneId> zoneModifier;
 
     @Override
     public void setupModule(SetupContext context) {
@@ -104,9 +101,9 @@ public class JacksonJavaTimeModule extends SimpleModule {
         ser.addSerializer(LocalDate.class, JacksonLocalDateSerializer.with(localDate));
         ser.addSerializer(LocalTime.class, JacksonLocalTimeSerializer.with(localTime));
         ser.addSerializer(LocalDateTime.class, JacksonLocalDateTimeSerializer.with(localDateTime));
-        ser.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.with(offsetTime, zoneModifier));
-        ser.addSerializer(OffsetDateTime.class, JacksonOffsetDateTimeSerializer.with(offsetDateTime, zoneModifier));
-        ser.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(zonedDateTime, zoneModifier));
+        ser.addSerializer(OffsetTime.class, JacksonOffsetTimeSerializer.with(offsetTime));
+        ser.addSerializer(OffsetDateTime.class, JacksonOffsetDateTimeSerializer.with(offsetDateTime));
+        ser.addSerializer(ZonedDateTime.class, JacksonZonedDateTimeSerializer.with(zonedDateTime));
 
         context.addSerializers(ser);
     }

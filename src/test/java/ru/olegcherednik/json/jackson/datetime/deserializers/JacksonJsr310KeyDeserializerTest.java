@@ -68,8 +68,7 @@ public class JacksonJsr310KeyDeserializerTest {
                                                           JsonSettings.DEFAULT.getLocalDateTimeFormatter(),
                                                           JsonSettings.DEFAULT.getOffsetTimeFormatter(),
                                                           JsonSettings.DEFAULT.getOffsetDateTimeFormatter(),
-                                                          JsonSettings.DEFAULT.getZonedDateTimeFormatter(),
-                                                          JsonSettings.DEFAULT.getZoneModifier()));
+                                                          JsonSettings.DEFAULT.getZonedDateTimeFormatter()));
 
         System.out.println(objectMapper.writeValueAsString(Collections.singletonMap(zdtLocal.minusYears(5).toInstant(), zdtLocal.toInstant())));
 
