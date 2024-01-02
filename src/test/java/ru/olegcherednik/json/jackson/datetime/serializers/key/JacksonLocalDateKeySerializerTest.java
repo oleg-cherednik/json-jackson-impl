@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,8 +54,12 @@ public class JacksonLocalDateKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        Data expected = new Data(LOCAL_DATE);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-10\":\"localDate\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseEpochDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -73,8 +79,13 @@ public class JacksonLocalDateKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE));
+        Data expected = new Data(LOCAL_DATE);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"10-12-2023\":\"localDate\"}}");
+
+        JsonSettings settings = JsonSettings.builder().localDateFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {

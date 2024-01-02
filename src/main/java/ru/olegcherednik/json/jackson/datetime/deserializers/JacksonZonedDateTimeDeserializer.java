@@ -38,32 +38,18 @@ public class JacksonZonedDateTimeDeserializer extends InstantDeserializer<ZonedD
     private static final long serialVersionUID = -5671981244499036058L;
 
     public JacksonZonedDateTimeDeserializer(DateTimeFormatter df) {
-        super(InstantDeserializer.ZONED_DATE_TIME, withNotNull(df));
+        super(InstantDeserializer.ZONED_DATE_TIME, df);
     }
 
     protected JacksonZonedDateTimeDeserializer(JacksonZonedDateTimeDeserializer base, DateTimeFormatter df) {
         super(base, df);
     }
 
-    protected JacksonZonedDateTimeDeserializer(JacksonZonedDateTimeDeserializer base,
-                                               DateTimeFormatter df,
-                                               Boolean leniency) {
-        super(base, df, leniency);
-    }
-
     @Override
     @SuppressWarnings("PMD.CompareObjectsWithEquals")
     protected JacksonZonedDateTimeDeserializer withDateFormat(DateTimeFormatter df) {
-        return df == _formatter ? this : new JacksonZonedDateTimeDeserializer(this, withNotNull(df));
+        return df == _formatter ? this : new JacksonZonedDateTimeDeserializer(this, df);
     }
 
-    @Override
-    protected JacksonZonedDateTimeDeserializer withLeniency(Boolean leniency) {
-        return new JacksonZonedDateTimeDeserializer(this, _formatter, leniency);
-    }
-
-    protected static DateTimeFormatter withNotNull(DateTimeFormatter df) {
-        return Optional.ofNullable(df).orElse(JsonSettings.DF_ZONED_DATE_TIME);
-    }
 
 }

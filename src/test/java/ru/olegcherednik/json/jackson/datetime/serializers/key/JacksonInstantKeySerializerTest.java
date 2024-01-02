@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalTimeZone;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 
@@ -45,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonInstantKeySerializerTest {
 
-    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758927Z");
+    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758Z");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
@@ -54,8 +56,12 @@ public class JacksonInstantKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
+        Data expected = new Data(INSTANT);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758Z\":\"instant\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseNanosecondWhenWriteDateAsTimestampsAndWriteDateTimestampsAsNanoseconds()
@@ -68,7 +74,7 @@ public class JacksonInstantKeySerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"1702236160.758927000\":\"instant\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"1702236160.758000000\":\"instant\"}}");
     }
 
     public void shouldSerializeTimestampWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -87,11 +93,15 @@ public class JacksonInstantKeySerializerTest {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
                                                 .withZone(LocalZoneId.ASIA_SINGAPORE);
         SimpleModule module = createModule(df);
-
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
+        Data expected = new Data(INSTANT);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-11T03:22:40.758+08:00\":\"instant\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseContextZoneWhenContextZoneExists() throws JsonProcessingException {
@@ -103,8 +113,13 @@ public class JacksonInstantKeySerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
+        Data expected = new Data(INSTANT);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"2023-12-11T03:22:40.758+08:00\":\"instant\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldIgnoreContextZoneWhenDisableWriteDateWithContextTimeZone() throws JsonProcessingException {
@@ -116,8 +131,13 @@ public class JacksonInstantKeySerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
+        Data expected = new Data(INSTANT);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758Z\":\"instant\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldIgnoreContextZoneWhenDisableWriteDateWithContextTimeZone1() throws JsonProcessingException {
@@ -128,8 +148,13 @@ public class JacksonInstantKeySerializerTest {
                 .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927Z\":\"instant\"}}");
+        Data expected = new Data(INSTANT);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758Z\":\"instant\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {

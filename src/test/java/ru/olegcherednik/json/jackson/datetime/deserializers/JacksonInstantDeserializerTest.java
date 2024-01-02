@@ -52,15 +52,6 @@ public class JacksonInstantDeserializerTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    public void shouldNotCreateNewInstanceWhenUseSameDataTimeFormat() {
-        LocalDeserializer deser = new LocalDeserializer(DateTimeFormatter.ISO_INSTANT);
-        JacksonInstantDeserializer deser1 = deser.withDateFormat(DateTimeFormatter.ISO_INSTANT);
-        JacksonInstantDeserializer deser2 = deser.withDateFormat(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-
-        assertThat(deser1).isSameAs(deser);
-        assertThat(deser2).isNotSameAs(deser);
-    }
-
     @Getter
     @EqualsAndHashCode
     private static final class Data {
@@ -72,16 +63,6 @@ public class JacksonInstantDeserializerTest {
                      @JsonFormat(lenient = OptBoolean.TRUE)
                      Instant one) {
             this.one = one;
-        }
-
-    }
-
-    private static final class LocalDeserializer extends JacksonInstantDeserializer {
-
-        private static final long serialVersionUID = 1561269843027654505L;
-
-        private LocalDeserializer(DateTimeFormatter df) {
-            super(df);
         }
 
     }

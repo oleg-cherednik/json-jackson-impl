@@ -19,12 +19,13 @@
 
 package ru.olegcherednik.json.jackson.datetime.deserializers;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import ru.olegcherednik.json.api.JsonSettings;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 /**
  * @author Oleg Cherednik
@@ -35,30 +36,11 @@ public class JacksonInstantDeserializer extends InstantDeserializer<Instant> {
     private static final long serialVersionUID = 6304027484218980135L;
 
     public JacksonInstantDeserializer(DateTimeFormatter df) {
-        super(InstantDeserializer.INSTANT, withNotNull(df));
-    }
-
-    protected JacksonInstantDeserializer(JacksonInstantDeserializer base, DateTimeFormatter df) {
-        super(base, df);
-    }
-
-    protected JacksonInstantDeserializer(JacksonInstantDeserializer base, DateTimeFormatter df, Boolean leniency) {
-        super(base, df, leniency);
+        super(InstantDeserializer.INSTANT, df);
     }
 
     @Override
-    @SuppressWarnings("PMD.CompareObjectsWithEquals")
-    protected JacksonInstantDeserializer withDateFormat(DateTimeFormatter df) {
-        return df == _formatter ? this : new JacksonInstantDeserializer(this, withNotNull(df));
+    public Instant deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+        return super.deserialize(parser, context);
     }
-
-    @Override
-    protected JacksonInstantDeserializer withLeniency(Boolean leniency) {
-        return new JacksonInstantDeserializer(this, _formatter, leniency);
-    }
-
-    protected static DateTimeFormatter withNotNull(DateTimeFormatter df) {
-        return Optional.ofNullable(df).orElse(JsonSettings.DF_INSTANT);
-    }
-
 }

@@ -27,7 +27,10 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalZoneId;
+import ru.olegcherednik.json.jackson.LocalZoneOffset;
 
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
@@ -43,35 +46,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonOffsetTimeKeySerializerTest {
 
-    private static final OffsetTime OFFSET_TIME = OffsetTime.parse("22:16:19.989648300+03:00");
+    private static final OffsetTime OFFSET_TIME = OffsetTime.parse("22:16:19.989+03:00");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
+        Data expected = new Data(OFFSET_TIME);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"" + OFFSET_TIME + "\":\"offsetTime\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'hh:mm:ssXXX");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'HH:mm:ss.SSSXXX");
         SimpleModule module = createModule(df);
-
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"[one]10:16:19+03:00\":\"offsetTime\"}}");
+        Data expected = new Data(OFFSET_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"[one]22:16:19.989+03:00\":\"offsetTime\"}}");
+
+        JsonSettings settings = JsonSettings.builder().offsetTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatZoneIdWhenDateFormatHasZoneId() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'hh:mm:ss.SSSXXX")
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'HH:mm:ss.SSSXXX")
                                                 .withZone(LocalZoneId.ASIA_SINGAPORE);
         SimpleModule module = createModule(df);
-
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(OFFSET_TIME));
         assertThat(json).isEqualTo("{\"map\":{\"[one]03:16:19.989+08:00\":\"offsetTime\"}}");
+
+        JsonSettings settings = JsonSettings.builder().offsetTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        Data expected = new Data(OFFSET_TIME.withOffsetSameInstant(LocalZoneOffset.ASIA_SINGAPORE));
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {

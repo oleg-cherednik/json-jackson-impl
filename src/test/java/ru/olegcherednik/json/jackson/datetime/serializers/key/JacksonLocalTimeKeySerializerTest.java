@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonLocalTimeKeySerializerTest {
 
-    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758927");
+    private static final LocalTime LOCAL_TIME = LocalTime.parse("19:22:40.758");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
@@ -52,8 +54,12 @@ public class JacksonLocalTimeKeySerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"19:22:40.758927\":\"localTime\"}}");
+        Data expected = new Data(LOCAL_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"19:22:40.758\":\"localTime\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseNanoOfDayWhenWriteDateAsTimestampsNano() throws JsonProcessingException {
@@ -65,7 +71,7 @@ public class JacksonLocalTimeKeySerializerTest {
                 .registerModule(module);
 
         String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"69760758927000\":\"localTime\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"69760758000000\":\"localTime\"}}");
     }
 
     public void shouldUseSecondOfDayWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -86,8 +92,13 @@ public class JacksonLocalTimeKeySerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_TIME));
+        Data expected = new Data(LOCAL_TIME);
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"map\":{\"758.40:22:19\":\"localTime\"}}");
+
+        JsonSettings settings = JsonSettings.builder().localTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {

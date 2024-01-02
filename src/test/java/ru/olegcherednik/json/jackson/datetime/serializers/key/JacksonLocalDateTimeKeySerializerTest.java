@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,24 +45,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NewClassNamingConvention")
 public class JacksonLocalDateTimeKeySerializerTest {
 
-    private static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.parse("2023-12-10T19:22:40.758927");
+    private static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.parse("2023-12-10T19:22:40.758");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
         SimpleModule module = createModule(null);
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758927\":\"localDateTime\"}}");
+        Data expected = new Data(LOCAL_DATE_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"2023-12-10T19:22:40.758\":\"localDateTime\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatWhenDateFormatNotNull() throws JsonProcessingException {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'ss:mm:HH");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("'[one]'yyyy-MM-dd'T'HH:mm:ss.SSS");
         SimpleModule module = createModule(df);
-
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(LOCAL_DATE_TIME));
-        assertThat(json).isEqualTo("{\"map\":{\"10-12-2023T40:22:19\":\"localDateTime\"}}");
+        Data expected = new Data(LOCAL_DATE_TIME);
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"map\":{\"[one]2023-12-10T19:22:40.758\":\"localDateTime\"}}");
+
+        JsonSettings settings = JsonSettings.builder().localDateTimeFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {

@@ -28,8 +28,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalTimeZone;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 
@@ -47,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class JacksonInstantSerializerTest {
 
-    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758927Z");
+    private static final Instant INSTANT = Instant.parse("2023-12-10T19:22:40.758Z");
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     public void shouldUseToStringWhenDateFormatIsNull() throws JsonProcessingException {
@@ -57,8 +58,12 @@ public class JacksonInstantSerializerTest {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758927Z\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758Z\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseNanosecondWhenWriteDateAsTimestampsAndWriteDateTimestampsAsNanoseconds()
@@ -70,8 +75,12 @@ public class JacksonInstantSerializerTest {
                 .enable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"instant\":1702236160.758927000}}");
+        assertThat(json).isEqualTo("{\"map\":{\"instant\":1702236160.758000000}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenWriteDateAsTimestamps() throws JsonProcessingException {
@@ -82,8 +91,12 @@ public class JacksonInstantSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":1702236160758}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseDateFormatZoneWhenDateFormatHasZone() throws JsonProcessingException {
@@ -92,8 +105,13 @@ public class JacksonInstantSerializerTest {
 
         ObjectMapper mapper = new ObjectMapper().registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-11T03:22:40.758+08:00\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(df).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldUseContextZoneWhenContextZoneExists() throws JsonProcessingException {
@@ -104,8 +122,13 @@ public class JacksonInstantSerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
         assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-11T03:22:40.758+08:00\"}}");
+
+        JsonSettings settings = JsonSettings.builder().instantFormatter(DF).build();
+        Data actual = Json.createReader(settings).readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldIgnoreContextZoneWhenDisableWriteDateWithContextTimeZone() throws JsonProcessingException {
@@ -117,60 +140,45 @@ public class JacksonInstantSerializerTest {
                 .setTimeZone(LocalTimeZone.ASIA_SINGAPORE)
                 .registerModule(module);
 
+        Data expected = new Data(INSTANT);
         String json = mapper.writeValueAsString(new Data(INSTANT));
-        assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758927Z\"}}");
+        assertThat(json).isEqualTo("{\"map\":{\"instant\":\"2023-12-10T19:22:40.758Z\"}}");
+
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenShapeNumberInt() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
-            private final Instant instant;
-
-        }
-
         SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(INSTANT));
+        DataInt expected = new DataInt();
+        String json = mapper.writeValueAsString(expected);
         assertThat(json).isEqualTo("{\"instant\":1702236160758}");
+
+        DataInt actual = Json.readValue(json, DataInt.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeNanosecondsWhenShapeNumberFloat() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
-            private final Instant instant;
-
-        }
-
         SimpleModule module = createModule(DF);
 
         ObjectMapper mapper = new ObjectMapper()
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
-        assertThat(json).isEqualTo("{\"instant\":1702236160.758927000}");
+        DataFloat expected = new DataFloat();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"instant\":1702236160.758000000}");
+
+        DataFloat actual = Json.readValue(json, DataFloat.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldSerializeTimestampWhenFeatureIsOn() throws JsonProcessingException {
-        @Getter
-        @RequiredArgsConstructor
-        class Data {
-
-            @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-            private final Instant instant;
-
-        }
-
         SimpleModule module = createModule(null);
 
         ObjectMapper mapper = new ObjectMapper()
@@ -178,8 +186,12 @@ public class JacksonInstantSerializerTest {
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .registerModule(module);
 
-        String json = mapper.writeValueAsString(new Data(Instant.parse("2023-12-10T19:22:40.758927Z")));
-        assertThat(json).isEqualTo("{\"instant\":1702236160.758927000}");
+        DataNano expected = new DataNano();
+        String json = mapper.writeValueAsString(expected);
+        assertThat(json).isEqualTo("{\"instant\":1702236160.758000000}");
+
+        DataNano actual = Json.readValue(json, DataNano.class);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private static SimpleModule createModule(DateTimeFormatter df) {
@@ -204,6 +216,30 @@ public class JacksonInstantSerializerTest {
         private Data(Instant value) {
             this(Collections.singletonMap("instant", value));
         }
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataInt {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+        private final Instant instant = INSTANT;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataFloat {
+
+        @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+        private final Instant instant = INSTANT;
+
+    }
+
+    @EqualsAndHashCode
+    private static final class DataNano {
+
+        @JsonFormat(with = JsonFormat.Feature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+        private final Instant instant = INSTANT;
 
     }
 
