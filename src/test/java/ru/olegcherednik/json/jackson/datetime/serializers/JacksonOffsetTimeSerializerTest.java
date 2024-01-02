@@ -34,7 +34,6 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 import ru.olegcherednik.json.jackson.LocalZoneOffset;
 
-import java.time.Instant;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
