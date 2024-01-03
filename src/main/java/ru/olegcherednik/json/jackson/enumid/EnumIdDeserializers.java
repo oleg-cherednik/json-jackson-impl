@@ -49,9 +49,9 @@ final class EnumIdDeserializers extends SimpleDeserializers {
     private final Map<Class<?>, JsonDeserializer<?>> cache = new HashMap<>();
 
     @Override
-    public JsonDeserializer<?> findEnumDeserializer(Class<?> type,
-                                                    DeserializationConfig config,
-                                                    BeanDescription beanDesc) throws JsonMappingException {
+    public synchronized JsonDeserializer<?> findEnumDeserializer(Class<?> type,
+                                                                 DeserializationConfig config,
+                                                                 BeanDescription beanDesc) throws JsonMappingException {
         return cache.computeIfAbsent(type, cls -> {
             Function<String, ?> read = EnumIdSupport.createFactory(type);
 
@@ -68,7 +68,6 @@ final class EnumIdDeserializers extends SimpleDeserializers {
                 }
             };
         });
-
     }
 
 }
