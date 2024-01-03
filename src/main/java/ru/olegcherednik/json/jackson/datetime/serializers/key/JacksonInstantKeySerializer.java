@@ -19,8 +19,6 @@
 
 package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
-import ru.olegcherednik.json.api.ZoneModifier;
-
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
@@ -33,8 +31,7 @@ public class JacksonInstantKeySerializer extends JacksonKeySerializer<Instant> {
     private static final long serialVersionUID = 154759679223502525L;
 
     public JacksonInstantKeySerializer(DateTimeFormatter df) {
-        super(Instant.class, df, ZoneModifier.USE_ORIGINAL,
-              Instant::toEpochMilli, Instant::getEpochSecond, Instant::getNano);
+        super(Instant.class, df, Instant::toEpochMilli, Instant::getEpochSecond, Instant::getNano);
     }
 
 }

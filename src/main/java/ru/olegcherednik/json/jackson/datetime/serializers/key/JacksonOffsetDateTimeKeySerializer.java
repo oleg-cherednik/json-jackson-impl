@@ -19,8 +19,6 @@
 
 package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
-import ru.olegcherednik.json.api.ZoneModifier;
-
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,8 +31,8 @@ public class JacksonOffsetDateTimeKeySerializer extends JacksonKeySerializer<Off
     private static final long serialVersionUID = 1613595140810067069L;
 
     public JacksonOffsetDateTimeKeySerializer(DateTimeFormatter df) {
-        super(OffsetDateTime.class, df, ZoneModifier.USE_ORIGINAL,
-              dt -> dt.toInstant().toEpochMilli(), OffsetDateTime::toEpochSecond, OffsetDateTime::getNano);
+        super(OffsetDateTime.class, df, dt -> dt.toInstant().toEpochMilli(),
+              OffsetDateTime::toEpochSecond, OffsetDateTime::getNano);
     }
 
 }

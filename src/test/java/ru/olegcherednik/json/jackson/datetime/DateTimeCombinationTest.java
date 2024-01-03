@@ -27,7 +27,6 @@ import lombok.Getter;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.jackson.LocalZoneId;
 import ru.olegcherednik.json.jackson.ResourceData;
 
@@ -98,7 +97,7 @@ public class DateTimeCombinationTest {
 
     private static JsonSettings getSettings() {
         return JsonSettings.builder()
-                           .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+                           .zoneId(ZoneOffset.UTC)
                            .instantFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd'T'HH:mm:ss.SSSz"))
                            .localTimeFormatter(DateTimeFormatter.ofPattern("'[one] 'HH:mm:ss.SSS"))
                            .localDateFormatter(DateTimeFormatter.ofPattern("'[one] 'yyyy-MM-dd"))

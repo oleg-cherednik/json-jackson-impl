@@ -31,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
-import java.util.function.UnaryOperator;
 
 /**
  * @param <T> A type of the key value
@@ -43,20 +42,17 @@ public abstract class JacksonKeySerializer<T extends Temporal> extends StdSerial
     private static final long serialVersionUID = 2020854544464342989L;
 
     protected final DateTimeFormatter df;
-    protected final UnaryOperator<ZoneId> zoneModifier;
     protected final ToLongFunction<T> getEpochMillis;
     protected final ToLongFunction<T> getEpochSeconds;
     protected final ToIntFunction<T> getNanoseconds;
 
     protected JacksonKeySerializer(Class<T> supportedType,
                                    DateTimeFormatter df,
-                                   UnaryOperator<ZoneId> zoneModifier,
                                    ToLongFunction<T> getEpochMillis,
                                    ToLongFunction<T> getEpochSeconds,
                                    ToIntFunction<T> getNanoseconds) {
         super(supportedType);
         this.df = df;
-        this.zoneModifier = zoneModifier;
         this.getEpochMillis = getEpochMillis;
         this.getEpochSeconds = getEpochSeconds;
         this.getNanoseconds = getNanoseconds;
@@ -85,8 +81,6 @@ public abstract class JacksonKeySerializer<T extends Temporal> extends StdSerial
             return value.toString();
 
         ZoneId zoneId = getZoneId(value, provider);
-        zoneId = zoneModifier.apply(zoneId);
-
         return zoneId == null ? df.format(value) : df.withZone(zoneId).format(value);
     }
 
