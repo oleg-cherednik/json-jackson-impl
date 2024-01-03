@@ -30,7 +30,7 @@ import java.util.List;
  * @author Oleg Cherednik
  * @since 22.12.2020
  */
-@SuppressWarnings({ "unchecked", "PMD.ShortMethodName" })
+@SuppressWarnings("PMD.ShortMethodName")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ListUtils {
 

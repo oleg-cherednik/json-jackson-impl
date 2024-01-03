@@ -154,7 +154,7 @@ publishing {
                         "    builder or static method set.\n" +
                         "  "
 
-                url = 'https://github.com/oleg-cherednik/jackson-utils'
+                url = 'https://github.com/oleg-cherednik/json-jackson-impl'
                 inceptionYear = '2020'
 
                 licenses {
@@ -174,9 +174,9 @@ publishing {
                 }
 
                 scm {
-                    url = 'https://github.com/oleg-cherednik/jackson-utils'
-                    connection = 'scm:https://github.com/oleg-cherednik/jackson-utils.git'
-                    developerConnection = 'scm:git@github.com:oleg-cherednik/jackson-utils.git'
+                    url = 'https://github.com/oleg-cherednik/json-jackson-impl'
+                    connection = 'scm:https://github.com/oleg-cherednik/json-jackson-impl.git'
+                    developerConnection = 'scm:git@github.com:oleg-cherednik/json-jackson-impl.git'
                 }
             }
         }
