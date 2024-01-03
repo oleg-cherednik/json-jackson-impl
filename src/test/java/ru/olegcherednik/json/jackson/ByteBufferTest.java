@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +51,12 @@ public class ByteBufferTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((ByteBuffer) null, Object.class)).isNull();
-        assertThat(Json.readListLazy((ByteBuffer) null)).isNull();
-        assertThat(Json.readListLazy((ByteBuffer) null, Object.class)).isNull();
-        assertThat(Json.readListOfMapLazy((ByteBuffer) null)).isNull();
+    }
+
+    public void shouldRetrieveEmptyIteratorWhenObjectNull() {
+        assertThat(Json.readListLazy((ByteBuffer) null)).isSameAs(Collections.emptyIterator());
+        assertThat(Json.readListLazy((ByteBuffer) null, Object.class)).isSameAs(Collections.emptyIterator());
+        assertThat(Json.readListOfMapLazy((ByteBuffer) null)).isSameAs(Collections.emptyIterator());
     }
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {

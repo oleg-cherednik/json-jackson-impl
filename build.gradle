@@ -129,7 +129,6 @@ test {
 license {
     header rootProject.file('APACHE.txt')
     include '**/*.java'
-    newLine true
 }
 
 signing {

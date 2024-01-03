@@ -25,12 +25,13 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngine;
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.jackson.types.ListMapTypeReference;
+import ru.olegcherednik.json.jackson.types.MappingIteratorDecorator;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -108,13 +109,15 @@ public class JacksonEngine implements JsonEngine {
     }
 
     @Override
-    public <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
-        return mapper.readerFor(valueClass).readValues(reader);
+    public <V> AutoCloseableIterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
+        MappingIterator<V> it = mapper.readerFor(valueClass).readValues(reader);
+        return new MappingIteratorDecorator<>(it);
     }
 
     @Override
-    public Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
-        return mapper.readerFor(Map.class).readValues(reader);
+    public AutoCloseableIterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
+        MappingIterator<Map<String, Object>> it = mapper.readerFor(Map.class).readValues(reader);
+        return new MappingIteratorDecorator<>(it);
     }
 
     @Override

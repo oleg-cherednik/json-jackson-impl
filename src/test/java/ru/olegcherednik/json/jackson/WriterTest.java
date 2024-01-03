@@ -45,7 +45,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WriteTest {
+public class WriterTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.writeValue(null)).isNull();

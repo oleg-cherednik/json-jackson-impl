@@ -22,6 +22,7 @@ package ru.olegcherednik.json.jackson;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.jackson.data.Book;
 import ru.olegcherednik.json.jackson.data.Data;
 
@@ -39,6 +40,10 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Oleg Cherednik
@@ -125,7 +130,7 @@ public class ReaderTest {
                                                     "year", 2020,
                                                     "authors", ListUtils.of("Oleg Cherednik"));
 
-        Iterator<Object> it = Json.readListLazy(getResourceAsReader("/books.json"));
+        Iterator<Object> it = Json.readListLazy(getResourceBooks());
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -140,7 +145,7 @@ public class ReaderTest {
     }
 
     public void shouldRetrieveIteratorOfDeserializedObjectsWhenReadValueLazyList() throws IOException {
-        Iterator<Book> it = Json.readListLazy(getResourceAsReader("/books.json"), Book.class);
+        Iterator<Book> it = Json.readListLazy(getResourceBooks(), Book.class);
         assertThat(it.hasNext()).isTrue();
 
         Book actual1 = it.next();
@@ -176,7 +181,7 @@ public class ReaderTest {
                                                     "year", 2020,
                                                     "authors", ListUtils.of("Oleg Cherednik"));
 
-        Iterator<Map<String, Object>> it = Json.readListOfMapLazy(getResourceAsReader("/books.json"));
+        Iterator<Map<String, Object>> it = Json.readListOfMapLazy(getResourceBooks());
         assertThat(it.hasNext()).isTrue();
 
         Object actual1 = it.next();
@@ -247,11 +252,26 @@ public class ReaderTest {
     }
 
     @SuppressWarnings("PMD.CloseResource")
-    public void shouldCloseInputStreamWhenFinishParse() throws IOException {
+    public void shouldCloseReaderWhenFinishParse() throws IOException {
         Reader in = getResourceAsReader("/book.json");
         Book actual = Json.readValue(in, Book.class);
         assertThat(actual).isEqualTo(Book.THINKING_IN_JAVA);
         assertThatThrownBy(in::read).isExactlyInstanceOf(IOException.class).hasMessage("Stream closed");
+    }
+
+    @SuppressWarnings("unused")
+    public void shouldNotCloseResourceUntilCallCloseWhenReadListLazy() throws Exception {
+        Reader reader = spy(getResourceBooks());
+
+        try (AutoCloseableIterator<Object> it = Json.readListLazy(reader)) {
+            verify(reader, never()).close();
+        }
+
+        verify(reader, times(1)).close();
+    }
+
+    private static Reader getResourceBooks() throws IOException {
+        return getResourceAsReader("/books.json");
     }
 
     private static Reader getResourceAsReader(String name) throws IOException {
