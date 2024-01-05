@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.type.MapType;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 import ru.olegcherednik.json.api.JsonEngine;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.jackson.types.ListMapTypeReference;
 import ru.olegcherednik.json.jackson.types.MappingAutoCloseableIterator;
 

@@ -21,7 +21,7 @@ package ru.olegcherednik.json.jackson.types;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 
 /**
  * @param <T> Type of iterable object
