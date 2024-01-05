@@ -11,7 +11,7 @@ plugins {
     id 'pmd'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
-    id 'io.franzbecker.gradle-lombok' version '4.0.0'
+    id 'io.freefair.lombok' version '8.4'
 
     id 'signing'
     id 'maven-publish'
@@ -23,17 +23,16 @@ repositories {
     mavenCentral()
 }
 
-group 'ru.oleg-cherednik.jackson'
-version '2.7'
+group 'ru.oleg-cherednik.json'
+version '666'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
     options.compilerArgs += ['-Xlint:unchecked']
 }
 
@@ -42,11 +41,18 @@ configurations {
 }
 
 checkstyle {
+    toolVersion = '10.10.0'
     configFile = "${projectDir}/misc/checkstyle/checkstyle.xml" as File
+    ignoreFailures = true
+    maxWarnings = 0
+    maxErrors = 0
 }
 
 pmd {
+    toolVersion = '6.21.0'
+    consoleOutput = true
     rulesMinimumPriority = 5
+    ignoreFailures = true
     ruleSets = [
             "${projectDir}/misc/pmd/bestpractices.xml",
             "${projectDir}/misc/pmd/codestyle.xml",
@@ -58,14 +64,38 @@ pmd {
     ]
 }
 
+checkstyleMain {
+    enabled = true
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    enabled = true
+    source = 'src/test/java'
+}
+
+pmdMain {
+    enabled = true
+    source = 'src/main/java'
+}
+
+pmdTest {
+    enabled = true
+    source = 'src/test/java'
+}
+
 dependencies {
+    annotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
+
+    api 'ru.oleg-cherednik.json:json-api:666'
+
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-parameter-names:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
 
     testImplementation('org.testng:testng:7.5.1') {
         exclude group: 'junit', module: 'junit'
@@ -79,10 +109,8 @@ dependencies {
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${property('jackson.version')}"
 
     testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'commons-io:commons-io:2.15.0'
     testImplementation 'org.mockito:mockito-core:4.11.0'
-
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testImplementation 'commons-io:commons-io:2.15.0'
 }
 
 jacocoTestReport {
@@ -126,7 +154,7 @@ publishing {
                         "    builder or static method set.\n" +
                         "  "
 
-                url = 'https://github.com/oleg-cherednik/jackson-utils'
+                url = 'https://github.com/oleg-cherednik/json-jackson-impl'
                 inceptionYear = '2020'
 
                 licenses {
@@ -146,9 +174,9 @@ publishing {
                 }
 
                 scm {
-                    url = 'https://github.com/oleg-cherednik/jackson-utils'
-                    connection = 'scm:https://github.com/oleg-cherednik/jackson-utils.git'
-                    developerConnection = 'scm:git@github.com:oleg-cherednik/jackson-utils.git'
+                    url = 'https://github.com/oleg-cherednik/json-jackson-impl'
+                    connection = 'scm:https://github.com/oleg-cherednik/json-jackson-impl.git'
+                    developerConnection = 'scm:git@github.com:oleg-cherednik/json-jackson-impl.git'
                 }
             }
         }
