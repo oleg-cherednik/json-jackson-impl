@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.jackson.types.ListMapTypeReference;
-import ru.olegcherednik.json.jackson.types.MappingIteratorDecorator;
+import ru.olegcherednik.json.jackson.types.MappingAutoCloseableIterator;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -111,13 +111,13 @@ public class JacksonEngine implements JsonEngine {
     @Override
     public <V> AutoCloseableIterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
         MappingIterator<V> it = mapper.readerFor(valueClass).readValues(reader);
-        return new MappingIteratorDecorator<>(it);
+        return new MappingAutoCloseableIterator<>(it);
     }
 
     @Override
     public AutoCloseableIterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
         MappingIterator<Map<String, Object>> it = mapper.readerFor(Map.class).readValues(reader);
-        return new MappingIteratorDecorator<>(it);
+        return new MappingAutoCloseableIterator<>(it);
     }
 
     @Override

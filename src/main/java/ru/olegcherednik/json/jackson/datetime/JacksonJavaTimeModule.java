@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.jackson.datetime.deserializers.JacksonInstantDeserializer;
 import ru.olegcherednik.json.jackson.datetime.deserializers.JacksonJsr310KeyDeserializer;
@@ -60,7 +62,8 @@ import java.time.format.DateTimeFormatter;
  * @author Oleg Cherednik
  * @since 14.12.2023
  */
-@RequiredArgsConstructor
+@Builder
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonJavaTimeModule extends SimpleModule {
 
     private static final long serialVersionUID = 7443855953089866124L;

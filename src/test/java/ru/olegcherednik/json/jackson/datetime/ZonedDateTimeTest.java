@@ -27,7 +27,6 @@ import ru.olegcherednik.json.jackson.MapUtils;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,24 +39,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ZonedDateTimeTest {
 
     public void shouldRetrieveJsonOriginalZoneWhenWriteDefaultSettings() {
-        String actual = Json.createWriter().writeValue(createData());
-        assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(
+        String actual = Json.writeValue(createData());
+        assertThat(actual).isNotNull().isEqualTo(
                 "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
                         + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
                         + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}");
     }
 
     public void shouldRetrieveJsonUtcZoneWhenWriteZonedDateTimeWithUtcZoneId() {
-        JsonSettings settings = JsonSettings.builder()
-                                            .zoneId(ZoneOffset.UTC)
-                                            .build();
+        JsonSettings settings = JsonSettings.builder().zoneId(ZoneOffset.UTC).build();
 
         String actual = Json.createWriter(settings).writeValue(createData());
-        assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
-                                             + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
-                                             + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+        assertThat(actual).isNotNull().isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                                                         + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
+                                                         + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveJsonSingaporeWhenWriteZonedDateTimeWithSingaporeZoneId() {
@@ -66,8 +61,7 @@ public class ZonedDateTimeTest {
                                             .build();
 
         String actual = Json.createWriter(settings).writeValue(createData());
-        assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(
+        assertThat(actual).isNotNull().isEqualTo(
                 "{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\","
                         + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
                         + "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"}");
@@ -80,17 +74,13 @@ public class ZonedDateTimeTest {
 
         Map<String, ZonedDateTime> actual = Json.readMap(json, String.class, ZonedDateTime.class);
         Map<String, ZonedDateTime> expected = createData();
-        assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isNotNull().isEqualTo(expected);
     }
 
-    static Map<String, ZonedDateTime> createData() {
-        String str = "2017-07-23T13:57:14.225";
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
-        return MapUtils.of("UTC", ZonedDateTime.parse(str, df.withZone(ZoneOffset.UTC)),
-                           "Asia/Singapore", ZonedDateTime.parse(str, df.withZone(LocalZoneId.ASIA_SINGAPORE)),
-                           "Australia/Sydney", ZonedDateTime.parse(str, df.withZone(LocalZoneId.AUSTRALIA_SYDNEY)));
+    private static Map<String, ZonedDateTime> createData() {
+        return MapUtils.of("UTC", ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                           "Asia/Singapore", ZonedDateTime.parse("2017-07-23T13:57:14.225+08:00[Asia/Singapore]"),
+                           "Australia/Sydney", ZonedDateTime.parse("2017-07-23T13:57:14.225+10:00[Australia/Sydney]"));
     }
 
 }

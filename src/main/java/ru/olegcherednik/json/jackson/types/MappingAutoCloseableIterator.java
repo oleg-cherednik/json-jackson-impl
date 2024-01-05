@@ -29,7 +29,7 @@ import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
  * @since 03.01.2024
  */
 @RequiredArgsConstructor
-public class MappingIteratorDecorator<T> implements AutoCloseableIterator<T> {
+public class MappingAutoCloseableIterator<T> implements AutoCloseableIterator<T> {
 
     protected final MappingIterator<T> delegate;
 

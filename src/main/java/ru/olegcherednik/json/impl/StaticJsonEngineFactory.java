@@ -116,13 +116,15 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
             mapper.registerModule(module);
 
             if ("jackson-datatype-jsr310".equals(module.getModuleName()))
-                mapper.registerModule(new JacksonJavaTimeModule(settings.getInstantFormatter(),
-                                                                settings.getLocalDateFormatter(),
-                                                                settings.getLocalTimeFormatter(),
-                                                                settings.getLocalDateTimeFormatter(),
-                                                                settings.getOffsetTimeFormatter(),
-                                                                settings.getOffsetDateTimeFormatter(),
-                                                                settings.getZonedDateTimeFormatter()));
+                mapper.registerModule(JacksonJavaTimeModule.builder()
+                                                           .instant(settings.getInstantFormatter())
+                                                           .localDate(settings.getLocalDateFormatter())
+                                                           .localTime(settings.getLocalTimeFormatter())
+                                                           .localDateTime(settings.getLocalDateTimeFormatter())
+                                                           .offsetTime(settings.getOffsetTimeFormatter())
+                                                           .offsetDateTime(settings.getOffsetDateTimeFormatter())
+                                                           .zonedDateTime(settings.getZonedDateTimeFormatter())
+                                                           .build());
         });
 
         return mapper;

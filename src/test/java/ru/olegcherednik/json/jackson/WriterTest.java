@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,13 @@ public class WriterTest {
     public void shouldRetrieveJsonWhenWriteListObject() {
         List<Data> data = ListUtils.of(Data.VICTORY, Data.OMEN);
         String actual = Json.writeValue(data);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
+    }
+
+    public void shouldRetrieveJsonWhenWriteIterator() {
+        List<Data> data = new ArrayList<>(ListUtils.of(Data.VICTORY, Data.OMEN));
+        String actual = Json.writeValue(data.iterator());
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("[{\"intVal\":555,\"strVal\":\"victory\"},{\"intVal\":666,\"strVal\":\"omen\"}]");
     }

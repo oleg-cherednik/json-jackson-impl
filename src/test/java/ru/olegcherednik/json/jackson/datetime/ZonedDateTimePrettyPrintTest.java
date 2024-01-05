@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.LocalZoneId;
+import ru.olegcherednik.json.jackson.MapUtils;
 import ru.olegcherednik.json.jackson.ResourceData;
 
 import java.io.IOException;
@@ -40,12 +41,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ZonedDateTimePrettyPrintTest {
 
     public void shouldRetrievePrettyPrintJsonUtcZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
-        JsonSettings settings = JsonSettings.builder()
-                                            .zoneId(ZoneOffset.UTC)
-                                            .build();
-
-        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
-        String actual = Json.createPrettyPrint(settings).writeValue(map);
+        JsonSettings settings = JsonSettings.builder().zoneId(ZoneOffset.UTC).build();
+        String actual = Json.createPrettyPrint(settings).writeValue(createData());
         String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_utc.json").trim();
 
         assertThat(actual).isNotEqualTo(expected);
@@ -54,16 +51,18 @@ public class ZonedDateTimePrettyPrintTest {
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint()
             throws IOException {
-        JsonSettings settings = JsonSettings.builder()
-                                            .zoneId(LocalZoneId.ASIA_SINGAPORE)
-                                            .build();
-
-        Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
-        String actual = Json.createPrettyPrint(settings).writeValue(map);
+        JsonSettings settings = JsonSettings.builder().zoneId(LocalZoneId.ASIA_SINGAPORE).build();
+        String actual = Json.createPrettyPrint(settings).writeValue(createData());
         String expected = ResourceData.getResourceAsString("/datetime/zoned_date_time_singapore.json").trim();
 
         assertThat(actual).isNotEqualTo(expected);
         assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
+    }
+
+    private static Map<String, ZonedDateTime> createData() {
+        return MapUtils.of("UTC", ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                           "Asia/Singapore", ZonedDateTime.parse("2017-07-23T13:57:14.225+08:00[Asia/Singapore]"),
+                           "Australia/Sydney", ZonedDateTime.parse("2017-07-23T13:57:14.225+10:00[Australia/Sydney]"));
     }
 
 }
