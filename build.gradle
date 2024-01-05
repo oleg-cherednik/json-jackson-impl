@@ -24,7 +24,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.json'
-version '666'
+version '3.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
