@@ -1,3 +1,7 @@
+import com.github.jk1.license.filter.LicenseBundleNormalizer
+import com.github.jk1.license.render.InventoryHtmlReportRenderer
+
+
 buildscript {
     repositories {
         mavenLocal()
@@ -10,8 +14,10 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'java-library'
-    id 'org.cadixdev.licenser' version '0.6.1'
     id 'io.freefair.lombok' version '8.4'
+
+    id 'org.cadixdev.licenser' version '0.6.1'
+    id 'com.github.jk1.dependency-license-report' version '2.5'
 
     id 'signing'
     id 'maven-publish'
@@ -43,16 +49,16 @@ configurations {
 checkstyle {
     toolVersion = '10.10.0'
     configFile = "${projectDir}/misc/checkstyle/checkstyle.xml" as File
-    ignoreFailures = true
+    ignoreFailures = false
     maxWarnings = 0
     maxErrors = 0
 }
 
 pmd {
     toolVersion = '6.21.0'
-    consoleOutput = true
+    consoleOutput = false
     rulesMinimumPriority = 5
-    ignoreFailures = true
+    ignoreFailures = false
     ruleSets = [
             "${projectDir}/misc/pmd/bestpractices.xml",
             "${projectDir}/misc/pmd/codestyle.xml",
@@ -120,15 +126,25 @@ jacocoTestReport {
     }
 }
 
-check.dependsOn jacocoTestReport
+check.finalizedBy(checkLicense)
+check.finalizedBy(generateLicenseReport)
+check.finalizedBy(jacocoTestReport)
 
 test {
+    dependsOn('jar')
     useTestNG()
 }
 
 license {
     header rootProject.file('APACHE.txt')
     include '**/*.java'
+}
+
+licenseReport {
+    configurations = ['compileClasspath', 'runtimeClasspath', 'testCompileClasspath', 'testRuntimeClasspath']
+    renderers = [new InventoryHtmlReportRenderer()]
+    allowedLicensesFile = new File("$projectDir/misc/license/allowed-licenses.json")
+    filters = [new LicenseBundleNormalizer(bundlePath: "$projectDir/misc/license/license-normalizer-bundle.json")]
 }
 
 signing {
