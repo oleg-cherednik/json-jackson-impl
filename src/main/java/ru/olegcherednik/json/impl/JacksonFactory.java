@@ -29,9 +29,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.JacksonEngine;
+import ru.olegcherednik.json.jackson.JacksonNullKeySerializer;
 import ru.olegcherednik.json.jackson.datetime.JacksonDateModule;
 import ru.olegcherednik.json.jackson.datetime.JacksonJavaTimeModule;
-import ru.olegcherednik.json.jackson.JacksonNullKeySerializer;
 import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Map;
