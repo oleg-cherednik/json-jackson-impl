@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime.serializers.key;
+package ru.olegcherednik.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializationFeature;

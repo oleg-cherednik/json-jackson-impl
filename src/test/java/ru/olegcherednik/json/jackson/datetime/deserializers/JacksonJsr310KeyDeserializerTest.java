@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NewClassNamingConvention")
 public class JacksonJsr310KeyDeserializerTest {
 
-    public void shouldSerializeNullKeyAsEmptyString() {
+    public void shouldSerializeNullKeyAsNullString() {
         LocalDate one = LocalDate.parse("2023-05-05");
         LocalDate two = LocalDate.parse("2023-06-06");
 

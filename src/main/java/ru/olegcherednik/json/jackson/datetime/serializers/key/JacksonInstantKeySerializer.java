@@ -16,6 +16,8 @@
 
 package ru.olegcherednik.json.jackson.datetime.serializers.key;
 
+import ru.olegcherednik.json.jackson.JacksonKeySerializer;
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 

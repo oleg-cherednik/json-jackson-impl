@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.olegcherednik.json.jackson.datetime.serializers.key;
+package ru.olegcherednik.json.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -31,10 +31,13 @@ import java.io.IOException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JacksonNullKeySerializer extends JsonSerializer<Object> {
 
+    public static final String NULL_VALUE = "";
+
+
     public static final JacksonNullKeySerializer INSTANCE = new JacksonNullKeySerializer();
 
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeFieldName("");
+        gen.writeFieldName(NULL_VALUE);
     }
 }

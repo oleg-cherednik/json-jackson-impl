@@ -31,9 +31,10 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.jackson.JacksonEngine;
 import ru.olegcherednik.json.jackson.datetime.JacksonDateModule;
 import ru.olegcherednik.json.jackson.datetime.JacksonJavaTimeModule;
-import ru.olegcherednik.json.jackson.datetime.serializers.key.JacksonNullKeySerializer;
+import ru.olegcherednik.json.jackson.JacksonNullKeySerializer;
 import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.TimeZone;
@@ -69,6 +70,8 @@ final class JacksonFactory {
             mapper.setTimeZone(TimeZone.getTimeZone(settings.getZoneId()));
 
         mapper.getSerializerProvider().setNullKeySerializer(JacksonNullKeySerializer.INSTANCE);
+        mapper.configOverride(Map.class).setInclude(JsonInclude.Value.construct(JsonInclude.Include.NON_NULL,
+                                                                                JsonInclude.Include.ALWAYS));
 
         return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)

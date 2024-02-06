@@ -19,6 +19,7 @@ package ru.olegcherednik.json.jackson.datetime.deserializers;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.jackson.JacksonNullKeySerializer;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -73,7 +74,9 @@ public class JacksonJsr310KeyDeserializer<T> extends KeyDeserializer {
 
     @Override
     public final Object deserializeKey(String key, DeserializationContext ctxt) throws IOException {
-        return "".equals(key) ? null : df.parse(key, query);
+        if (JacksonNullKeySerializer.NULL_VALUE.equals(key))
+            return null;
+        return df.parse(key, query);
     }
 }
 
