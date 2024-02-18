@@ -16,23 +16,23 @@
 
 package ru.olegcherednik.json.jackson.enumid;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.enumid.EnumId;
 
-public final class EnumIdModule extends SimpleModule {
+import java.io.IOException;
 
-    private static final long serialVersionUID = -946898814418994813L;
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+final class EnumIdKeySerializer extends JsonSerializer<EnumId> {
 
-    public EnumIdModule() {
-        addSerializer(EnumId.class, EnumIdSerializer.INSTANCE);
-        addKeySerializer(EnumId.class, EnumIdKeySerializer.INSTANCE);
-        _deserializers = EnumIdDeserializers.INSTANCE;
-    }
+    public static final EnumIdKeySerializer INSTANCE = new EnumIdKeySerializer();
 
     @Override
-    public void setupModule(SetupContext context) {
-        super.setupModule(context);
-        context.addBeanSerializerModifier(EnumIdSerializerModifier.INSTANCE);
+    public void serialize(EnumId enumId, JsonGenerator generator, SerializerProvider serializers) throws IOException {
+        generator.writeFieldName(enumId.getId());
     }
 
 }

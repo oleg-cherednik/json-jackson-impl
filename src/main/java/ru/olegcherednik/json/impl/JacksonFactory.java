@@ -70,8 +70,11 @@ final class JacksonFactory {
             mapper.setTimeZone(TimeZone.getTimeZone(settings.getZoneId()));
 
         mapper.getSerializerProvider().setNullKeySerializer(JacksonNullKeySerializer.INSTANCE);
-        mapper.configOverride(Map.class).setInclude(JsonInclude.Value.construct(JsonInclude.Include.NON_NULL,
-                                                                                JsonInclude.Include.ALWAYS));
+
+        JsonInclude.Include contentIncl = settings.isSerializeNullMapValue() ? JsonInclude.Include.ALWAYS
+                                                                             : JsonInclude.Include.NON_NULL;
+        mapper.configOverride(Map.class)
+              .setInclude(JsonInclude.Value.construct(JsonInclude.Include.NON_NULL, contentIncl));
 
         return mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
                      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
