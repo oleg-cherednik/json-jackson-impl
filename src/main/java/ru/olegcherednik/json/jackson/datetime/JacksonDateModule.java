@@ -16,19 +16,12 @@
 
 package ru.olegcherednik.json.jackson.datetime;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleKeyDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.jackson.JacksonSimpleModule;
 import ru.olegcherednik.json.jackson.datetime.deserializers.JacksonDateDeserializer;
 
 import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * @author Oleg Cherednik
@@ -43,22 +36,19 @@ public class JacksonDateModule extends JacksonSimpleModule {
 
     @Override
     protected void addKeySerializers(SetupContext context) {
+        super.addKeySerializers(context);
         context.addKeySerializers(createSerializers(new DateSerializer(null, df)));
     }
 
-    // TODO check this out. Looks like it does not work now
-    //    @Override
-    //    protected void addKeyDeserializers(SetupContext context) {
-    //        context.addKeyDeserializers(new SimpleKeyDeserializers());
-    //    }
-
     @Override
     protected void addSerializers(SetupContext context) {
+        super.addSerializers(context);
         context.addSerializers(createSerializers(new DateSerializer(null, df)));
     }
 
     @Override
     protected void addDeserializers(SetupContext context) {
+        super.addDeserializers(context);
         context.addDeserializers(createDeserializers(JacksonDateDeserializer.with(df)));
     }
 

@@ -33,16 +33,19 @@ public class EnumIdModule extends JacksonSimpleModule {
 
     @Override
     protected void addKeySerializers(SetupContext context) {
+        super.addKeySerializers(context);
         context.addKeySerializers(createSerializers(EnumIdKeySerializer.INSTANCE));
     }
 
     @Override
     protected void addSerializers(SetupContext context) {
+        super.addSerializers(context);
         context.addSerializers(createSerializers(EnumIdSerializer.INSTANCE));
     }
 
     @Override
     protected void addDeserializers(SetupContext context) {
+        super.addDeserializers(context);
         context.addDeserializers(EnumIdDeserializers.INSTANCE);
     }
 }
