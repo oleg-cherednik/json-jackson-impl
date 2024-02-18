@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.olegcherednik.json.jackson.enumid;
+package ru.olegcherednik.json.jackson.enumid.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -31,10 +31,15 @@ import java.io.IOException;
  * {@link EnumId#getId()} returns lower-case enum constant name (instead of upper-case by default). Therefor you have
  * to define {@link ru.olegcherednik.json.api.enumid.EnumIdJsonCreator} for every {@link EnumId} instance.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class EnumIdSerializer extends JsonSerializer<EnumId> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class EnumIdSerializer extends JsonSerializer<EnumId> {
 
     public static final EnumIdSerializer INSTANCE = new EnumIdSerializer();
+
+    @Override
+    public Class<EnumId> handledType() {
+        return EnumId.class;
+    }
 
     @Override
     public void serialize(EnumId enumId, JsonGenerator generator, SerializerProvider serializers) throws IOException {

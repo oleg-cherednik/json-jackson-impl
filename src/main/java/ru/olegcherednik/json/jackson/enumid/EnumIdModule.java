@@ -16,18 +16,14 @@
 
 package ru.olegcherednik.json.jackson.enumid;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import ru.olegcherednik.json.api.enumid.EnumId;
+import ru.olegcherednik.json.jackson.JacksonSimpleModule;
+import ru.olegcherednik.json.jackson.enumid.deserializers.EnumIdDeserializers;
+import ru.olegcherednik.json.jackson.enumid.serializers.EnumIdKeySerializer;
+import ru.olegcherednik.json.jackson.enumid.serializers.EnumIdSerializer;
 
-public final class EnumIdModule extends SimpleModule {
+public class EnumIdModule extends JacksonSimpleModule {
 
     private static final long serialVersionUID = -946898814418994813L;
-
-    public EnumIdModule() {
-        addSerializer(EnumId.class, EnumIdSerializer.INSTANCE);
-        addKeySerializer(EnumId.class, EnumIdKeySerializer.INSTANCE);
-        _deserializers = EnumIdDeserializers.INSTANCE;
-    }
 
     @Override
     public void setupModule(SetupContext context) {
@@ -35,4 +31,18 @@ public final class EnumIdModule extends SimpleModule {
         context.addBeanSerializerModifier(EnumIdSerializerModifier.INSTANCE);
     }
 
+    @Override
+    protected void addKeySerializers(SetupContext context) {
+        context.addKeySerializers(createSerializers(EnumIdKeySerializer.INSTANCE));
+    }
+
+    @Override
+    protected void addSerializers(SetupContext context) {
+        context.addSerializers(createSerializers(EnumIdSerializer.INSTANCE));
+    }
+
+    @Override
+    protected void addDeserializers(SetupContext context) {
+        context.addDeserializers(EnumIdDeserializers.INSTANCE);
+    }
 }

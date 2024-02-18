@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.olegcherednik.json.jackson.enumid;
+package ru.olegcherednik.json.jackson.enumid.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -25,14 +25,19 @@ import ru.olegcherednik.json.api.enumid.EnumId;
 
 import java.io.IOException;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class EnumIdKeySerializer extends JsonSerializer<EnumId> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class EnumIdKeySerializer extends JsonSerializer<EnumId> {
 
     public static final EnumIdKeySerializer INSTANCE = new EnumIdKeySerializer();
 
     @Override
-    public void serialize(EnumId enumId, JsonGenerator generator, SerializerProvider serializers) throws IOException {
-        generator.writeFieldName(enumId.getId());
+    public Class<EnumId> handledType() {
+        return EnumId.class;
+    }
+
+    @Override
+    public void serialize(EnumId enumId, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        gen.writeFieldName(enumId.getId());
     }
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.olegcherednik.json.jackson.enumid;
+package ru.olegcherednik.json.jackson.enumid.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -36,8 +36,8 @@ import java.util.function.Function;
  * @author Oleg Cherednik
  * @since 27.02.2022
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class EnumIdDeserializers extends SimpleDeserializers {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class EnumIdDeserializers extends SimpleDeserializers {
 
     private static final long serialVersionUID = -6984119149643932744L;
 

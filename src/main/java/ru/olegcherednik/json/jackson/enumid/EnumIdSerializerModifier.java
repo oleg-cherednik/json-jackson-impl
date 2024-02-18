@@ -29,13 +29,13 @@ import java.util.ListIterator;
  * @author Oleg Cherednik
  * @since 27.02.2022
  */
-final class EnumIdSerializerModifier extends SerializerModifier {
+public class EnumIdSerializerModifier extends SerializerModifier {
 
     private static final long serialVersionUID = -1888579980196998551L;
 
     public static final EnumIdSerializerModifier INSTANCE = new EnumIdSerializerModifier();
 
-    private EnumIdSerializerModifier() {
+    protected EnumIdSerializerModifier() {
         super(null);
     }
 
