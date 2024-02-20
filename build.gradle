@@ -1,10 +1,8 @@
 import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.github.jk1.license.render.InventoryHtmlReportRenderer
 
-
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
