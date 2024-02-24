@@ -28,7 +28,7 @@ repositories {
 }
 
 group 'ru.oleg-cherednik.json'
-version '3.0.0'
+version '3.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -91,7 +91,7 @@ pmdTest {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
 
-    api 'ru.oleg-cherednik.json:json-api:3.0.0'
+    api 'ru.oleg-cherednik.json:json-api:3.0'
 
     compileOnly "com.fasterxml.jackson.core:jackson-databind:${property('jackson.version')}"
     compileOnly "com.fasterxml.jackson.module:jackson-module-afterburner:${property('jackson.version')}"
