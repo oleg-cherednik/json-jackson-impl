@@ -17,7 +17,6 @@
 package ru.olegcherednik.json.jackson.datetime;
 
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.jackson.JacksonSimpleModule;
 import ru.olegcherednik.json.jackson.datetime.deserializers.JacksonDateDeserializer;
 
@@ -27,12 +26,16 @@ import java.text.DateFormat;
  * @author Oleg Cherednik
  * @since 09.12.2023
  */
-@RequiredArgsConstructor
 public class JacksonDateModule extends JacksonSimpleModule {
 
     private static final long serialVersionUID = -7801651470699380868L;
 
     protected final DateFormat df;
+
+    public JacksonDateModule(DateFormat df) {
+        super("json-date");
+        this.df = df;
+    }
 
     @Override
     protected void addKeySerializers(SetupContext context) {

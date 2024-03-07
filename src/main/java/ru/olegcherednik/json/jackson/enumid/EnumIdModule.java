@@ -25,6 +25,10 @@ public class EnumIdModule extends JacksonSimpleModule {
 
     private static final long serialVersionUID = -946898814418994813L;
 
+    public EnumIdModule() {
+        super("json-enum-id");
+    }
+
     @Override
     public void setupModule(SetupContext context) {
         super.setupModule(context);

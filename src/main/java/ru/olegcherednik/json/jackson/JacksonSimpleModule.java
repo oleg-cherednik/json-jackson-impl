@@ -16,22 +16,24 @@
 
 package ru.olegcherednik.json.jackson;
 
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Oleg Cherednik
  * @since 18.02.2024
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JacksonSimpleModule extends SimpleModule {
 
     private static final long serialVersionUID = -543871656247679655L;
+
+    protected JacksonSimpleModule(String name) {
+        super(name, Version.unknownVersion());
+    }
 
     @Override
     public void setupModule(SetupContext context) {

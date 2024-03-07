@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.AccessLevel;
@@ -36,7 +35,6 @@ import ru.olegcherednik.json.jackson.enumid.EnumIdModule;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.ServiceLoader;
 import java.util.TimeZone;
 
 /**
@@ -97,23 +95,22 @@ final class JacksonFactory {
     }
 
     private static ObjectMapper registerModules(ObjectMapper mapper, JsonSettings settings) {
+        mapper = mapper.findAndRegisterModules();
+
         mapper.registerModule(new JacksonDateModule(settings.getDateFormatter()))
               .registerModule(new EnumIdModule());
 
-        ServiceLoader.load(Module.class).forEach(module -> {
-            mapper.registerModule(module);
-
-            if ("jackson-datatype-jsr310".equals(module.getModuleName()))
-                mapper.registerModule(JacksonJavaTimeModule.builder()
-                                                           .instant(settings.getInstantFormatter())
-                                                           .localDate(settings.getLocalDateFormatter())
-                                                           .localTime(settings.getLocalTimeFormatter())
-                                                           .localDateTime(settings.getLocalDateTimeFormatter())
-                                                           .offsetTime(settings.getOffsetTimeFormatter())
-                                                           .offsetDateTime(settings.getOffsetDateTimeFormatter())
-                                                           .zonedDateTime(settings.getZonedDateTimeFormatter())
-                                                           .build());
-        });
+        if (mapper.getRegisteredModuleIds().contains("jackson-datatype-jsr310")) {
+            mapper.registerModule(JacksonJavaTimeModule.builder()
+                                                       .instant(settings.getInstantFormatter())
+                                                       .localDate(settings.getLocalDateFormatter())
+                                                       .localTime(settings.getLocalTimeFormatter())
+                                                       .localDateTime(settings.getLocalDateTimeFormatter())
+                                                       .offsetTime(settings.getOffsetTimeFormatter())
+                                                       .offsetDateTime(settings.getOffsetDateTimeFormatter())
+                                                       .zonedDateTime(settings.getZonedDateTimeFormatter())
+                                                       .build());
+        }
 
         return mapper;
     }
